@@ -1,0 +1,18 @@
+{
+    "name": "小管家",
+    "short_name": "小管家",
+    "orientation": "portrait-primary",
+    "icons": [{
+        "src": "./img/logo.png",
+        "sizes": "144x144",
+        "type": "image/png"
+    }],
+    "start_url": "./sign",
+    "display": "standalone",
+    "background_color": "transparent",
+    "theme_color": "#4DBA87",
+    "related_applications": [{
+        "platform": "web",
+        "url": "https://cjd6568358.coding.me/xgj"
+    }]
+}

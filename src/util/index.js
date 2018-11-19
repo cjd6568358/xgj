@@ -1,0 +1,145 @@
+import { HOST1 } from "../config";
+import http from "./http";
+let checkWebp = function() {
+    return new Promise(function(resolve) {
+        if (getCookie('webpSupport') == 'true') {
+            resolve(true);
+        } else if (getCookie('webpSupport') == 'false') {
+            resolve(false);
+        } else {
+            try {
+                let bool = (document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+                setCookie('webpSupport', bool);
+                resolve(bool);
+            } catch (err) {
+                setCookie('webpSupport', false);
+                resolve(false);
+            }
+        }
+    });
+}
+
+let calculatGUID = function() {
+    let guid = '';
+    for (let i = 1; i <= 32; i++) {
+        let n = Math.floor(Math.random() * 16.0).toString(16);
+        guid += n;
+        if ((i == 8) || (i == 12) || (i == 16) || (i == 20)) {
+            guid += '-';
+        }
+    }
+    return guid;
+}
+
+let getYMD = function(timestamp = Date.now()) {
+    let date = new Date(timestamp)
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+    return { year, month, day }
+}
+
+let getHash = function(str) {
+    var I64BIT_TABLE =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+    var hash = 5381;
+    var i = str.length - 1;
+
+    if (typeof str == 'string') {
+        for (; i > -1; i--)
+            hash += (hash << 5) + str.charCodeAt(i);
+    } else {
+        for (; i > -1; i--)
+            hash += (hash << 5) + str[i];
+    }
+    var value = hash & 0x7FFFFFFF;
+
+    var retValue = '';
+    do {
+        retValue += I64BIT_TABLE[value & 0x3F];
+    }
+    // eslint-disable-next-line
+    while (value >>= 6);
+
+    return retValue;
+}
+
+let getCookieDomain = function() {
+    var host = location.hostname;
+    var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+    if (ip.test(host) == true || host == 'localhost') return host;
+    var regex = /([^/]*).*/;
+    var match = host.match(regex);
+    if (typeof match != 'undefined' && null != match) host = match[1];
+    if (typeof host != 'undefined' && null != host) {
+        var strAry = host.split('.');
+        if (strAry.length > 1) {
+            host = strAry[strAry.length - 2] + '.' + strAry[strAry.length - 1];
+        }
+    }
+    return '.' + host;
+}
+
+let setCookie = function(cookieKey, cookieVal) {
+    var env = getCookieDomain();
+    var date = 30;
+    var exp = new Date();
+    exp.setTime(exp.getTime() + date * 24 * 60 * 60 * 1000);
+    if (typeof cookieVal == 'object') {
+        cookieVal = JSON.stringify(cookieVal);
+    }
+    document.cookie = cookieKey + '=' + encodeURIComponent(cookieVal) + ';domain=' + env + ';path=/;expires=' + exp.toGMTString();
+}
+
+let getCookie = function(cookieKey) {
+    var arr = document.cookie.match(new RegExp('(^| )' + cookieKey + '=([^;]*)(;|$)'));
+    if (arr != null) return decodeURIComponent(arr[2]);
+    return null;
+}
+
+let delCookie = function(cookieKey) {
+    var date = new Date();
+    date.setTime(date.getTime() - 1);
+    document.cookie = cookieKey + '=' + '' + ';path=/;expires=' + date.toGMTString();
+}
+
+/**
+ * data 必须为字符串
+ * @param {Object} params 
+ */
+let string2File = function(params = { fileName: '', data: '' }) {
+    let HOST = HOST1;
+    if (localStorage.getItem("api_host")) {
+        HOST = localStorage.getItem("api_host");
+    }
+    http.post(`${HOST}/api/string2File`, params).then(res => {
+        if (res.data.statusCode == 1) {
+            window.open(`${HOST}/api/downloadFile/${res.data.data}`)
+        }
+    })
+}
+
+/**
+ * 获取指定年月天数数组
+ * @param {String|Number} yyyy 
+ * @param {String|Number} MM 
+ * @param {boolean} leftPad 
+ */
+let getTotalDaysArr = (yyyy, MM, leftPad = false) => {
+    return new Array(new Date(yyyy, MM, 0).getDate()).fill(0).map((item, index) => {
+        ++index
+        return leftPad ? '0' + index : index
+    })
+}
+
+export {
+    checkWebp,
+    calculatGUID,
+    getYMD,
+    getHash,
+    setCookie,
+    getCookie,
+    delCookie,
+    string2File,
+    getTotalDaysArr
+}

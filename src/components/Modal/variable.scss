@@ -1,0 +1,17 @@
+$purple:#5a4ec0;//紫
+$blue: #3389e7;//蓝
+$yellow: #fccb2c;//黄
+$orange: #fc5d2c;//橙
+$white: #fff;//白
+$word-black:#1e1e1e;//字体黑
+$dark-purple: #3e3587;//深紫
+$light-gray: #ddd;//浅灰
+$dark-gray: #9a9a9a;//深灰
+$bg-light-gray: #fafaf8;//背景浅灰
+$bg-dark-gray: #f2f3f5;//背景深灰
+$linear-gradient-90-bp:linear-gradient(90deg, $blue, $purple);//线性渐变 左-右 蓝-紫
+$linear-gradient-140-bp:linear-gradient(140deg, $blue, $purple);//线性渐变 左上-右下 蓝-紫
+$linear-gradient-180-bp:linear-gradient(180deg, $blue, $purple);//线性渐变 上-下 蓝-紫
+$linear-gradient-270-bp:linear-gradient(270deg, $blue, $purple);//线性渐变 右-左 蓝-紫
+$linear-gradient-90-bpb:linear-gradient(90deg, $blue, $purple, $blue);//线性渐变 左-中-右 蓝-紫-蓝
+/* prettier-ignore */
