@@ -15,7 +15,7 @@ importScripts("/xgj/workbox-v3.6.3/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/xgj/workbox-v3.6.3"});
 
 importScripts(
-  "/xgj/precache-manifest.8602c7288fd64696ed2039e7dd64cc84.js"
+  "/xgj/precache-manifest.f152fb9a16d8a0e52143ac2f77ec1ff3.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "xgj"});
@@ -32,4 +32,4 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, workbox.strategies.networkFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200,404]})] }), 'GET');
+workbox.routing.registerRoute(/\/xgj\/(my|sign|video|password|discuz)$/, workbox.strategies.networkFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200,404]})] }), 'GET');

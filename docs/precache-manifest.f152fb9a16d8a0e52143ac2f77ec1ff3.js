@@ -72,8 +72,8 @@ self.__precacheManifest = [
     "url": "/xgj/js/SignView.ac483f70.js"
   },
   {
-    "revision": "614544129cb35774ee4a",
-    "url": "/xgj/css/DiscuzView.ad5bd143.css"
+    "revision": "1c757822d841c4ce79d5014a54d0e332",
+    "url": "/xgj/img/arrow-left.1c757822.svg"
   },
   {
     "revision": "9eb629e1dd1c698f9ef2",
@@ -86,10 +86,6 @@ self.__precacheManifest = [
   {
     "revision": "a4b845be68c9c9f28b38",
     "url": "/xgj/css/app.59cef92f.css"
-  },
-  {
-    "revision": "1c757822d841c4ce79d5014a54d0e332",
-    "url": "/xgj/img/arrow-left.1c757822.svg"
   },
   {
     "revision": "0bb15b48b26b3445e092",
@@ -106,6 +102,10 @@ self.__precacheManifest = [
   {
     "revision": "923b920535cc2503e5c8",
     "url": "/xgj/css/LoginView.f6f762bd.css"
+  },
+  {
+    "revision": "614544129cb35774ee4a",
+    "url": "/xgj/css/DiscuzView.ad5bd143.css"
   },
   {
     "revision": "456defb1e63d0dd129b2",

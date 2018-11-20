@@ -18,7 +18,7 @@ module.exports = {
             runtimeCaching: [
                 // 配置路由请求缓存
                 {
-                    urlPattern: /(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, // 匹配文件
+                    urlPattern: /\/xgj\/(my|sign|video|password|discuz)$/, // 匹配文件
                     handler: 'networkFirst', // 网络优先
                     options: {
                         cacheableResponse: {
@@ -26,6 +26,15 @@ module.exports = {
                         }
                     }
                 }
+                // {
+                //     urlPattern: /(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, // 匹配文件
+                //     handler: 'networkFirst', // 网络优先
+                //     options: {
+                //         cacheableResponse: {
+                //             statuses: [200, 404]
+                //         }
+                //     }
+                // }
             ]
         }
     },
