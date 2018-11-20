@@ -17,7 +17,7 @@ module.exports = {
             runtimeCaching: [
                 // 配置路由请求缓存
                 {
-                    urlPattern: /(?!(.html|.svg|.png|.json|.htm|.js|.css|.txt))$/, // 匹配文件
+                    urlPattern: "(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$", // 匹配文件
                     handler: 'networkFirst', // 网络优先
                     options: {
                         cacheableResponse: {
