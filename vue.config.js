@@ -16,10 +16,10 @@ module.exports = {
             skipWaiting: true, // 强制等待中的 Service Worker 被激活
             runtimeCaching: [
                 // 配置路由请求缓存
-                // {
-                //     urlPattern: /\/xgj\/my$/, // 匹配文件
-                //     handler: 'networkFirst' // 网络优先
-                // }
+                {
+                    urlPattern: /\.[^.|/]{1,}$/, // 匹配文件
+                    handler: 'networkFirst' // 网络优先
+                }
             ]
         }
     },
