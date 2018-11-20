@@ -31,6 +31,4 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/index.html");
-
 workbox.routing.registerRoute(/(?!(.html|.svg|.png|.json|.htm|.js|.css|.txt))$/, workbox.strategies.networkFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,503]})] }), 'GET');
