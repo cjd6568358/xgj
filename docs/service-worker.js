@@ -19,6 +19,9 @@ importScripts(
 
 workbox.core.setCacheNameDetails({prefix: "xgj"});
 
+workbox.skipWaiting();
+workbox.clientsClaim();
+
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
  * requests for URLs in the manifest.
