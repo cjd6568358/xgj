@@ -14,6 +14,12 @@
                 <li @click="recordsImportClick">
                     导入
                 </li>
+                <li @click="clearCacheClick">
+                    清除缓存
+                </li>
+                <li @click="debugClick">
+                    {{debug?'关闭':'打开'}}调试
+                </li>
             </ul>
         </div>
         <TabBar></TabBar>
@@ -21,6 +27,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import TabBar from "../../components/TabBar/index.vue";
 import RecordsImport from "../../components/RecordsImport/index.vue";
 import RecordsExport from "../../components/RecordsExport/index.vue";
@@ -29,6 +36,9 @@ export default {
     components: { TabBar },
     data() {
         return {};
+    },
+    computed: {
+        ...mapState(["debug"])
     },
     mounted() {},
     methods: {
@@ -65,6 +75,21 @@ export default {
                 DbHelper.signRecords.clear();
                 this.$Toast.info("清除考勤记录完成!");
             }
+        },
+        async clearCacheClick() {
+            if (confirm("确认清除缓存?")) {
+                let caches = await window.caches.keys();
+                caches.forEach(cacheKey => {
+                    window.caches.delete(cacheKey);
+                });
+                let registration = await navigator.serviceWorker.getRegistration();
+                registration.unregister();
+                this.$Toast.info("清除成功");
+            }
+        },
+        debugClick() {
+            localStorage.setItem("debug", !this.debug);
+            location.reload();
         }
     }
 };

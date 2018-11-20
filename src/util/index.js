@@ -132,6 +132,26 @@ let getTotalDaysArr = (yyyy, MM, leftPad = false) => {
     })
 }
 
+/**
+ * 动态加载脚本
+ * @param {String} src 
+ */
+let loadScript = function(src) {
+    return new Promise(function(resolve, reject) {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = src;
+        script.onload = () => {
+            resolve(true);
+        }
+        // eslint-disable-next-line
+        script.onerror = (e) => {
+            reject(false);
+        }
+        document.body.appendChild(script);
+    })
+}
+
 export {
     checkWebp,
     calculatGUID,
@@ -141,5 +161,6 @@ export {
     getCookie,
     delCookie,
     string2File,
-    getTotalDaysArr
+    getTotalDaysArr,
+    loadScript
 }
