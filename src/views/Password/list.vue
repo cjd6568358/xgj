@@ -41,8 +41,8 @@ export default {
         .icon-plus {
             display: inline-block;
             position: absolute;
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             top: 50%;
             right: 20px;
             transform: translateY(-50%);
