@@ -18,7 +18,12 @@ module.exports = {
                 // 配置路由请求缓存
                 {
                     urlPattern: /(?!(.html|.svg|.png|.json|.htm|.js|.css|.txt))$/, // 匹配文件
-                    handler: 'networkFirst' // 网络优先
+                    handler: 'networkFirst', // 网络优先
+                    options: {
+                        cacheableResponse: {
+                            statuses: [0, 599]
+                        }
+                    }
                 }
             ]
         }
