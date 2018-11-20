@@ -10,6 +10,15 @@ module.exports = {
             appleTouchIcon: 'img/logo.png',
             maskIcon: 'img/logo.png',
             msTileImage: 'img/logo.png'
+        },
+        workboxOptions: {
+            runtimeCaching: [
+                // 配置路由请求缓存
+                {
+                    urlPattern: /\/xgj\/.*[^.]{4,}$/, // 匹配文件
+                    handler: 'networkFirst' // 网络优先
+                }
+            ]
         }
     },
     // configureWebpack: config => {
