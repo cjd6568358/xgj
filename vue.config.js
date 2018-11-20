@@ -21,7 +21,7 @@ module.exports = {
                     handler: 'networkFirst', // 网络优先
                     options: {
                         cacheableResponse: {
-                            statuses: [0, 599]
+                            statuses: [0, 503]
                         }
                     }
                 }
