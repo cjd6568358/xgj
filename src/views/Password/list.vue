@@ -46,7 +46,7 @@ export default {
             top: 50%;
             right: 20px;
             transform: translateY(-50%);
-            background: url(./images/plus-square.svg) 100% / 100% no-repeat;
+            background: url(./images/plus.svg) 100% / 100% no-repeat;
         }
         .icon-back {
             display: inline-block;
