@@ -96,12 +96,12 @@ self.__precacheManifest = [
     "url": "/xgj/js/chunk-vendors.56065a9c.js"
   },
   {
-    "revision": "70f8b6fd89c6174ca2d725f8ebabfe43",
-    "url": "/xgj/img/plus.70f8b6fd.svg"
-  },
-  {
     "revision": "1c757822d841c4ce79d5014a54d0e332",
     "url": "/xgj/img/arrow-left.1c757822.svg"
+  },
+  {
+    "revision": "70f8b6fd89c6174ca2d725f8ebabfe43",
+    "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
     "revision": "4ab79c480738da1f2f42937a1e596ec0",
