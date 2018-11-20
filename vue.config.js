@@ -15,7 +15,7 @@ module.exports = {
             runtimeCaching: [
                 // 配置路由请求缓存
                 {
-                    urlPattern: /\/xgj\/my$/, // 匹配文件
+                    urlPattern: /my$/, // 匹配文件
                     handler: 'networkFirst' // 网络优先
                 }
             ]
