@@ -104,16 +104,16 @@ self.__precacheManifest = [
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "6dc1133b7e84d08d47619307e5a3fd77",
-    "url": "/xgj/favicon.png"
+    "revision": "4ab79c480738da1f2f42937a1e596ec0",
+    "url": "/xgj/img/logo.png"
   },
   {
     "revision": "f597f5b78fa743e96f67a822b41c39d7",
     "url": "/xgj/index.html"
   },
   {
-    "revision": "4ab79c480738da1f2f42937a1e596ec0",
-    "url": "/xgj/img/logo.png"
+    "revision": "6dc1133b7e84d08d47619307e5a3fd77",
+    "url": "/xgj/favicon.png"
   },
   {
     "revision": "e51eccff2ae2fa18a2e5",
