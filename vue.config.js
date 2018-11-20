@@ -14,18 +14,18 @@ module.exports = {
         workboxOptions: {
             clientsClaim: true, // Service Worker 被激活后使其立即获得页面控制权
             skipWaiting: true, // 强制等待中的 Service Worker 被激活
-            // runtimeCaching: [
-            //     // 配置路由请求缓存
-            //     {
-            //         urlPattern: /(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, // 匹配文件
-            //         handler: 'networkFirst', // 网络优先
-            //         options: {
-            //             cacheableResponse: {
-            //                 statuses: [200, 404]
-            //             }
-            //         }
-            //     }
-            // ]
+            runtimeCaching: [
+                // 配置路由请求缓存
+                {
+                    urlPattern: /(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, // 匹配文件
+                    handler: 'networkFirst', // 网络优先
+                    options: {
+                        cacheableResponse: {
+                            statuses: [200, 404]
+                        }
+                    }
+                }
+            ]
         }
     },
     // configureWebpack: config => {

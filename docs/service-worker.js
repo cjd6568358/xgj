@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/xgj/precache-manifest.3f0acb4f5ed5d0431fd0d41d149ffd84.js"
+  "/xgj/precache-manifest.8602c7288fd64696ed2039e7dd64cc84.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "xgj"});
@@ -30,3 +30,5 @@ workbox.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
+
+workbox.routing.registerRoute(/(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, workbox.strategies.networkFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200,404]})] }), 'GET');
