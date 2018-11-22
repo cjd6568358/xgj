@@ -77,7 +77,7 @@ export default {
         // 使用createObjectURL文件大小无限制,但低版本Chrome存在文件名失效
         // a.href = URL.createObjectURL(blob);
         // 使用DataURL可以解决文件名失效问题,文件大小限制为2M
-        a.href = await readBlobAsDataURL(blob)
+        a.href = await this.readBlobAsDataURL(blob)
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(a.href);
@@ -92,7 +92,7 @@ export default {
       this.$emit("closeModal");
     },
     readBlobAsDataURL(blob) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         var a = new FileReader();
         a.onload = function(e) {
           resolve(e.target.result)
