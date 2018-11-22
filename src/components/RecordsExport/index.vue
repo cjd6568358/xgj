@@ -68,18 +68,19 @@ export default {
       }
       backup.hash = getHash(JSON.stringify(backup));
       if (type === 1) {
-        // let blob = new Blob([JSON.stringify(backup)], {
-        //   type: "application/json"
-        // });
+        let blob = new Blob([JSON.stringify(backup)], {
+          type: "application/json"
+        });
         let a = document.createElement("a");
-        a.download = fileName;
+        // a.download = fileName;
+        a.setAttribute("download", fileName);
         a.target = "_blank";
         // 1、使用createObjectURL 文件大小无限制 低版本浏览器无法识别文件名,
-        // a.href = URL.createObjectURL(blob);
+        a.href = URL.createObjectURL(blob);
         // 2、使用DataURL 文件大小限制为2M 可以识别文件名 低版本浏览器无法下载
         // a.href = await this.readBlobAsDataURL(blob)
         // 3、使用base64 无法识别文件名 
-        a.href = `data:application/json,${encodeURIComponent(JSON.stringify(backup))}`
+        // a.href = `data:application/json,${encodeURIComponent(JSON.stringify(backup))}`
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(a.href);
