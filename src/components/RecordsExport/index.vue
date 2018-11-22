@@ -79,7 +79,7 @@ export default {
         // 2、使用DataURL 文件大小限制为2M 可以识别文件名 低版本浏览器无法下载
         // a.href = await this.readBlobAsDataURL(blob)
         // 3、使用base64 无法识别文件名 
-        a.href = `data:application/json;base64,${btoa(JSON.stringify(backup))}`
+        a.href = `data:application/json,${encodeURIComponent(JSON.stringify(backup))}`
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(a.href);
