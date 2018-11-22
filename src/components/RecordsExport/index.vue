@@ -55,7 +55,7 @@ export default {
   methods: {
     async confirm(type) {
       let backup = {};
-      let fileName = `${new Date().Format("yyyy_MM_dd_hh_mm_ss")}.json`;
+      let fileName = `${new Date().Format("yyyy_MM_dd_hh_mm_ss")}`;
       let backUpList = [];
       if (this.backUpList[0].selected) {
         fileName = "website_" + fileName;
@@ -73,6 +73,7 @@ export default {
         });
         let a = document.createElement("a");
         a.download = fileName;
+        a.target = "_blank";
         a.href = URL.createObjectURL(blob);
         document.body.appendChild(a);
         a.click();
@@ -80,7 +81,7 @@ export default {
         this.$Toast.info("数据备份成功!");
       } else {
         let params = {
-          fileName: fileName,
+          fileName: fileName + ".json",
           data: JSON.stringify(backup)
         };
         string2File(params);
