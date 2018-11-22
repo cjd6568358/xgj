@@ -55,7 +55,7 @@ export default {
   methods: {
     async confirm(type) {
       let backup = {};
-      let fileName = `${new Date().Format("yyyy_MM_dd_hh_mm_ss")}`;
+      let fileName = `${new Date().Format("yyyy_MM_dd_hh_mm_ss")}.json`;
       let backUpList = [];
       if (this.backUpList[0].selected) {
         fileName = "website_" + fileName;
@@ -74,19 +74,31 @@ export default {
         let a = document.createElement("a");
         a.download = fileName;
         a.target = "_blank";
-        a.href = URL.createObjectURL(blob);
+        // 使用createObjectURL文件大小无限制,但低版本Chrome存在文件名失效
+        // a.href = URL.createObjectURL(blob);
+        // 使用DataURL可以解决文件名失效问题,文件大小限制为2M
+        a.href = await readBlobAsDataURL(blob)
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(a.href);
         this.$Toast.info("数据备份成功!");
       } else {
         let params = {
-          fileName: fileName + ".json",
+          fileName: fileName,
           data: JSON.stringify(backup)
         };
         string2File(params);
       }
       this.$emit("closeModal");
+    },
+    readBlobAsDataURL(blob) {
+      return new Promise((resolve, reject) => {
+        var a = new FileReader();
+        a.onload = function(e) {
+          resolve(e.target.result)
+        };
+        a.readAsDataURL(blob);
+      });
     }
   }
 };
