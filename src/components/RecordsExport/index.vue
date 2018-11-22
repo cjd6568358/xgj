@@ -74,10 +74,10 @@ export default {
         let a = document.createElement("a");
         a.download = fileName;
         a.target = "_blank";
-        // 使用createObjectURL文件大小无限制,但低版本Chrome存在文件名失效
-        // a.href = URL.createObjectURL(blob);
-        // 使用DataURL可以解决文件名失效问题,文件大小限制为2M
-        a.href = await this.readBlobAsDataURL(blob)
+        // 使用createObjectURL无法识别文件名,文件大小无限制
+        a.href = URL.createObjectURL(blob);
+        // 使用DataURL可以识别文件名,文件大小限制为2M
+        // a.href = await this.readBlobAsDataURL(blob)
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(a.href);
