@@ -85,7 +85,7 @@ export default {
         // document.body.appendChild(a);
         // a.click();
         // URL.revokeObjectURL(a.href);
-        download(JSON.stringify(backup), fileName, "text/plain");
+        download(JSON.stringify(backup), fileName, "text/json");
         this.$Toast.info("数据备份成功!");
       } else {
         let params = {
