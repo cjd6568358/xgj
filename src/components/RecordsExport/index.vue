@@ -56,7 +56,7 @@ export default {
   methods: {
     async confirm(type) {
       let backup = {};
-      let fileName = `${new Date().Format("yyyy_MM_dd_hh_mm_ss")}.txt`;
+      let fileName = `${new Date().Format("yyyy_MM_dd_hh_mm_ss")}.json`;
       let backUpList = [];
       if (this.backUpList[0].selected) {
         fileName = "website_" + fileName;
