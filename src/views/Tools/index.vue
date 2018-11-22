@@ -1,5 +1,5 @@
 <template>
-    <div class="video-page">
+    <div class="tools-page">
         <div class="overflow-container">
             <div class="flow-station">
                 <input type="text" v-model="session" placeholder="请输入流量加油站session">
@@ -52,7 +52,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.video-page {
+.tools-page {
   .flow-station {
     padding: 0 20px;
     margin: 40px 0;

@@ -1,41 +1,35 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const LoginView = () =>
-    import ( /* webpackChunkName: "LoginView" */ './views/Login/index.vue')
 const SignView = () =>
-    import ( /* webpackChunkName: "SignView" */ './views/Sign/index.vue')
-const VideoView = () =>
-    import ( /* webpackChunkName: "VideoView" */ './views/Video/index.vue')
+    import( /* webpackChunkName: "SignView" */ './views/Sign/index.vue')
+const ToolsView = () =>
+    import( /* webpackChunkName: "ToolsView" */ './views/Tools/index.vue')
 const DiscuzView = () =>
-    import ( /* webpackChunkName: "DiscuzView" */ './views/Discuz/index.vue')
+    import( /* webpackChunkName: "DiscuzView" */ './views/Discuz/index.vue')
 const DiscuzForumView = () =>
-    import ( /* webpackChunkName: "DiscuzForumView" */ './views/Discuz/forum.vue')
+    import( /* webpackChunkName: "DiscuzForumView" */ './views/Discuz/forum.vue')
 const DiscuzMyView = () =>
-    import ( /* webpackChunkName: "DiscuzMyView" */ './views/Discuz/my.vue')
+    import( /* webpackChunkName: "DiscuzMyView" */ './views/Discuz/my.vue')
 const DiscuzThreadView = () =>
-    import ( /* webpackChunkName: "DiscuzThreadView" */ './views/Discuz/thread.vue')
+    import( /* webpackChunkName: "DiscuzThreadView" */ './views/Discuz/thread.vue')
 const MyView = () =>
-    import ( /* webpackChunkName: "MyView" */ './views/My/index.vue')
+    import( /* webpackChunkName: "MyView" */ './views/My/index.vue')
 const PasswordListView = () =>
-    import ( /* webpackChunkName: "PasswordListView" */ './views/Password/list.vue')
+    import( /* webpackChunkName: "PasswordListView" */ './views/Password/list.vue')
 const PasswordView = () =>
-    import ( /* webpackChunkName: "PasswordView" */ './views/Password/index.vue')
+    import( /* webpackChunkName: "PasswordView" */ './views/Password/index.vue')
 
 Vue.use(Router)
 
 export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes: [{
-            path: '/login/:type?',
-            name: 'LoginView',
-            component: LoginView
-        },
+    routes: [
         {
-            path: '/video',
-            name: 'VideoView',
-            component: VideoView
+            path: '/tools',
+            name: 'ToolsView',
+            component: ToolsView
         },
         {
             path: '/discuz',
@@ -82,7 +76,7 @@ export default new Router({
         },
         {
             path: '*',
-            redirect: '/video'
+            redirect: '/tools'
         },
     ]
 })
