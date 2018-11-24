@@ -3,9 +3,16 @@
         <div class="overflow-container">
             <div class="flow-station">
                 <input type="text" v-model="session" placeholder="请输入流量加油站session">
+                <select name="" id="" v-model="openId">
+                  <option value="oKXUCj2hnsXf3XNEHlYlaaOENtK0">17316345137</option>
+                  <option value="oKXUCj14Nnll-1jXgKc25hQ1QAEM">17721490806</option>
+                </select>
                 <button @click="updateSession">
                     更新SESSION
                 </button>
+            </div>
+            <div class="bt-download">
+              <a class="btn" href="http://www.cjd6568358.tk:6701/download/" target="_blank">查看BT资源</a>
             </div>             
         </div>
         <TabBar></TabBar>
@@ -21,7 +28,8 @@ export default {
   components: { TabBar },
   data() {
     return {
-      session: ""
+      session: "",
+      openId: "oKXUCj2hnsXf3XNEHlYlaaOENtK0"
     };
   },
   computed: {
@@ -38,9 +46,7 @@ export default {
         let {
           data: { data }
         } = await http.get(
-          `${HOST2}/api/flowStation/update/oKXUCj2hnsXf3XNEHlYlaaOENtK0/${
-            this.session
-          }`
+          `${HOST2}/api/flowStation/update/${this.openId}/${this.session}`
         );
         this.$store.commit("SET_LOADING_STATUS", false);
         this.$Toast.info(data);
@@ -53,9 +59,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .tools-page {
-  .flow-station {
+  .overflow-container {
     padding: 0 20px;
-    margin: 40px 0;
     input {
       width: 100%;
       height: 60px;
@@ -63,7 +68,14 @@ export default {
       border: 1px solid #d3d3d3;
       padding-left: 20px;
     }
-    button {
+    select {
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      border: 1px solid #d3d3d3;
+      margin: 30px 0;
+    }
+    button,a.btn {
       margin-top: 40px;
       display: block;
       width: 100%;
@@ -73,6 +85,20 @@ export default {
       background-color: #3389e7;
       color: #fff;
       font-size: 28px;
+    }
+  }
+  .flow-station {
+    margin: 40px 0;
+    select {
+      margin: 30px 0;
+    }
+    button {
+      margin-top: 40px;
+    }
+  }
+  .bt-download {
+    a {
+      text-align: center;
     }
   }
 }
