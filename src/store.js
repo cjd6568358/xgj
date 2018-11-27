@@ -57,7 +57,6 @@ export default new Vuex.Store({
             state.isLoading = STATUS
         },
         UPDATE_DISCUZ(state, info) {
-            console.log(info)
             if (info.webSite) {
                 setCookie('webSite', info.webSite)
             }
