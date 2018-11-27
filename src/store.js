@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getCookie, delCookie, loadScript } from "./util";
+import { getCookie, delCookie, setCookie, loadScript } from "./util";
 import { HOST1, HOST2 } from "./config";
 
 Vue.use(Vuex)
@@ -57,6 +57,9 @@ export default new Vuex.Store({
             state.isLoading = STATUS
         },
         UPDATE_DISCUZ(state, info) {
+            if (info.webSite) {
+                setCookie('webSite', info.webSite)
+            }
             Object.assign(state.discuz, info)
         },
     },

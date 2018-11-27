@@ -5,7 +5,7 @@ const keepaliveAgent = new Agent({
     maxSockets: 100,
     maxFreeSockets: 10,
     timeout: 60000,
-    freeSocketKeepAliveTimeout: 30000
+    freeSocketTimeout: 30000
 })
 const httpClient = axios.create({
     withCredentials: true

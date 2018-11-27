@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/xgj/js/DiscuzMyView.c83dc762.js"
   },
   {
-    "revision": "09317a0ede8be6ab091842612880490c",
+    "revision": "502c91ca42710d46c5c46a3edc938314",
     "url": "/xgj/index.html"
   },
   {
@@ -28,24 +28,24 @@ self.__precacheManifest = [
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "6da1d5700da2795e55a7",
-    "url": "/xgj/js/DiscuzView.4a15eb92.js"
+    "revision": "59bc75d70c88eb6ffcb9",
+    "url": "/xgj/js/DiscuzView.2f98e8a3.js"
   },
   {
     "revision": "937d57b5a397b03af724",
     "url": "/xgj/js/chunk-vendors.ce4a7c48.js"
   },
   {
-    "revision": "78f66c024cb031da65ed",
-    "url": "/xgj/js/MyView.b10deb62.js"
+    "revision": "9e7260c54656381a22c8",
+    "url": "/xgj/js/MyView.03a83bd4.js"
   },
   {
     "revision": "836ae3d48364226264cc",
     "url": "/xgj/js/MyView~PasswordListView~PasswordView~SignView.71923af2.js"
   },
   {
-    "revision": "299dcdb008b0b6e59eb4",
-    "url": "/xgj/js/app.dd4142a1.js"
+    "revision": "c87606424ef48a97cea7",
+    "url": "/xgj/js/app.b02c5ebc.js"
   },
   {
     "revision": "e1afd8801d4075b0aeb3",
@@ -76,7 +76,7 @@ self.__precacheManifest = [
     "url": "/xgj/favicon.png"
   },
   {
-    "revision": "299dcdb008b0b6e59eb4",
+    "revision": "c87606424ef48a97cea7",
     "url": "/xgj/css/app.8b33a87b.css"
   },
   {
@@ -92,12 +92,12 @@ self.__precacheManifest = [
     "url": "/xgj/css/PasswordListView.13e98019.css"
   },
   {
-    "revision": "78f66c024cb031da65ed",
-    "url": "/xgj/css/MyView.63b7f2c1.css"
+    "revision": "9e7260c54656381a22c8",
+    "url": "/xgj/css/MyView.85e6d299.css"
   },
   {
-    "revision": "6da1d5700da2795e55a7",
-    "url": "/xgj/css/DiscuzView.4c2ded16.css"
+    "revision": "59bc75d70c88eb6ffcb9",
+    "url": "/xgj/css/DiscuzView.298c1895.css"
   },
   {
     "revision": "4a0d172524b6831ddb3a",
@@ -112,7 +112,7 @@ self.__precacheManifest = [
     "url": "/xgj/css/DiscuzForumView.9cc70f2a.css"
   },
   {
-    "revision": "09317a0ede8be6ab091842612880490c",
+    "revision": "502c91ca42710d46c5c46a3edc938314",
     "url": "/xgj/404.html"
   }
 ];

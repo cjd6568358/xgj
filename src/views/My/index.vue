@@ -28,10 +28,27 @@
           导入
         </li>
         <li @click="debugClick">
-          {{debug?'关闭':'打开'}}调试
+          {{debug ? '关闭':'打开'}}调试
         </li>
         <li @click="switchTemmeConvert">
           {{temmeConvert}}进行HTML转换
+        </li>
+        <li>
+          <span>
+            切换website源
+          </span>
+          <select
+            name=""
+            id=""
+            placeholder="请选择站点"
+            v-model="webSite"
+          >
+            <option
+              v-for="item of discuz.webSiteList"
+              :key="item"
+              :value="item"
+            >{{item}}</option>
+          </select>
         </li>
       </ul>
     </div>
@@ -51,7 +68,17 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["debug", "temmeConvert"])
+    ...mapState(["debug", "temmeConvert", "discuz"]),
+    webSite: {
+      get() {
+        return this.discuz.webSite;
+      },
+      set(newValue) {
+        this.$store.commit("UPDATE_DISCUZ", {
+          webSite: newValue
+        });
+      }
+    }
   },
   mounted() {},
   methods: {
@@ -147,8 +174,12 @@ export default {
         height: 80px;
         line-height: 80px;
         border-bottom: 1px solid #d3d3d3;
+        display: flex;
         &:last-child {
           border-bottom: 0;
+        }
+        span {
+          flex: 1;
         }
       }
     }

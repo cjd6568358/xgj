@@ -85,7 +85,7 @@
       <a
         class="btn switch"
         @click="switchHost"
-      >切换源(当前:{{discuz.HOST.includes('herokuapp')?'herokuapp':'3322'}})</a>
+      >切换HOST源(当前:{{discuz.HOST.includes('herokuapp')?'herokuapp':'3322'}})</a>
     </div>
   </div>
 </template>
@@ -191,7 +191,6 @@ export default {
         this.$store.commit("UPDATE_DISCUZ", {
           isLogin: !!getCookie("cdb3_auth")
         });
-        setCookie("webSite", this.webSite);
         this.checkSigned();
         this.getIndexPageJson();
       }
