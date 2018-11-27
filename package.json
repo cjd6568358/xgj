@@ -11,6 +11,7 @@
     "agentkeepalive": "^4.0.0",
     "axios": "^0.18.0",
     "dexie": "^2.0.4",
+    "js-cookie": "^2.2.0",
     "register-service-worker": "^1.0.0",
     "temme": "^0.8.2",
     "vue": "^2.5.17",

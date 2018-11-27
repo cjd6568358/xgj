@@ -1,5 +1,6 @@
 import { HOST1 } from "../config";
 import http from "./http";
+import Cookies from 'js-cookie'
 let checkWebp = function() {
     return new Promise(function(resolve) {
         if (getCookie('webpSupport') == 'true') {
@@ -81,26 +82,29 @@ let getCookieDomain = function() {
 }
 
 let setCookie = function(cookieKey, cookieVal) {
-    var env = getCookieDomain();
-    var date = 30;
-    var exp = new Date();
-    exp.setTime(exp.getTime() + date * 24 * 60 * 60 * 1000);
-    if (typeof cookieVal == 'object') {
-        cookieVal = JSON.stringify(cookieVal);
-    }
-    document.cookie = cookieKey + '=' + encodeURIComponent(cookieVal) + ';domain=' + env + ';path=/;expires=' + exp.toGMTString();
+    Cookies.set(cookieKey, cookieVal, { expires: 7 });
+    // var env = getCookieDomain();
+    // var date = 30;
+    // var exp = new Date();
+    // exp.setTime(exp.getTime() + date * 24 * 60 * 60 * 1000);
+    // if (typeof cookieVal == 'object') {
+    //     cookieVal = JSON.stringify(cookieVal);
+    // }
+    // document.cookie = cookieKey + '=' + encodeURIComponent(cookieVal) + ';domain=' + env + ';path=/;expires=' + exp.toGMTString();
 }
 
 let getCookie = function(cookieKey) {
-    var arr = document.cookie.match(new RegExp('(^| )' + cookieKey + '=([^;]*)(;|$)'));
-    if (arr != null) return decodeURIComponent(arr[2]);
-    return null;
+    return Cookies.get(cookieKey);
+    // var arr = document.cookie.match(new RegExp('(^| )' + cookieKey + '=([^;]*)(;|$)'));
+    // if (arr != null) return decodeURIComponent(arr[2]);
+    // return null;
 }
 
 let delCookie = function(cookieKey) {
-    var date = new Date();
-    date.setTime(date.getTime() - 1);
-    document.cookie = cookieKey + '=' + '' + ';path=/;expires=' + date.toGMTString();
+    Cookies.remove(cookieKey);
+    // var date = new Date();
+    // date.setTime(date.getTime() - 1);
+    // document.cookie = cookieKey + '=' + '' + ';path=/;expires=' + date.toGMTString();
 }
 
 /**
@@ -142,9 +146,9 @@ let loadScript = function(src) {
         script.async = true;
         script.src = src;
         script.onload = () => {
-            resolve(true);
-        }
-        // eslint-disable-next-line
+                resolve(true);
+            }
+            // eslint-disable-next-line
         script.onerror = (e) => {
             reject(false);
         }
