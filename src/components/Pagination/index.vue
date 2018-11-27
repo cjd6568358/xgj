@@ -26,12 +26,16 @@ export default {
 <style lang="scss" scoped>
 .pagination {
   text-align: center;
-  padding-top: 10px;
+  padding: 20px 0;
   .btn {
     display: inline-block;
     padding: 20px;
     background: #fff;
     border: 2px solid #ddd;
+    border-radius: 10px;
+    &.currPageInfo{
+        margin: 0 20px;
+    }
     &.prev-btn {
     }
     &.next-btn {

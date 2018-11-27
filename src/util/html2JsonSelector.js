@@ -28,7 +28,7 @@ export default {
             .nums{$nums};
             td.icon img[alt=$type];
             span.bold{$permission|Number}
-            .author cite{$thanks|html|replace(/<a(.*)absmiddle">/g,'')|Number}
+            .author cite{node($thanks|html|replace(/<a(.*)absmiddle">/g,'')|Number)}
         }
     };
     .mainbox.threadlist+.pages_btns .pages@pageInfo|pack{
@@ -54,8 +54,8 @@ export default {
         // .postauthor .profile{$authorProfile}
         .postcontent .postinfo strong[id=$pid|replace(/postnum_/g,'')][onclick=$absPostUrl|replace(/',.*/g,'')|match(/viewth.*/g)|first]{$postFloor}
         .postcontent .postinfo{find('小',$postTime, '只看该作者')}
-        .postcontent .postmessage>h2{$postTitle|html}
-        .postcontent .postmessage .t_msgfont{$content|html|replace(/border(.*)alt=""/g,"")} 
+        .postcontent .postmessage>h2{node($postTitle|html)}
+        .postcontent .postmessage .t_msgfont{node($content|html|replace(/border(.*)alt=""/g,""))}
     };
     form+.pages_btns .pages@pageInfo|pack{
         $currPageNum = 1;

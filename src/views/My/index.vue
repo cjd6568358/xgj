@@ -1,40 +1,46 @@
 <template>
-    <div class="my-page">
-        <div class="overflow-container">
-            <div class="user">
-                <img src="//q2.qlogo.cn/g?b=qq&k=5iapa3nHicXobHy5D7nmibgOQ&s=100" alt="">
-                <div class="info">
-                    <p class="name">测试</p>
-                    <div class="phone">13512341234</div>
-                </div>
-            </div>
-            <ul>
-                <li @click="deleteSignRecords">
-                    清除考勤记录
-                </li>
-                <li @click="deleteDB">
-                    删除数据库
-                </li>
-                <li @click="clearCacheClick">
-                    清除缓存
-                </li>
-                <li @click="recordsExportClick">
-                    备份
-                </li>
-                <li @click="recordsImportClick">
-                    导入
-                </li>
-                <li @click="debugClick">
-                    {{debug?'关闭':'打开'}}调试
-                </li>
-            </ul>
+  <div class="my-page">
+    <div class="overflow-container">
+      <div class="user">
+        <img
+          src="//q2.qlogo.cn/g?b=qq&k=5iapa3nHicXobHy5D7nmibgOQ&s=100"
+          alt=""
+        >
+        <div class="info">
+          <p class="name">测试</p>
+          <div class="phone">13512341234</div>
         </div>
-        <TabBar></TabBar>
+      </div>
+      <ul>
+        <li @click="deleteSignRecords">
+          清除考勤记录
+        </li>
+        <li @click="deleteDB">
+          删除数据库
+        </li>
+        <li @click="clearCacheClick">
+          清除缓存
+        </li>
+        <li @click="recordsExportClick">
+          备份
+        </li>
+        <li @click="recordsImportClick">
+          导入
+        </li>
+        <li @click="debugClick">
+          {{debug?'关闭':'打开'}}调试
+        </li>
+        <li @click="switchTemmeConvert">
+          {{temmeConvert}}进行HTML转换
+        </li>
+      </ul>
     </div>
+    <TabBar></TabBar>
+  </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import TabBar from "../../components/TabBar/index.vue";
 import RecordsImport from "../../components/RecordsImport/index.vue";
 import RecordsExport from "../../components/RecordsExport/index.vue";
@@ -45,10 +51,11 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["debug"])
+    ...mapState(["debug", "temmeConvert"])
   },
   mounted() {},
   methods: {
+    ...mapActions(["switchTemmeConvert"]),
     recordsImportClick() {
       this.$openModal({
         position: "bottom",
