@@ -63,7 +63,7 @@ class DbHelper {
     initDB(dbName) {
         this.db = new Dexie(dbName);
         this.db.version(this.version).stores({
-            signRecords: "id,timestamp,year,month,day,hour,minute,second",
+            signRecords: "id,timestamp,[year+month],day,hour,minute,second",
             website: 'id,title,remark,keys,status'
         });
         this.db.open().catch(function(e) {
