@@ -82,7 +82,7 @@ let getCookieDomain = function() {
 }
 
 let setCookie = function(cookieKey, cookieVal) {
-    Cookies.set(cookieKey, cookieVal, { expires: 7 });
+    Cookies.set(cookieKey, cookieVal, { expires: 30 });
     // var env = getCookieDomain();
     // var date = 30;
     // var exp = new Date();
