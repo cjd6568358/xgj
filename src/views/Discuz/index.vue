@@ -407,22 +407,22 @@ export default {
     async updateWebSiteList() {
       let url = `http://www.oznewspaper.com/`;
       let postData = {
-          httpConfig: {
-              url,
-              method: "get",
-              responseType: "arraybuffer"
-          },
-          encoding: "gbk",
-          selector: selectors.webSiteList
+        httpConfig: {
+          url,
+          method: "get",
+          responseType: "arraybuffer"
+        },
+        encoding: "gbk",
+        selector: selectors.webSiteList
       };
       this.$store.commit("SET_LOADING_STATUS", true);
       let {
-          data: { data }
+        data: { data }
       } = await http.post(`${HOST1}/api/html2Json`, postData);
       this.$store.commit("SET_LOADING_STATUS", false);
       let webSiteList = [];
       data.webSiteList.forEach(webSite => {
-          webSiteList.push(webSite.replace("\n", "").replace(/ .*/g,''));
+        webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
       });
       localStorage.setItem("webSiteList", JSON.stringify(webSiteList));
       this.$store.commit("UPDATE_DISCUZ", { webSiteList });
