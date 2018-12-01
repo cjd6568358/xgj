@@ -65,21 +65,21 @@ let getHash = function(str) {
     return retValue;
 }
 
-let getCookieDomain = function() {
-    var host = location.hostname;
-    var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-    if (ip.test(host) == true || host == 'localhost') return host;
-    var regex = /([^/]*).*/;
-    var match = host.match(regex);
-    if (typeof match != 'undefined' && null != match) host = match[1];
-    if (typeof host != 'undefined' && null != host) {
-        var strAry = host.split('.');
-        if (strAry.length > 1) {
-            host = strAry[strAry.length - 2] + '.' + strAry[strAry.length - 1];
-        }
-    }
-    return '.' + host;
-}
+// let getCookieDomain = function() {
+//     var host = location.hostname;
+//     var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+//     if (ip.test(host) == true || host == 'localhost') return host;
+//     var regex = /([^/]*).*/;
+//     var match = host.match(regex);
+//     if (typeof match != 'undefined' && null != match) host = match[1];
+//     if (typeof host != 'undefined' && null != host) {
+//         var strAry = host.split('.');
+//         if (strAry.length > 1) {
+//             host = strAry[strAry.length - 2] + '.' + strAry[strAry.length - 1];
+//         }
+//     }
+//     return '.' + host;
+// }
 
 let setCookie = function(cookieKey, cookieVal) {
     Cookies.set(cookieKey, cookieVal, { expires: 30 });
