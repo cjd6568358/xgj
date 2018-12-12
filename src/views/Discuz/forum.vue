@@ -1,7 +1,7 @@
 <template>
 	<div class="discuzForum-page">
 		<Menus :url="url"></Menus>
-		<div class="overflow-container">
+		<div class="overflow-container" @touchend="onScroll">
 			<ul class="area" v-for="(forum,i) of forumList" :key="i" :data-title="forum.name">
 				<template v-for="(thread,ii) of forum.value">
 					<router-link v-if="thread.type != '投票'" :key="ii" :to="{name: 'DiscuzThreadView', params: { url: targetHost + thread.href }}" tag="li">
@@ -32,7 +32,8 @@ export default {
 				totalPageNum: 1,
 				nextPageNum: null,
 				nextUrl: null
-			}
+			},
+			scrollMap: new Map()
 		};
 	},
 	computed: {
@@ -49,20 +50,23 @@ export default {
 			}
 		}
 	},
-	async mounted() {
-		await this.getForumPageJson(this.url);
-		if (this.$route.query.scrollTop) {
-			this.$nextTick(() => {
-				document.querySelector(
-					".overflow-container"
-				).scrollTop = this.$route.query.scrollTop;
-			});
-		}
-	},
+	async mounted() {},
 	async beforeRouteUpdate(to, from, next) {
 		next();
 		await this.getForumPageJson(to.params.url);
-		document.querySelector(".overflow-container").scrollTop = 0;
+		let scrollTop = 0;
+		if (this.scrollMap.has(to.params.url)) {
+			scrollTop = this.scrollMap.get(to.params.url);
+		}
+		document.querySelector(".overflow-container").scrollTop = scrollTop;
+	},
+	async activated() {
+		await this.getForumPageJson(this.url);
+		let scrollTop = 0;
+		if (this.scrollMap.has(this.url)) {
+			scrollTop = this.scrollMap.get(this.url);
+		}
+		document.querySelector(".overflow-container").scrollTop = scrollTop;
 	},
 	beforeMount() {},
 	destroyed() {},
@@ -96,6 +100,17 @@ export default {
 			this.forumList = pageData.forumList;
 			this.pageInfo = pageData.pageInfo;
 			document.title = pageData.documentTitle;
+		},
+		onScroll() {
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+			this.timer = setTimeout(() => {
+				this.scrollMap.set(
+					this.url,
+					document.querySelector(".overflow-container").scrollTop
+				);
+			}, 500);
 		}
 	}
 };

@@ -2,31 +2,30 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const SignView = () =>
-    import( /* webpackChunkName: "SignView" */ './views/Sign/index.vue')
+    import ( /* webpackChunkName: "SignView" */ './views/Sign/index.vue')
 const ToolsView = () =>
-    import( /* webpackChunkName: "ToolsView" */ './views/Tools/index.vue')
+    import ( /* webpackChunkName: "ToolsView" */ './views/Tools/index.vue')
 const DiscuzView = () =>
-    import( /* webpackChunkName: "DiscuzView" */ './views/Discuz/index.vue')
+    import ( /* webpackChunkName: "DiscuzView" */ './views/Discuz/index.vue')
 const DiscuzForumView = () =>
-    import( /* webpackChunkName: "DiscuzForumView" */ './views/Discuz/forum.vue')
+    import ( /* webpackChunkName: "DiscuzForumView" */ './views/Discuz/forum.vue')
 const DiscuzMyView = () =>
-    import( /* webpackChunkName: "DiscuzMyView" */ './views/Discuz/my.vue')
+    import ( /* webpackChunkName: "DiscuzMyView" */ './views/Discuz/my.vue')
 const DiscuzThreadView = () =>
-    import( /* webpackChunkName: "DiscuzThreadView" */ './views/Discuz/thread.vue')
+    import ( /* webpackChunkName: "DiscuzThreadView" */ './views/Discuz/thread.vue')
 const MyView = () =>
-    import( /* webpackChunkName: "MyView" */ './views/My/index.vue')
+    import ( /* webpackChunkName: "MyView" */ './views/My/index.vue')
 const PasswordListView = () =>
-    import( /* webpackChunkName: "PasswordListView" */ './views/Password/list.vue')
+    import ( /* webpackChunkName: "PasswordListView" */ './views/Password/list.vue')
 const PasswordView = () =>
-    import( /* webpackChunkName: "PasswordView" */ './views/Password/index.vue')
+    import ( /* webpackChunkName: "PasswordView" */ './views/Password/index.vue')
 
 Vue.use(Router)
 
 export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes: [
-        {
+    routes: [{
             path: '/tools',
             name: 'ToolsView',
             component: ToolsView
@@ -34,13 +33,19 @@ export default new Router({
         {
             path: '/discuz',
             name: 'DiscuzView',
-            component: DiscuzView
+            component: DiscuzView,
+            meta: {
+                keepAlive: true // true 表示需要使用缓存 false表示不需要被缓存
+            }
         },
         {
             path: '/discuz/forum/:url',
             name: 'DiscuzForumView',
             component: DiscuzForumView,
-            props: true
+            props: true,
+            meta: {
+                keepAlive: true // true 表示需要使用缓存 false表示不需要被缓存
+            }
         },
         {
             path: '/discuz/my',

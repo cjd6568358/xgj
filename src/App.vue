@@ -1,6 +1,9 @@
 <template>
 	<div id="app">
-		<router-view class="view"></router-view>
+		<keep-alive>
+			<router-view v-if="$route.meta.keepAlive" class="view"></router-view>
+		</keep-alive>
+		<router-view v-if="!$route.meta.keepAlive" class="view"></router-view>
 		<div class="loading" v-if="isLoading">
 			<svg class="icon icon-spinner3">
 				<symbol id="icon-spinner3" viewBox="0 0 32 32">

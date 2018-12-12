@@ -1,6 +1,6 @@
 <template>
 	<div class="discuz-page">
-		<div class="overflow-container">
+		<div class="overflow-container" @scroll="onScroll">
 			<div v-if="!discuz.isLogin" class="login-form">
 				<center>
 					<h3>discuz论坛手机版</h3>
@@ -55,7 +55,8 @@ export default {
 				username: "",
 				password: "",
 				QA: ""
-			}
+			},
+			scrollTop: 0
 		};
 	},
 	computed: {
@@ -73,9 +74,17 @@ export default {
 		}
 	},
 	mounted() {
-		this.init();
+		
+	},
+	activated() {
+        this.init();
 		// eslint-disable-next-line
 		console.log("isLogin:", this.discuz.isLogin, this.discuz.HOST);
+		if (this.scrollTop) {
+			document.querySelector(
+				".overflow-container"
+			).scrollTop = this.scrollTop;
+		}
 	},
 	beforeMount() {},
 	destroyed() {},
@@ -389,6 +398,14 @@ export default {
 			});
 			localStorage.setItem("webSiteList", JSON.stringify(webSiteList));
 			this.$store.commit("UPDATE_DISCUZ", { webSiteList });
+		},
+		onScroll(e) {
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+			this.timer = setTimeout(() => {
+                this.scrollTop = e.target.scrollTop;
+			}, 100);
 		}
 	}
 };
