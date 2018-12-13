@@ -1,7 +1,7 @@
 <template>
 	<div class="discuzForum-page">
 		<Menus :url="url"></Menus>
-		<div class="overflow-container" @touchend="onScroll">
+		<div class="overflow-container" @touchmove="onScroll">
 			<ul class="area" v-for="(forum,i) of forumList" :key="i" :data-title="forum.name">
 				<template v-for="(thread,ii) of forum.value">
 					<router-link v-if="thread.type != '投票'" :key="ii" :to="{name: 'DiscuzThreadView', params: { url: targetHost + thread.href }}" tag="li">
@@ -40,14 +40,16 @@ export default {
 		...mapState(["isLoading", "discuz"]),
 		...mapGetters(["targetHost"]),
 		prevUrl() {
+			let prevUrl = "";
 			if (this.pageInfo.currPageNum != 1 && this.url) {
-				return this.url
+				prevUrl = this.url
+					.replace(/.*bbs\//g, "")
 					.replace(
-						/-\d.html/,
-						`-${this.pageInfo.currPageNum - 1}.html`
-					)
-					.replace(/.*bbs\//g, "");
+						/(\d*)\.html/,
+						`${this.pageInfo.currPageNum - 1}.html`
+					);
 			}
+			return prevUrl;
 		}
 	},
 	async mounted() {},

@@ -42,14 +42,16 @@ export default {
 		...mapState(["isLoading", "discuz"]),
 		...mapGetters(["targetHost"]),
 		prevUrl() {
+			let prevUrl = "";
 			if (this.pageInfo.currPageNum != 1 && this.url) {
-				return this.url
+				prevUrl = this.url
+					.replace(/.*bbs\//g, "")
 					.replace(
-						/-\d.html/,
-						`-${this.pageInfo.currPageNum - 1}.html`
-					)
-					.replace(/.*bbs\//g, "");
+						/(\d*)\.html/,
+						`${this.pageInfo.currPageNum - 1}.html`
+					);
 			}
+			return prevUrl;
 		}
 	},
 	async mounted() {
