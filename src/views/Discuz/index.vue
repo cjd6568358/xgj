@@ -55,8 +55,7 @@ export default {
 				username: "",
 				password: "",
 				QA: ""
-			},
-			scrollTop: 0
+			}
 		};
 	},
 	computed: {
@@ -73,18 +72,13 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		
-	},
+	mounted() {},
 	activated() {
-        this.init();
+		this.init();
 		// eslint-disable-next-line
 		console.log("isLogin:", this.discuz.isLogin, this.discuz.HOST);
-		if (this.scrollTop) {
-			document.querySelector(
-				".overflow-container"
-			).scrollTop = this.scrollTop;
-		}
+		document.querySelector(".overflow-container").scrollTop =
+			sessionStorage.getItem("homePage") || 0;
 	},
 	beforeMount() {},
 	destroyed() {},
@@ -404,7 +398,7 @@ export default {
 				clearTimeout(this.timer);
 			}
 			this.timer = setTimeout(() => {
-                this.scrollTop = e.target.scrollTop;
+				sessionStorage.setItem("homePage", e.target.scrollTop);
 			}, 100);
 		}
 	}

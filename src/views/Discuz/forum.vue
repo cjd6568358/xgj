@@ -32,8 +32,7 @@ export default {
 				totalPageNum: 1,
 				nextPageNum: null,
 				nextUrl: null
-			},
-			scrollMap: new Map()
+			}
 		};
 	},
 	computed: {
@@ -56,19 +55,11 @@ export default {
 	async beforeRouteUpdate(to, from, next) {
 		next();
 		await this.getForumPageJson(to.params.url);
-		let scrollTop = 0;
-		if (this.scrollMap.has(to.params.url)) {
-			scrollTop = this.scrollMap.get(to.params.url);
-		}
-		document.querySelector(".overflow-container").scrollTop = scrollTop;
+		document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem(to.params.url) || 0;
 	},
 	async activated() {
 		await this.getForumPageJson(this.url);
-		let scrollTop = 0;
-		if (this.scrollMap.has(this.url)) {
-			scrollTop = this.scrollMap.get(this.url);
-		}
-		document.querySelector(".overflow-container").scrollTop = scrollTop;
+		document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem(this.url) || 0;
 	},
 	beforeMount() {},
 	destroyed() {},
@@ -108,7 +99,7 @@ export default {
 				clearTimeout(this.timer);
 			}
 			this.timer = setTimeout(() => {
-				this.scrollMap.set(
+				sessionStorage.setItem(
 					this.url,
 					document.querySelector(".overflow-container").scrollTop
 				);
