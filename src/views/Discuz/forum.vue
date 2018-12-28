@@ -55,11 +55,13 @@ export default {
 	async beforeRouteUpdate(to, from, next) {
 		next();
 		await this.getForumPageJson(to.params.url);
-		document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem(to.params.url) || 0;
+		document.querySelector(".overflow-container").scrollTop =
+			sessionStorage.getItem(to.params.url + "_scrollTop") || 0;
 	},
 	async activated() {
 		await this.getForumPageJson(this.url);
-		document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem(this.url) || 0;
+		document.querySelector(".overflow-container").scrollTop =
+			sessionStorage.getItem(this.url + "_scrollTop") || 0;
 	},
 	beforeMount() {},
 	destroyed() {},
@@ -89,7 +91,6 @@ export default {
 				pageData = data;
 				sessionStorage.setItem(url, JSON.stringify(pageData));
 			}
-
 			this.forumList = pageData.forumList;
 			this.pageInfo = pageData.pageInfo;
 			document.title = pageData.documentTitle;
@@ -100,7 +101,7 @@ export default {
 			}
 			this.timer = setTimeout(() => {
 				sessionStorage.setItem(
-					this.url,
+					this.url + "_scrollTop",
 					document.querySelector(".overflow-container").scrollTop
 				);
 			}, 500);
