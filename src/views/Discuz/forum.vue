@@ -40,7 +40,7 @@ export default {
 		...mapGetters(["targetHost"]),
 		prevUrl() {
 			let prevUrl = "";
-			if (this.pageInfo.currPageNum != 1 && this.url) {
+			if (this.pageInfo && this.pageInfo.currPageNum != 1 && this.url) {
 				prevUrl = this.url
 					.replace(/.*bbs\//g, "")
 					.replace(
