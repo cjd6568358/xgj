@@ -187,9 +187,8 @@ export default {
 					} else if (
 						item &&
 						item.title ==
-							`${
-								data.username
-							}/${new Date().getMonth()}月份/打卡签到帖`
+							`${data.username}/${new Date().getMonth() ||
+								12}月份/打卡签到帖`
 					) {
 						signInfo.prevMonthSignThreadLastPostUrl =
 							item.lastPostUrl;
@@ -202,9 +201,8 @@ export default {
 					if (
 						item &&
 						item.title ==
-							`${
-								data.username
-							}/${new Date().getMonth()}月份/打卡签到帖`
+							`${data.username}/${new Date().getMonth() ||
+								12}月份/打卡签到帖`
 					) {
 						signInfo.prevMonthSignThreadLastPostUrl = item.href;
 					}
