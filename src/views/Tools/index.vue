@@ -6,6 +6,7 @@
 				<select name id v-model="openId">
 					<option value="oKXUCj2hnsXf3XNEHlYlaaOENtK0">17316345137</option>
 					<option value="oKXUCj14Nnll-1jXgKc25hQ1QAEM">17721490806</option>
+                    <option value="oKXUCj6oxII_7cEvHM0dPk1RX-eQ">13386089856</option>
 				</select>
 				<button @click="updateSession">更新SESSION</button>
 			</div>
