@@ -32,4 +32,4 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/\/xgj\/(my|sign|video|password|discuz)$/, workbox.strategies.networkFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200,404]})] }), 'GET');
+workbox.routing.registerRoute(/\/xgj\/(tools|discuz|sign|password|my)$/, workbox.strategies.networkFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200,404]})] }), 'GET');
