@@ -1,7 +1,6 @@
 import { HOST1 } from "../config";
 import http from "./http";
 import Cookies from 'js-cookie'
-import { async } from "q";
 let checkWebp = function() {
     return new Promise(function(resolve) {
         if (getCookie('webpSupport') == 'true') {
