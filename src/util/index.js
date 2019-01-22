@@ -1,6 +1,7 @@
 import { HOST1 } from "../config";
 import http from "./http";
 import Cookies from 'js-cookie'
+import { async } from "q";
 let checkWebp = function() {
     return new Promise(function(resolve) {
         if (getCookie('webpSupport') == 'true') {
@@ -111,16 +112,51 @@ let delCookie = function(cookieKey) {
  * data 必须为字符串
  * @param {Object} params 
  */
-let string2File = function(params = { fileName: '', data: '' }) {
+let string2File = function(params = { fileName: '', data: '', encrypt: true }) {
     let HOST = HOST1;
     if (localStorage.getItem("api_host")) {
         HOST = localStorage.getItem("api_host");
+    }
+    if (typeof params.encrypt === 'undefined') {
+        params.encrypt = true
     }
     http.post(`${HOST}/api/string2File`, params).then(res => {
         if (res.data.statusCode == 1) {
             window.open(`${HOST}/api/downloadFile/${res.data.data}`)
         }
     })
+}
+
+/**
+ * 加密字符串
+ * @param {String} data 
+ * @param {String} key 
+ */
+let encryptAES = async function(data, key) {
+    let HOST = HOST1;
+    if (localStorage.getItem("api_host")) {
+        HOST = localStorage.getItem("api_host");
+    }
+    let { data: resData } = await http.post(`${HOST}/api/encryptAES`, { data, key })
+    if (resData.statusCode == 1) {
+        return resData.data
+    }
+}
+
+/**
+ * 解密字符串
+ * @param {String} encryptedString 
+ * @param {String} key 
+ */
+let decryptAES = async function(data, key) {
+    let HOST = HOST1;
+    if (localStorage.getItem("api_host")) {
+        HOST = localStorage.getItem("api_host");
+    }
+    let { data: resData } = await http.post(`${HOST}/api/decryptAES`, { data, key })
+    if (resData.statusCode == 1) {
+        return resData.data
+    }
 }
 
 /**
@@ -166,5 +202,7 @@ export {
     delCookie,
     string2File,
     getTotalDaysArr,
-    loadScript
+    loadScript,
+    encryptAES,
+    decryptAES
 }
