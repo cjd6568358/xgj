@@ -314,6 +314,20 @@ export default {
 					},
 					encoding: "gbk"
 				};
+				// Object.assign(postData.httpConfig, {
+				// 	url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
+				// 	data: querystring.stringify({
+				// 		formhash: signInfo.formhash,
+				// 		subject: "",
+				// 		message: `ID: ${username}\r\n签到次数: ${
+				// 			prevMonthSignInfo.count
+				// 		}\r\n签到链接: [bbs]${encodeURIComponent(
+				// 			prevMonthSignInfo.absPostUrl
+				// 		)}[/bbs]`,
+				// 		fid: 420,
+				// 		wysiwyg: 0
+				// 	})
+				// });
 				Object.assign(postData.httpConfig, {
 					url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
 					data: querystring.stringify({
@@ -322,7 +336,7 @@ export default {
 						message: `ID: ${username}\r\n签到次数: ${
 							prevMonthSignInfo.count
 						}\r\n签到链接: [bbs]${encodeURIComponent(
-							prevMonthSignInfo.absPostUrl
+							`thread-${prevMonthSignInfo.tid}-1-1.html`
 						)}[/bbs]`,
 						fid: 420,
 						wysiwyg: 0
