@@ -34,7 +34,7 @@
 					<router-link v-for="(form,ii) of area.value" :key="ii" :to="{name: 'DiscuzForumView', params: { url: targetHost + form.value }}" tag="li">{{form.name}}</router-link>
 				</ul>
 			</template>
-			<a class="btn switch" @click="switchHost">切换HOST源(当前:{{discuz.HOST.includes('herokuapp')?'herokuapp':'3322'}})</a>
+			<a class="btn switch" @click="switchProxy">切换代理源({{proxyServerPlatom}})</a>
 		</div>
 	</div>
 </template>
@@ -44,7 +44,7 @@ import http from "../../util/http";
 import querystring from "querystring";
 import { getCookie } from "../../util";
 import selectors from "../../util/html2JsonSelector";
-import { HOST1 } from "../../config";
+import { proxyServers } from "../../config";
 export default {
 	name: "discuz-page",
 	components: {},
@@ -70,6 +70,14 @@ export default {
 					webSite: newValue
 				});
 			}
+		},
+		proxyServerPlatom() {
+            console.log(proxyServers.filter(
+				item => item.host === this.discuz.HOST
+			),this.discuz.HOST)
+			return proxyServers.filter(
+				item => item.host === this.discuz.HOST
+			)[0].platom;
 		}
 	},
 	mounted() {},
@@ -83,7 +91,7 @@ export default {
 	beforeMount() {},
 	destroyed() {},
 	methods: {
-		...mapActions(["switchHost", "logout"]),
+		...mapActions(["switchProxy", "logout"]),
 		async init() {
 			if (this.discuz.isLogin) {
 				if (!this.discuz.signInfo.isSigned) {
@@ -383,6 +391,12 @@ export default {
 			}
 		},
 		async updateWebSiteList() {
+            let gfwProxyServers = proxyServers.filter(item => item.gfw);
+			let HOST =
+				gfwProxyServers[
+					Math.floor(Math.random() * gfwProxyServers.length)
+                ].host;
+                console.log(222)
 			let url = `http://www.oznewspaper.com/`;
 			let postData = {
 				httpConfig: {
@@ -396,7 +410,7 @@ export default {
 			this.$store.commit("SET_LOADING_STATUS", true);
 			let {
 				data: { data }
-			} = await http.post(`${HOST1}/api/html2Json`, postData);
+			} = await http.post(`${HOST}/api/html2Json`, postData);
 			this.$store.commit("SET_LOADING_STATUS", false);
 			let webSiteList = [];
 			data.webSiteList.forEach(webSite => {

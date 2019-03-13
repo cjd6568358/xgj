@@ -6,7 +6,7 @@
 				<select name id v-model="openId">
 					<option value="oKXUCj2hnsXf3XNEHlYlaaOENtK0">17316345137</option>
 					<option value="oKXUCj14Nnll-1jXgKc25hQ1QAEM">17721490806</option>
-                    <option value="oKXUCj6oxII_7cEvHM0dPk1RX-eQ">13386089856</option>
+					<option value="oKXUCj6oxII_7cEvHM0dPk1RX-eQ">13386089856</option>
 				</select>
 				<button @click="updateSession">更新SESSION</button>
 			</div>
@@ -21,7 +21,7 @@
 import { mapState, mapGetters } from "vuex";
 import TabBar from "../../components/TabBar/index.vue";
 import http from "../../util/http";
-import { HOST2 } from "../../config";
+import { proxyServers } from "../../config";
 export default {
 	name: "video-page",
 	components: { TabBar },
@@ -41,11 +41,14 @@ export default {
 	methods: {
 		async updateSession() {
 			if (this.session) {
+				let HOST = proxyServers.filter(item =>
+					item.platom.includes("n270")
+				)[0];
 				this.$store.commit("SET_LOADING_STATUS", true);
 				let {
 					data: { data }
 				} = await http.get(
-					`${HOST2}/api/flowStation/update/${this.openId}/${
+					`${HOST}/api/flowStation/update/${this.openId}/${
 						this.session
 					}`
 				);

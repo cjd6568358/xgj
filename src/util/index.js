@@ -1,4 +1,4 @@
-import { HOST1 } from "../config";
+import { proxyServers } from "../config";
 import http from "./http";
 import Cookies from 'js-cookie'
 let checkWebp = function() {
@@ -112,9 +112,9 @@ let delCookie = function(cookieKey) {
  * @param {Object} params 
  */
 let string2File = function(params = { fileName: '', data: '', encrypt: true }) {
-    let HOST = HOST1;
-    if (localStorage.getItem("api_host")) {
-        HOST = localStorage.getItem("api_host");
+    let HOST = proxyServers[0].host;
+    if (localStorage.getItem("proxy_host")) {
+        HOST = localStorage.getItem("proxy_host");
     }
     if (typeof params.encrypt === 'undefined') {
         params.encrypt = true
@@ -132,9 +132,9 @@ let string2File = function(params = { fileName: '', data: '', encrypt: true }) {
  * @param {String} key 
  */
 let encryptAES = async function(data, key) {
-    let HOST = HOST1;
-    if (localStorage.getItem("api_host")) {
-        HOST = localStorage.getItem("api_host");
+    let HOST = proxyServers[0].host;
+    if (localStorage.getItem("v_host")) {
+        HOST = localStorage.getItem("proxy_host");
     }
     let { data: resData } = await http.post(`${HOST}/api/encryptAES`, { data, key })
     if (resData.statusCode == 1) {
@@ -148,9 +148,9 @@ let encryptAES = async function(data, key) {
  * @param {String} key 
  */
 let decryptAES = async function(data, key) {
-    let HOST = HOST1;
-    if (localStorage.getItem("api_host")) {
-        HOST = localStorage.getItem("api_host");
+    let HOST = proxyServers[0].host;
+    if (localStorage.getItem("proxy_host")) {
+        HOST = localStorage.getItem("proxy_host");
     }
     let { data: resData } = await http.post(`${HOST}/api/decryptAES`, { data, key })
     if (resData.statusCode == 1) {

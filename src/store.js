@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { getCookie, delCookie, setCookie, loadScript } from "./util";
-import { HOST1, HOST2 } from "./config";
+import { proxyServers } from "./config";
 
 Vue.use(Vuex)
 
-let HOST = localStorage.getItem("api_host") || HOST1
+let HOST = localStorage.getItem("proxy_host") || proxyServers[0].host
 let temmeConvert = '客户端'
 if (localStorage.getItem("temme_convert")) {
     temmeConvert = decodeURIComponent(localStorage.getItem("temme_convert"))
@@ -69,9 +69,13 @@ export default new Vuex.Store({
             sessionStorage.clear();
             location.reload();
         },
-        switchHost({ commit, state }) {
-            let HOST = state.discuz.HOST === HOST1 ? HOST2 : HOST1;
-            localStorage.setItem("api_host", HOST);
+        switchProxy({ commit, state }) {
+            let HOST = proxyServers[0].host
+            let index = proxyServers.findIndex(item => item.host === state.discuz.HOST)
+            if (index < proxyServers.length - 1) {
+                HOST = proxyServers[index + 1].host
+            }
+            localStorage.setItem("proxy_host", HOST);
             commit('SET_HOST', HOST)
         },
         switchTemmeConvert({ commit, state }) {

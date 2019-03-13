@@ -17,7 +17,7 @@
 				<li @click="debugClick">{{debug ? '关闭':'打开'}}调试</li>
 				<li @click="switchTemmeConvert">{{temmeConvert}}进行HTML转换</li>
 				<li>
-					<span>切换website源</span>
+					<span>切换论坛源</span>
 					<select name id placeholder="请选择站点" v-model="webSite">
 						<option v-for="item of discuz.webSiteList" :key="item" :value="item">{{item}}</option>
 					</select>
