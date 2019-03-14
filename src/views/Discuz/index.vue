@@ -72,9 +72,6 @@ export default {
 			}
 		},
 		proxyServerPlatom() {
-            console.log(proxyServers.filter(
-				item => item.host === this.discuz.HOST
-			),this.discuz.HOST)
 			return proxyServers.filter(
 				item => item.host === this.discuz.HOST
 			)[0].platom;
@@ -396,7 +393,6 @@ export default {
 				gfwProxyServers[
 					Math.floor(Math.random() * gfwProxyServers.length)
                 ].host;
-                console.log(222)
 			let url = `http://www.oznewspaper.com/`;
 			let postData = {
 				httpConfig: {
