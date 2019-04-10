@@ -1,8 +1,8 @@
 import { proxyServers } from "../config";
 import http from "./http";
 import Cookies from 'js-cookie'
-let checkWebp = function() {
-    return new Promise(function(resolve) {
+let checkWebp = function () {
+    return new Promise(function (resolve) {
         if (getCookie('webpSupport') == 'true') {
             resolve(true);
         } else if (getCookie('webpSupport') == 'false') {
@@ -20,7 +20,7 @@ let checkWebp = function() {
     });
 }
 
-let calculatGUID = function() {
+let calculatGUID = function () {
     let guid = '';
     for (let i = 1; i <= 32; i++) {
         let n = Math.floor(Math.random() * 16.0).toString(16);
@@ -32,7 +32,7 @@ let calculatGUID = function() {
     return guid;
 }
 
-let getYMD = function(timestamp = Date.now()) {
+let getYMD = function (timestamp = Date.now()) {
     let date = new Date(timestamp)
     let year = date.getFullYear()
     let month = date.getMonth() + 1
@@ -40,7 +40,7 @@ let getYMD = function(timestamp = Date.now()) {
     return { year, month, day }
 }
 
-let getHash = function(str) {
+let getHash = function (str) {
     var I64BIT_TABLE =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
     var hash = 5381;
@@ -81,7 +81,7 @@ let getHash = function(str) {
 //     return '.' + host;
 // }
 
-let setCookie = function(cookieKey, cookieVal) {
+let setCookie = function (cookieKey, cookieVal) {
     Cookies.set(cookieKey, cookieVal, { expires: 30 });
     // var env = getCookieDomain();
     // var date = 30;
@@ -93,14 +93,14 @@ let setCookie = function(cookieKey, cookieVal) {
     // document.cookie = cookieKey + '=' + encodeURIComponent(cookieVal) + ';domain=' + env + ';path=/;expires=' + exp.toGMTString();
 }
 
-let getCookie = function(cookieKey) {
+let getCookie = function (cookieKey) {
     return Cookies.get(cookieKey);
     // var arr = document.cookie.match(new RegExp('(^| )' + cookieKey + '=([^;]*)(;|$)'));
     // if (arr != null) return decodeURIComponent(arr[2]);
     // return null;
 }
 
-let delCookie = function(cookieKey) {
+let delCookie = function (cookieKey) {
     Cookies.remove(cookieKey);
     // var date = new Date();
     // date.setTime(date.getTime() - 1);
@@ -111,7 +111,7 @@ let delCookie = function(cookieKey) {
  * data 必须为字符串
  * @param {Object} params 
  */
-let string2File = function(params = { fileName: '', data: '', encrypt: true }) {
+let string2File = function (params = { fileName: '', data: '', key: '' }) {
     let HOST = proxyServers[0].host;
     if (localStorage.getItem("proxy_host")) {
         HOST = localStorage.getItem("proxy_host");
@@ -119,11 +119,42 @@ let string2File = function(params = { fileName: '', data: '', encrypt: true }) {
     if (typeof params.encrypt === 'undefined') {
         params.encrypt = true
     }
-    http.post(`${HOST}/api/string2File`, params).then(res => {
-        if (res.data.statusCode == 1) {
-            window.open(`${HOST}/api/downloadFile/${res.data.data}`)
-        }
-    })
+    let tmpForm = document.createElement('form');
+    tmpForm.method = "post";
+    // tmpForm.action = `${HOST}/api/string2File`;
+    
+    tmpForm.action = `https://common-server-git-master.cjd6568358.now/api/string2File`;
+    tmpForm.target = 'name';
+    var fileNameInput = document.createElement("input");
+    fileNameInput.type = "hidden";
+    fileNameInput.name = "fileName"
+    fileNameInput.value = params.fileName;
+    tmpForm.appendChild(fileNameInput);
+    var dataInput = document.createElement("input");
+    dataInput.type = "hidden";
+    dataInput.name = "data"
+    dataInput.value = params.data;
+    tmpForm.appendChild(dataInput);
+    var encryptInput = document.createElement("input");
+    encryptInput.type = "hidden";
+    encryptInput.name = "key"
+    encryptInput.value = params.key;
+    tmpForm.appendChild(encryptInput);
+    tmpForm.addEventListener('submit', () => {
+        var iWidth = 1100; //弹出窗口的宽度;
+        var iHeight = 550; //弹出窗口的高度;
+        var iTop = (window.screen.availHeight - 30 - iHeight) / 2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2; //获得窗口的水平位置;        
+        window.open('about:blank', 'name', "height=" + iHeight + ", width=" + iWidth + ", top=" + iTop + ", left=" + iLeft + ",toolbar=no, menubar=no,  scrollbars=yes,resizable=yes,location=no, status=no");
+    });
+    document.body.appendChild(tmpForm);
+    tmpForm.submit()
+
+    // http.post(`${HOST}/api/string2File`, params).then(res => {
+    //     if (res.data.statusCode == 1) {
+    //         window.open(`${HOST}/api/downloadFile/${res.data.data}`)
+    //     }
+    // })
 }
 
 /**
@@ -131,7 +162,7 @@ let string2File = function(params = { fileName: '', data: '', encrypt: true }) {
  * @param {String} data 
  * @param {String} key 
  */
-let encryptAES = async function(data, key) {
+let encryptAES = async function (data, key) {
     let HOST = proxyServers[0].host;
     if (localStorage.getItem("v_host")) {
         HOST = localStorage.getItem("proxy_host");
@@ -147,7 +178,7 @@ let encryptAES = async function(data, key) {
  * @param {String} encryptedString 
  * @param {String} key 
  */
-let decryptAES = async function(data, key) {
+let decryptAES = async function (data, key) {
     let HOST = proxyServers[0].host;
     if (localStorage.getItem("proxy_host")) {
         HOST = localStorage.getItem("proxy_host");
@@ -175,15 +206,15 @@ let getTotalDaysArr = (yyyy, MM, leftPad = false) => {
  * 动态加载脚本
  * @param {String} src 
  */
-let loadScript = function(src) {
-    return new Promise(function(resolve, reject) {
+let loadScript = function (src) {
+    return new Promise(function (resolve, reject) {
         var script = document.createElement('script');
         script.async = true;
         script.src = src;
         script.onload = () => {
-                resolve(true);
-            }
-            // eslint-disable-next-line
+            resolve(true);
+        }
+        // eslint-disable-next-line
         script.onerror = (e) => {
             reject(false);
         }

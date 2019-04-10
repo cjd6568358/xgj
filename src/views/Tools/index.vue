@@ -41,8 +41,8 @@ export default {
 	methods: {
 		async updateSession() {
 			if (this.session) {
-				let HOST = proxyServers.filter(item =>
-					item.platom.includes("n270")
+				let HOST = proxyServers.filter(
+					item => item.platom === "N270"
 				)[0];
 				this.$store.commit("SET_LOADING_STATUS", true);
 				let {

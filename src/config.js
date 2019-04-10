@@ -4,22 +4,17 @@
 const proxyServers = [{
     protocol: 'all',
     host: '//common-server.herokuapp.com',
-    platom: 'herokuapp',
+    platom: 'HEROKUAPP',
     gfw: true
 }, {
     protocol: 'https',
     host: 'https://common-server-fkh5q7kaw.now.sh',
-    platom: 'now',
+    platom: 'NOW',
     gfw: true
 }, {
     protocol: 'https',
     host: 'https://www.cjd6568358.tk:6707',
-    platom: 'n270_https',
-    gfw: false
-}, {
-    protocol: 'http',
-    host: 'http://www.cjd6568358.tk:6704',
-    platom: 'n270_http',
+    platom: 'N270',
     gfw: false
 }]
 export {
