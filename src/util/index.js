@@ -121,9 +121,7 @@ let string2File = function (params = { fileName: '', data: '', key: '' }) {
     }
     let tmpForm = document.createElement('form');
     tmpForm.method = "post";
-    // tmpForm.action = `${HOST}/api/string2File`;
-    
-    tmpForm.action = `https://common-server-git-master.cjd6568358.now/api/string2File`;
+    tmpForm.action = `${HOST}/api/string2File`;
     tmpForm.target = 'name';
     var fileNameInput = document.createElement("input");
     fileNameInput.type = "hidden";

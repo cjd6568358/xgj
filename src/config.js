@@ -8,7 +8,7 @@ const proxyServers = [{
     gfw: true
 }, {
     protocol: 'https',
-    host: 'https://common-server-fkh5q7kaw.now.sh',
+    host: 'https://common-server-git-master.cjd6568358.now.sh',
     platom: 'NOW',
     gfw: true
 }, {
