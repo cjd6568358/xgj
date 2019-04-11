@@ -60,7 +60,7 @@ export default {
 				return;
 			}
 			let backup = {};
-			let fileName = `xgj_${new Date().Format("yyyy_MM_dd_hh_mm_ss")}.bak`;
+			let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
 			if (this.backUpList[0].selected) {
 				backup.website = await DbHelper.website.toArray();
 			}
