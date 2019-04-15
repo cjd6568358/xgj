@@ -1,0 +1,11 @@
+/* pages/location/location.wxss */
+page{
+  width: 100%;
+  height: 100%;
+  /* position: relative; */
+}
+#map{
+  /* position: absolute; */
+  width: 100%;
+  height: 100%;
+}

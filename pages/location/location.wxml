@@ -1,0 +1,2 @@
+<!--pages/location/location.wxml-->
+<map id="map" longitude="{{lon}}" latitude="{{lat}}" markers="{{markers}}" show-location></map>

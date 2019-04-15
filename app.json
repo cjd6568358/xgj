@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/my/my",
+    "pages/sign/sign",
+    "pages/location/location",
+    "pages/systemInfo/systemInfo",
+    "pages/wifi/wifi"
+  ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/sign/sign",
+        "text": "签到"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "小管家",
+    "navigationBarTextStyle": "black"
+  }
+}

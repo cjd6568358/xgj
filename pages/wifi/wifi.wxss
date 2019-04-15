@@ -1,0 +1,16 @@
+/* pages/wifi/wifi.wxss */
+
+page {
+  /* padding: 20rpx; */
+  width: 100%;
+}
+.wifi-list{
+  padding: 20rpx;
+}
+.wifi-list .item{
+  display: flex;
+  margin-top: 10rpx;
+}
+.wifi-list text:first-child{
+  flex: 1;
+}

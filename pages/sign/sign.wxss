@@ -1,0 +1,32 @@
+/* pages/sign/sign.wxss */
+
+.has-data {
+  background: #00b26a;
+  color: #fff;
+   border-radius: 50%; 
+}
+
+.btn-sign {
+  margin-top: 20rpx;
+  width: 300rpx;
+}
+
+.table {
+  margin-top: 20rpx;
+  padding: 20rpx;
+}
+
+.table .row {
+  display: flex;
+  margin-bottom: 10rpx;
+  /* border: 1rpx solid #ddd; */
+}
+
+.row label {
+  width: 200rpx;
+  text-align: center;
+}
+
+.row text {
+  flex: 1;
+}

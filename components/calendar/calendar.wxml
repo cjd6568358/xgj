@@ -1,0 +1,46 @@
+<!--components/calendar/calendar.wxml-->
+<wxs module="util">
+  var totalDays2Weeks = function(totalDays) {
+    var weeks = [];
+    if (totalDays) {
+      // 由于第一周数据可能不满7个,先截取第一周数据
+      var firstSundayIndex = -1;
+      totalDays.forEach(function(item, i) {
+        if (item.dayOfWeek == 6 && firstSundayIndex == -1) {
+          firstSundayIndex = i;
+        }
+      });
+      weeks.push(totalDays.splice(0, firstSundayIndex + 1))
+      // 按7的倍数截取剩下的数据
+      var len = totalDays.length;
+      for (var i = 0; i < len; i += 7) {
+        weeks.push(totalDays.slice(i, i + 7));
+      }
+    }
+    return weeks
+  }
+  module.exports.totalDays2Weeks = totalDays2Weeks;
+</wxs>
+<view class='calendar-wrap'>
+  <view class="calendar-header">
+    <button class='left' bindtap='prevClick'></button>
+    <text class='title'>{{headerText}}</text>
+    <button class='right' bindtap='nextClick'></button>
+  </view>
+  <view class='calendar-body' bindtap='cellClick'>
+    <view class='row-header'>
+      <view class='cell0'>日</view>
+      <view class='cell1'>一</view>
+      <view class='cell2'>二</view>
+      <view class='cell3'>三</view>
+      <view class='cell4'>四</view>
+      <view class='cell5'>五</view>
+      <view class='cell6'>六</view>
+    </view>
+    <view class='row' wx:for="{{util.totalDays2Weeks(totalDays)}}" wx:key="i" wx:for-item="week">
+      <view class='cell{{day.dayOfWeek}} {{day.timestamp == activeItem.timestamp ? "active":""}} {{day.data ? "has-data-class":""}}' wx:for="{{week}}" wx:key="ii" wx:for-item="day" data-day="{{day}}">
+        {{day.date}}
+      </view>
+    </view>
+  </view>
+</view>

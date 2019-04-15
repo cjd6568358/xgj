@@ -1,0 +1,20 @@
+<!--pages/wifi/wifi.wxml-->
+<scroll-view>
+  <view class='wifi-status'>
+
+  </view>
+  <view class='wifi-list'>
+    <view class='item'>
+      <text>SSID</text>
+      <text>BSSID</text>
+      <text>是否加密</text>
+      <text>信号强度</text>
+    </view>
+    <view class='item' wx:for="{{wifiList}}" wx:key="index" wx:for-item="item">
+      <text>{{item.SSID}}</text>
+      <text>{{item.BSSID}}</text>
+      <text>{{item.secure}}</text>
+      <text>{{item.signalStrength}}</text>
+    </view>
+  </view>
+</scroll-view>
