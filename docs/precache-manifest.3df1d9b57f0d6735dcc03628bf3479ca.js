@@ -1,10 +1,10 @@
 self.__precacheManifest = [
   {
-    "revision": "c793bd61e0b7f4917afb",
-    "url": "/xgj/css/PasswordView.ac64bf18.css"
+    "revision": "05b3ff93d3e0ffef62e8",
+    "url": "/xgj/css/PasswordView.27346599.css"
   },
   {
-    "revision": "f8b10fe9e69942517e01faeb5a8d48a0",
+    "revision": "45078334dfd28c6bd9b086408286ca80",
     "url": "/xgj/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = [
     "url": "/xgj/js/DiscuzMyView-legacy.5821de59.js"
   },
   {
-    "revision": "09746edafc698ec4f8d3",
-    "url": "/xgj/js/app-legacy.c869323e.js"
+    "revision": "61c4058cce6108022681",
+    "url": "/xgj/js/app-legacy.7d0e91ee.js"
   },
   {
     "revision": "dbd8094dd8cb1ab582fc",
@@ -44,12 +44,12 @@ self.__precacheManifest = [
     "url": "/xgj/js/MyView~PasswordListView~PasswordView~SignView-legacy.71923af2.js"
   },
   {
-    "revision": "c793bd61e0b7f4917afb",
-    "url": "/xgj/js/PasswordView-legacy.e93dbf75.js"
+    "revision": "05b3ff93d3e0ffef62e8",
+    "url": "/xgj/js/PasswordView-legacy.55d45e05.js"
   },
   {
-    "revision": "67c060d602698a28cd4e",
-    "url": "/xgj/js/PasswordListView-legacy.257a2890.js"
+    "revision": "3fa31c0ba69063522c20",
+    "url": "/xgj/js/PasswordListView-legacy.3d2ef7ee.js"
   },
   {
     "revision": "bddabbd5e48c37db6581",
@@ -60,7 +60,7 @@ self.__precacheManifest = [
     "url": "/xgj/css/DiscuzThreadView.8ce0dce4.css"
   },
   {
-    "revision": "67c060d602698a28cd4e",
+    "revision": "3fa31c0ba69063522c20",
     "url": "/xgj/css/PasswordListView.78d11824.css"
   },
   {
@@ -76,7 +76,7 @@ self.__precacheManifest = [
     "url": "/xgj/img/arrow-left.1c757822.svg"
   },
   {
-    "revision": "09746edafc698ec4f8d3",
+    "revision": "61c4058cce6108022681",
     "url": "/xgj/css/app.169a4b35.css"
   },
   {
@@ -100,7 +100,7 @@ self.__precacheManifest = [
     "url": "/xgj/css/DiscuzForumView.41ec8602.css"
   },
   {
-    "revision": "f8b10fe9e69942517e01faeb5a8d48a0",
+    "revision": "45078334dfd28c6bd9b086408286ca80",
     "url": "/xgj/404.html"
   }
 ];
