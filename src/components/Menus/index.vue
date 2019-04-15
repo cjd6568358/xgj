@@ -14,7 +14,7 @@
             </svg>
         </a>
         <li>
-            <span @click="saveReadProgress">保存</span>
+            <span @click="saveReadProgress">收藏</span>
         </li>
         <li v-if="readProgress">
             <span @click="deleteReadProgress">删除</span>

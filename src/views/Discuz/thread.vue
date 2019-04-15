@@ -106,6 +106,18 @@ export default {
 			this.postList.forEach(item => {
 				item.content = item.content
 					.replace(/="attachment/g, `="${this.targetHost}attachment`)
+                    .replace(/="images/g, `="${this.targetHost}images`)
+                    .replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
+					.replace(
+						/="(viewthread|thread.*)" target/g,
+						($0, $1, $2, $3) => {
+							return `="${
+								process.env.BASE_URL
+							}discuz/thread/${encodeURIComponent(
+								this.targetHost + $1
+							)}" target`;
+						}
+					)
 					.replace(/:14pt/g, ":5vw");
 			});
 		}
