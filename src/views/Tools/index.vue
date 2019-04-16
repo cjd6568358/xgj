@@ -11,7 +11,7 @@
 				<button @click="updateSession">更新SESSION</button>
 			</div>
 			<div class="bt-download">
-				<a class="btn" href="https://www.cjd6568358.tk:6706/download/" target="_blank">查看BT资源</a>
+				<a class="btn" href="https://cjd6568358.3322.org:6706/download/" target="_blank">查看BT资源</a>
 			</div>
 		</div>
 		<TabBar></TabBar>

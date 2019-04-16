@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/xgj/css/PasswordView.27346599.css"
   },
   {
-    "revision": "ab7e9dfc5e6c3750d4cf72ea4c4d09df",
+    "revision": "f8e261fdbc44f9532d9673bcd4262401",
     "url": "/xgj/index.html"
   },
   {
@@ -16,16 +16,16 @@ self.__precacheManifest = [
     "url": "/xgj/js/DiscuzMyView-legacy.5821de59.js"
   },
   {
-    "revision": "0522b045b990c138c9f1",
-    "url": "/xgj/js/app-legacy.3b4b3dbe.js"
+    "revision": "beaf09d39b0e8338b982",
+    "url": "/xgj/js/app-legacy.17ed6fb8.js"
   },
   {
     "revision": "e6fd9612c5f0b8025ad7",
     "url": "/xgj/js/DiscuzThreadView-legacy.3d8aa124.js"
   },
   {
-    "revision": "1658cd1e68463dbc386f",
-    "url": "/xgj/js/ToolsView-legacy.5a7d06e9.js"
+    "revision": "b90f29d5aa652c9b98bc",
+    "url": "/xgj/js/ToolsView-legacy.5c0ef771.js"
   },
   {
     "revision": "923d64436437f122568c",
@@ -68,15 +68,15 @@ self.__precacheManifest = [
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "1658cd1e68463dbc386f",
-    "url": "/xgj/css/ToolsView.fe7d3b51.css"
+    "revision": "b90f29d5aa652c9b98bc",
+    "url": "/xgj/css/ToolsView.09a19916.css"
   },
   {
     "revision": "1c757822d841c4ce79d5014a54d0e332",
     "url": "/xgj/img/arrow-left.1c757822.svg"
   },
   {
-    "revision": "0522b045b990c138c9f1",
+    "revision": "beaf09d39b0e8338b982",
     "url": "/xgj/css/app.169a4b35.css"
   },
   {
@@ -100,7 +100,7 @@ self.__precacheManifest = [
     "url": "/xgj/css/DiscuzForumView.41ec8602.css"
   },
   {
-    "revision": "ab7e9dfc5e6c3750d4cf72ea4c4d09df",
+    "revision": "f8e261fdbc44f9532d9673bcd4262401",
     "url": "/xgj/404.html"
   }
 ];
