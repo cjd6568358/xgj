@@ -26,8 +26,8 @@
 				<ul class="user-info">
 					<router-link :to="{name: 'DiscuzMyView'}" tag="li">{{discuz.userInfo.username}}</router-link>
 					<li v-if="discuz.signInfo.isSigned">已签到</li>
-					<li v-else @click="sign">日签到</li>
-					<li @click="uploadEveryMonthSignInfo">月签到</li>
+					<li v-else @click="dailySignIn">日签到</li>
+					<li @click="monthSignIn">月签到</li>
 					<li @click="logout">退出</li>
 				</ul>
 				<ul class="area" v-for="(area,i) of areaList" :key="i" :data-title="area.name">
@@ -88,15 +88,23 @@ export default {
 	beforeMount() {},
 	destroyed() {},
 	methods: {
-		...mapActions(["switchProxy", "logout"]),
+		...mapActions([
+			"switchProxy",
+			"logout",
+			"submitPost",
+			"dailySignIn",
+			"monthSignIn",
+			"getPageData"
+		]),
 		async init() {
-			if (this.discuz.isLogin) {
-				if (!this.discuz.signInfo.isSigned) {
+			let { isLogin, signInfo, webSiteList } = this.discuz;
+			if (isLogin) {
+				if (!signInfo.isSigned) {
 					this.checkSigned();
 				}
-				this.getIndexPageJson();
+				this.getIndexPageData();
 			} else {
-				if (!this.discuz.webSiteList.length) {
+				if (!webSiteList.length) {
 					this.updateWebSiteList();
 				}
 			}
@@ -155,29 +163,19 @@ export default {
 		async checkSigned() {
 			let {
 				targetHost,
-				discuz: { HOST, signInfo }
+				discuz: { signInfo }
 			} = this;
-			let postData = {
-				httpConfig: {
-					url: `${targetHost}my.php`,
-					method: "get",
-					responseType: "arraybuffer"
-				},
-				encoding: "gbk",
-				selector: selectors.my
-			};
-			this.$store.commit("SET_LOADING_STATUS", true);
-			let {
-				data: { data }
-			} = await http.post(`${HOST}/api/html2Json`, postData);
-			this.$store.commit("SET_LOADING_STATUS", false);
-			signInfo.formhash = data.formhash;
-			data.recentTopics &&
-				data.recentTopics.forEach(item => {
+			let url = `${targetHost}my.php`;
+			let selector = selectors.my;
+			let pageData = await this.getPageData();
+			let { formhash, username, recentReply, recentTopics } = pageData;
+			signInfo.formhash = formhash;
+			recentTopics &&
+				recentTopics.forEach(item => {
 					if (
 						item &&
 						item.title ==
-							`${data.username}/${new Date().getMonth() +
+							`${username}/${new Date().getMonth() +
 								1}月份/打卡签到帖`
 					) {
 						if (
@@ -192,7 +190,7 @@ export default {
 					} else if (
 						item &&
 						item.title ==
-							`${data.username}/${new Date().getMonth() ||
+							`${username}/${new Date().getMonth() ||
 								12}月份/打卡签到帖`
 					) {
 						signInfo.prevMonthSignThreadLastPostUrl =
@@ -201,180 +199,26 @@ export default {
 				});
 
 			!signInfo.prevMonthSignThreadLastPostUrl &&
-				data.recentReply &&
-				data.recentReply.forEach(item => {
+				recentReply &&
+				recentReply.forEach(item => {
 					if (
 						item &&
 						item.title ==
-							`${data.username}/${new Date().getMonth() ||
+							`${username}/${new Date().getMonth() ||
 								12}月份/打卡签到帖`
 					) {
 						signInfo.prevMonthSignThreadLastPostUrl = item.href;
 					}
 				});
 		},
-		async sign() {
-			if (this.isLoading) {
-				return;
-			}
-			this.$store.commit("SET_LOADING_STATUS", true);
-			let {
-				targetHost,
-				discuz: {
-					userInfo: { username },
-					HOST,
-					signInfo
-				}
-			} = this;
-			let postData = {
-				httpConfig: {
-					method: "post",
-					responseType: "arraybuffer"
-				},
-				encoding: "gbk"
-			};
-			if (!signInfo.tid) {
-				// 主题帖签到
-				Object.assign(postData.httpConfig, {
-					url: `${targetHost}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
-					data: querystring.stringify({
-						formhash: signInfo.formhash,
-						frombbs: 1,
-						typeid: 797,
-						selecttypeid: 797,
-						readperm: 101,
-						subject: `${username}/${new Date().getMonth() +
-							1}月份/打卡签到帖`,
-						message: `ID: ${username}\r\n日期: ${new Date().Format(
-							"yyyy.M.dd"
-						)}\r\n心情: ......`
-					})
-				});
-			} else {
-				// 回复帖签到
-				Object.assign(postData.httpConfig, {
-					url: `${targetHost}post.php?action=reply&fid=420&tid=${
-						signInfo.tid
-					}&extra=&replysubmit=yes`,
-					data: querystring.stringify({
-						formhash: signInfo.formhash,
-						subject: "",
-						message: `ID: ${username}\r\n日期: ${new Date().Format(
-							"yyyy.M.dd"
-						)}\r\n心情: ......`
-					})
-				});
-			}
-			await http.post(`${HOST}/api/advancedProxy`, postData);
-			this.$store.commit("SET_LOADING_STATUS", false);
-			signInfo.isSigned = true;
-		},
-		async uploadEveryMonthSignInfo() {
-			if (
-				confirm("确认上报上月签到数据吗？") &&
-				confirm("再次确认") &&
-				confirm("三次确认")
-			) {
-				let {
-					targetHost,
-					discuz: {
-						userInfo: { username },
-						HOST,
-						signInfo
-					}
-				} = this;
-				// eslint-disable-next-line
-				console.log(signInfo);
-				if (!signInfo.prevMonthSignThreadLastPostUrl) {
-					return;
-				}
-
-				let postData1 = {
-					httpConfig: {
-						url: `${targetHost +
-							signInfo.prevMonthSignThreadLastPostUrl}`,
-						method: "post",
-						responseType: "arraybuffer"
-					},
-					encoding: "gbk",
-					selector: selectors.thread
-				};
-				let {
-					data: { data }
-				} = await http.post(`${HOST}/api/html2Json`, postData1);
-				let lastPostInfo = data.postList.slice(-1)[0];
-				let prevMonthSignInfo = {
-					pid: lastPostInfo.pid,
-					tid: data.tid,
-					count: parseInt(lastPostInfo.postFloor),
-					absPostUrl: lastPostInfo.absPostUrl
-				};
-				// eslint-disable-next-line
-				console.log(prevMonthSignInfo);
-				//
-				let postData = {
-					httpConfig: {
-						method: "post",
-						responseType: "arraybuffer"
-					},
-					encoding: "gbk"
-				};
-				// Object.assign(postData.httpConfig, {
-				// 	url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
-				// 	data: querystring.stringify({
-				// 		formhash: signInfo.formhash,
-				// 		subject: "",
-				// 		message: `ID: ${username}\r\n签到次数: ${
-				// 			prevMonthSignInfo.count
-				// 		}\r\n签到链接: [bbs]${encodeURIComponent(
-				// 			prevMonthSignInfo.absPostUrl
-				// 		)}[/bbs]`,
-				// 		fid: 420,
-				// 		wysiwyg: 0
-				// 	})
-				// });
-				Object.assign(postData.httpConfig, {
-					url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
-					data: querystring.stringify({
-						formhash: signInfo.formhash,
-						subject: "",
-						message: `ID: ${username}\r\n签到次数: ${
-							prevMonthSignInfo.count
-						}\r\n签到链接: [bbs]${encodeURIComponent(
-							`thread-${prevMonthSignInfo.tid}-1-1.html`
-						)}[/bbs]`,
-						fid: 420,
-						wysiwyg: 0
-					})
-				});
-				await http.post(`${HOST}/api/advancedProxy`, postData);
-				alert("上报成功!");
-			}
-		},
-		async getIndexPageJson() {
+		async getIndexPageData() {
 			let url = `${this.targetHost}index.php`;
+			let selector = selectors.index;
 			let pageData = {};
 			if (sessionStorage.getItem(url)) {
 				pageData = JSON.parse(sessionStorage.getItem(url));
 			} else {
-				let postData = {
-					httpConfig: {
-						url,
-						method: "get",
-						responseType: "arraybuffer"
-					},
-					encoding: "gbk",
-					selector: selectors.index
-				};
-				this.$store.commit("SET_LOADING_STATUS", true);
-				let {
-					data: { data }
-				} = await http.post(
-					`${this.discuz.HOST}/api/html2Json`,
-					postData
-				);
-				this.$store.commit("SET_LOADING_STATUS", false);
-				pageData = data;
+				pageData = await this.getPageData({ url, selector });
 				sessionStorage.setItem(url, JSON.stringify(pageData));
 			}
 
@@ -388,28 +232,16 @@ export default {
 			}
 		},
 		async updateWebSiteList() {
-            let gfwProxyServers = proxyServers.filter(item => item.gfw);
+			let gfwProxyServers = proxyServers.filter(item => item.gfw);
 			let HOST =
 				gfwProxyServers[
 					Math.floor(Math.random() * gfwProxyServers.length)
-                ].host;
+				].host;
 			let url = `http://www.oznewspaper.com/`;
-			let postData = {
-				httpConfig: {
-					url,
-					method: "get",
-					responseType: "arraybuffer"
-				},
-				encoding: "gbk",
-				selector: selectors.webSiteList
-			};
-			this.$store.commit("SET_LOADING_STATUS", true);
-			let {
-				data: { data }
-			} = await http.post(`${HOST}/api/html2Json`, postData);
-			this.$store.commit("SET_LOADING_STATUS", false);
+			let selector = selectors.webSiteList;
+			let pageData = await this.getPageData({ url, selector, HOST });
 			let webSiteList = [];
-			data.webSiteList.forEach(webSite => {
+			pageData.webSiteList.forEach(webSite => {
 				webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
 			});
 			localStorage.setItem("webSiteList", JSON.stringify(webSiteList));

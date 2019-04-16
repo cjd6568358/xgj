@@ -54,41 +54,26 @@ export default {
 	async mounted() {},
 	async beforeRouteUpdate(to, from, next) {
 		next();
-		await this.getForumPageJson(to.params.url);
+		await this.getForumPageData(to.params.url);
 		document.querySelector(".overflow-container").scrollTop =
 			sessionStorage.getItem(to.params.url + "_scrollTop") || 0;
 	},
 	async activated() {
-		await this.getForumPageJson(this.url);
+		await this.getForumPageData(this.url);
 		document.querySelector(".overflow-container").scrollTop =
 			sessionStorage.getItem(this.url + "_scrollTop") || 0;
 	},
 	beforeMount() {},
 	destroyed() {},
 	methods: {
-		async getForumPageJson(url) {
+		...mapActions(["getPageData"]),
+		async getForumPageData(url) {
 			let pageData = {};
 			if (sessionStorage.getItem(url)) {
 				pageData = JSON.parse(sessionStorage.getItem(url));
 			} else {
-				let postData = {
-					httpConfig: {
-						url: `${url}`,
-						method: "get",
-						responseType: "arraybuffer"
-					},
-					encoding: "gbk",
-					selector: selectors.forum
-				};
-				this.$store.commit("SET_LOADING_STATUS", true);
-				let {
-					data: { data }
-				} = await http.post(
-					`${this.discuz.HOST}/api/html2Json`,
-					postData
-				);
-				this.$store.commit("SET_LOADING_STATUS", false);
-				pageData = data;
+				let selector = selectors.forum;
+				pageData = await this.getPageData({ url, selector });
 				sessionStorage.setItem(url, JSON.stringify(pageData));
 			}
 			this.forumList = pageData.forumList;

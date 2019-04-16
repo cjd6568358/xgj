@@ -12,8 +12,8 @@ const httpClient = axios.create({
 });
 httpClient.defaults.httpAgent = keepaliveAgent;
 httpClient.interceptors.request.use(async(config) => {
-    let temmeConvert = decodeURIComponent(localStorage.getItem('temme_convert'))
-    if (config.url.includes('html2Json') && temmeConvert === '客户端') {
+    let temmeConvert = localStorage.getItem('temmeConvert')
+    if (config.url.includes('html2Json') && temmeConvert === 'client') {
         config.temmeConvert = temmeConvert
         config.url = config.url.replace('html2Json', 'advancedProxy')
     }
@@ -29,7 +29,7 @@ httpClient.interceptors.request.use(async(config) => {
 
 // Add a response interceptor
 httpClient.interceptors.response.use(async(response) => {
-    if (response.config.temmeConvert === '客户端') {
+    if (response.config.temmeConvert === 'client') {
         let selector = JSON.parse(response.config.data).selector
         response.data.data = temme(response.data.data, selector)
     }

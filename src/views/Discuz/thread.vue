@@ -1,6 +1,6 @@
 <template>
 	<div class="discuzThread-page">
-		<Menus :url="url"></Menus>
+		<Menus :url="url" :tid="tid"></Menus>
 		<div class="overflow-container">
 			<ul class="thread">
 				<li class="post" v-for="(post,i) of postList" :key="i">
@@ -30,6 +30,7 @@ export default {
 	data() {
 		return {
 			postList: [],
+			tid: "",
 			pageInfo: {
 				currPageNum: 1,
 				totalPageNum: 1,
@@ -72,29 +73,14 @@ export default {
 		document.querySelector(".overflow-container").scrollTop = 0;
 	},
 	methods: {
+		...mapActions(["getPageData"]),
 		async getThreadPageJson(url) {
 			let pageData = {};
 			if (sessionStorage.getItem(url)) {
 				pageData = JSON.parse(sessionStorage.getItem(url));
 			} else {
-				let postData = {
-					httpConfig: {
-						url: `${url}`,
-						method: "get",
-						responseType: "arraybuffer"
-					},
-					encoding: "gbk",
-					selector: selectors.thread
-				};
-				this.$store.commit("SET_LOADING_STATUS", true);
-				let {
-					data: { data }
-				} = await http.post(
-					`${this.discuz.HOST}/api/html2Json`,
-					postData
-				);
-				this.$store.commit("SET_LOADING_STATUS", false);
-				pageData = data;
+				let selector = selectors.thread;
+				pageData = await this.getPageData({ url, selector });
 				sessionStorage.setItem(url, JSON.stringify(pageData));
 			}
 
@@ -102,12 +88,13 @@ export default {
 			if (pageData.pageInfo) {
 				this.pageInfo = pageData.pageInfo;
 			}
+			this.tid = pageData.tid;
 			this.postList = pageData.postList;
 			this.postList.forEach(item => {
 				item.content = item.content
 					.replace(/="attachment/g, `="${this.targetHost}attachment`)
-                    .replace(/="images/g, `="${this.targetHost}images`)
-                    .replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
+					.replace(/="images/g, `="${this.targetHost}images`)
+					.replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
 					.replace(
 						/="(viewthread|thread.*)" target/g,
 						($0, $1, $2, $3) => {
@@ -127,6 +114,7 @@ export default {
 <style lang="scss" >
 .discuzThread-page {
 	.thread {
+		padding: 0 20px;
 		.post {
 			line-height: 1.8;
 			margin-bottom: 10px;

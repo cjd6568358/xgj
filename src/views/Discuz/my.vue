@@ -51,44 +51,34 @@ export default {
 	beforeMount() {},
 	destroyed() {},
 	methods: {
+		...mapActions(["getPageData"]),
 		async init() {
 			if (this.discuz.isLogin) {
-				await this.getMyPageJson();
+				await this.getMyPageData();
 				this.collections =
 					JSON.parse(localStorage.getItem("collections")) || [];
 			} else {
 				this.$router.replace("/index");
 			}
 		},
-		async getMyPageJson() {
+		async getMyPageData() {
 			let {
 				targetHost,
-				discuz: { userInfo, HOST, signInfo }
+				discuz: { userInfo, signInfo }
 			} = this;
-			let postData = {
-				httpConfig: {
-					url: `${targetHost}my.php`,
-					method: "get",
-					responseType: "arraybuffer"
-				},
-				encoding: "gbk",
-				selector: selectors.my
-			};
-			this.$store.commit("SET_LOADING_STATUS", true);
-			let {
-				data: { data }
-			} = await http.post(`${HOST}/api/html2Json`, postData);
-			this.$store.commit("SET_LOADING_STATUS", false);
-			userInfo.username = data.username;
-			this.creditList = data.creditList;
-			this.recentReply = data.recentReply;
-			this.recentTopics = data.recentTopics;
+			let url = `${targetHost}my.php`;
+			let selector = selectors.my;
+			let pageData = await this.getPageData({ url, selector });
+			userInfo.username = pageData.username;
+			this.creditList = pageData.creditList;
+			this.recentReply = pageData.recentReply;
+			this.recentTopics = pageData.recentTopics;
 			this.recentTopics &&
 				this.recentTopics.forEach(item => {
 					if (
 						item &&
 						item.title ==
-							`${data.username}/${new Date().getMonth() +
+							`${pageData.username}/${new Date().getMonth() +
 								1}月份/打卡签到帖`
 					) {
 						if (

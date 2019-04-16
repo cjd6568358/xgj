@@ -1,16 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import querystring from "querystring";
 import { getCookie, delCookie, setCookie, loadScript } from "./util";
+import selectors from "./util/html2JsonSelector";
 import { proxyServers } from "./config";
+import http from "./util/http";
 
 Vue.use(Vuex)
 
 let HOST = localStorage.getItem("proxy_host") || proxyServers[0].host
-let temmeConvert = '客户端'
-if (localStorage.getItem("temme_convert")) {
-    temmeConvert = decodeURIComponent(localStorage.getItem("temme_convert"))
+let temmeConvert = 'client'
+if (localStorage.getItem("temmeConvert")) {
+    temmeConvert = localStorage.getItem("temmeConvert")
 } else {
-    localStorage.setItem("temme_convert", encodeURIComponent(temmeConvert));
+    localStorage.setItem("temmeConvert", temmeConvert);
 }
 let isLogin = !!getCookie("cdb3_auth")
 let webSiteList = JSON.parse(localStorage.getItem("webSiteList") || '[]')
@@ -79,9 +82,128 @@ export default new Vuex.Store({
             commit('SET_HOST', HOST)
         },
         switchTemmeConvert({ commit, state }) {
-            let STATUS = state.temmeConvert === "客户端" ? '服务端' : "客户端";
-            localStorage.setItem("temme_convert", encodeURIComponent(STATUS));
+            let STATUS = state.temmeConvert === "client" ? 'server' : "client";
+            localStorage.setItem("temmeConvert", STATUS);
             commit('SET_TEMMECONVERT', STATUS)
+        },
+        async submitPost({ commit, state }, httpConfig) {
+            let { discuz: { HOST } } = state;
+            let postData = {
+                httpConfig: {
+                    method: "post",
+                    responseType: "arraybuffer"
+                },
+                encoding: "gbk"
+            };
+            Object.assign(postData.httpConfig, httpConfig)
+            commit("SET_LOADING_STATUS", true);
+            await http.post(`${HOST}/api/advancedProxy`, postData);
+            commit("SET_LOADING_STATUS", false);
+        },
+        async submitReply({ dispatch, state, getters }, { fid, tid, message = "", subject = "" }) {
+            let { isLoading, discuz: { signInfo: { formhash } } } = state;
+            let { targetHost } = getters
+            if (isLoading || !message) {
+                return;
+            }
+            let httpConfig = {
+                url: `${targetHost}post.php?action=reply&fid=${fid}&tid=${tid}&extra=&replysubmit=yes`,
+                data: querystring.stringify({
+                    formhash,
+                    message,
+                    subject
+                })
+            }
+            await dispatch('submitPost', httpConfig);
+        },
+        async dailySignIn({ dispatch, state, getters }) {
+            let { isLoading, discuz: { userInfo: { username }, signInfo } } = state;
+            let { targetHost } = getters
+            if (isLoading) {
+                return;
+            }
+            let httpConfig = {};
+            let message = `ID: ${username}\r\n日期: ${new Date().Format("yyyy.M.dd")}\r\n心情: ......`
+            let formhash = signInfo.formhash
+            if (!signInfo.tid) {
+                // 主题帖签到
+                Object.assign(httpConfig, {
+                    url: `${targetHost}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+                    data: querystring.stringify({
+                        formhash,
+                        message,
+                        frombbs: 1,
+                        typeid: 797,
+                        selecttypeid: 797,
+                        readperm: 101,
+                        subject: `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
+                    })
+                });
+            } else {
+                // 回复帖签到
+                Object.assign(httpConfig, {
+                    url: `${targetHost}post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+                    data: querystring.stringify({
+                        formhash,
+                        message,
+                        subject: ""
+                    })
+                });
+            }
+            await dispatch('submitPost', httpConfig);
+            signInfo.isSigned = true;
+        },
+        async monthSignIn({ dispatch, state, getters }) {
+            if (confirm("确认上报上月签到数据吗?") && confirm("再次确认") && confirm("三次确认")) {
+                let {
+                    discuz: {
+                        userInfo: { username },
+                        signInfo: { prevMonthSignThreadLastPostUrl, formhash }
+                    }
+                } = state;
+                let { targetHost } = getters
+                if (!prevMonthSignThreadLastPostUrl) {
+                    return;
+                }
+                let url = `${targetHost + prevMonthSignThreadLastPostUrl}`
+                let selector = selectors.thread
+                let pageData = await dispatch('getPageData', { url, selector })
+                let lastPostInfo = pageData.postList.slice(-1)[0];
+                let prevMonthSignInfo = {
+                    pid: lastPostInfo.pid,
+                    tid: pageData.tid,
+                    count: parseInt(lastPostInfo.postFloor),
+                    absPostUrl: lastPostInfo.absPostUrl
+                };
+
+                let httpConfig = {
+                    url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
+                    data: querystring.stringify({
+                        formhash,
+                        subject: "",
+                        message: `ID: ${username}\r\n签到次数: ${prevMonthSignInfo.count}\r\n签到链接: [bbs]${encodeURIComponent(`thread-${prevMonthSignInfo.tid}-1-1.html`)}[/bbs]`,
+                        fid: 420,
+                        wysiwyg: 0
+                    })
+                }
+                await dispatch('submitPost', httpConfig);
+                alert("上报成功!");
+            }
+        },
+        async getPageData({ state }, { url, selector, HOST = state.discuz.HOST }) {
+            let postData = {
+                httpConfig: {
+                    url,
+                    method: "get",
+                    responseType: "arraybuffer"
+                },
+                encoding: "gbk",
+                selector
+            };
+            this.$store.commit("SET_LOADING_STATUS", true);
+            let { data: { data } } = await http.post(`${HOST}/api/html2Json`, postData);
+            this.$store.commit("SET_LOADING_STATUS", false);
+            return data
         }
     },
     getters: {
