@@ -13,7 +13,7 @@ const proxyServers = [{
     gfw: true
 }, {
     protocol: 'https',
-    host: 'https://www.cjd6568358.tk:6707',
+    host: 'https://cjd6568358.3322.org:6707',
     platom: 'N270',
     gfw: false
 }]
