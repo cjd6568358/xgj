@@ -31,6 +31,7 @@ export default new Vuex.Store({
         debug,
         temmeConvert,
         discuz: {
+            formhash: "",
             HOST,
             isLogin,
             webSiteList,
@@ -42,10 +43,9 @@ export default new Vuex.Store({
                 creditList: []
             },
             signInfo: {
-                formhash: "",
                 isSigned: false,
                 tid: null,
-                prevMonthSignThreadLastPostUrl: ""
+                lastPostUrl: ""
             }
         }
     },
@@ -101,13 +101,13 @@ export default new Vuex.Store({
             commit("SET_LOADING_STATUS", false);
         },
         async submitReply({ dispatch, state, getters }, { fid, tid, message = "", subject = "" }) {
-            let { isLoading, discuz: { signInfo: { formhash } } } = state;
+            let { isLoading, discuz: { formhash } } = state;
             let { targetHost } = getters
             if (isLoading || !message) {
                 return;
             }
             let httpConfig = {
-                url: `${targetHost}post.php?action=reply&fid=${fid}&tid=${tid}&extra=&replysubmit=yes`,
+                url: `${targetHost}post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
                 data: querystring.stringify({
                     formhash,
                     message,
@@ -117,14 +117,13 @@ export default new Vuex.Store({
             await dispatch('submitPost', httpConfig);
         },
         async dailySignIn({ dispatch, state, getters }) {
-            let { isLoading, discuz: { userInfo: { username }, signInfo } } = state;
+            let { isLoading, discuz: { userInfo: { username }, formhash, signInfo } } = state;
             let { targetHost } = getters
             if (isLoading) {
                 return;
             }
             let httpConfig = {};
             let message = `ID: ${username}\r\n日期: ${new Date().Format("yyyy.M.dd")}\r\n心情: ......`
-            let formhash = signInfo.formhash
             if (!signInfo.tid) {
                 // 主题帖签到
                 Object.assign(httpConfig, {
@@ -157,15 +156,16 @@ export default new Vuex.Store({
             if (confirm("确认上报上月签到数据吗?") && confirm("再次确认") && confirm("三次确认")) {
                 let {
                     discuz: {
+                        formhash,
                         userInfo: { username },
-                        signInfo: { prevMonthSignThreadLastPostUrl, formhash }
+                        signInfo: { lastPostUrl }
                     }
                 } = state;
                 let { targetHost } = getters
-                if (!prevMonthSignThreadLastPostUrl) {
+                if (!lastPostUrl) {
                     return;
                 }
-                let url = `${targetHost + prevMonthSignThreadLastPostUrl}`
+                let url = `${targetHost + lastPostUrl}`
                 let selector = selectors.thread
                 let pageData = await dispatch('getPageData', { url, selector })
                 let lastPostInfo = pageData.postList.slice(-1)[0];
@@ -190,7 +190,7 @@ export default new Vuex.Store({
                 alert("上报成功!");
             }
         },
-        async getPageData({ state }, { url, selector, HOST = state.discuz.HOST }) {
+        async getPageData({ commit, state }, { url, selector, HOST = state.discuz.HOST }) {
             let postData = {
                 httpConfig: {
                     url,
@@ -200,9 +200,9 @@ export default new Vuex.Store({
                 encoding: "gbk",
                 selector
             };
-            this.$store.commit("SET_LOADING_STATUS", true);
+            commit("SET_LOADING_STATUS", true);
             let { data: { data } } = await http.post(`${HOST}/api/html2Json`, postData);
-            this.$store.commit("SET_LOADING_STATUS", false);
+            commit("SET_LOADING_STATUS", false);
             return data
         }
     },

@@ -157,7 +157,7 @@ export default {
 					isLogin: !!getCookie("cdb3_auth")
 				});
 				this.checkSigned();
-				this.getIndexPageJson();
+				this.getIndexPageData();
 			}
 		},
 		async checkSigned() {
@@ -167,9 +167,9 @@ export default {
 			} = this;
 			let url = `${targetHost}my.php`;
 			let selector = selectors.my;
-			let pageData = await this.getPageData();
+			let pageData = await this.getPageData({ url, selector });
 			let { formhash, username, recentReply, recentTopics } = pageData;
-			signInfo.formhash = formhash;
+			this.discuz.formhash = formhash;
 			recentTopics &&
 				recentTopics.forEach(item => {
 					if (
@@ -193,12 +193,12 @@ export default {
 							`${username}/${new Date().getMonth() ||
 								12}月份/打卡签到帖`
 					) {
-						signInfo.prevMonthSignThreadLastPostUrl =
+						signInfo.lastPostUrl =
 							item.lastPostUrl;
 					}
 				});
 
-			!signInfo.prevMonthSignThreadLastPostUrl &&
+			!signInfo.lastPostUrl &&
 				recentReply &&
 				recentReply.forEach(item => {
 					if (
@@ -207,7 +207,7 @@ export default {
 							`${username}/${new Date().getMonth() ||
 								12}月份/打卡签到帖`
 					) {
-						signInfo.prevMonthSignThreadLastPostUrl = item.href;
+						signInfo.lastPostUrl = item.href;
 					}
 				});
 		},

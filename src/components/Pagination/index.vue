@@ -16,6 +16,7 @@ export default {
   },
   methods: {
     gotoPage(url) {
+      console.log(url)
       this.$router.push(
         encodeURIComponent(`${this.targetHost}${url}`)
       );

@@ -46,7 +46,7 @@ export default {
         return Math.ceil(this/10)
     };
     form input[name=formhash][value=$formhash];
-    form #ajax_favorite[href=$tid|replace(/^my.php.*tid=/g,'')];
+    #postform[action=$replyUrl];
     head title{$documentTitle};
     form .mainbox.viewthread@postList{
         .postauthor cite a[id^=userinfo]{$authorName};

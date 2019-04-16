@@ -16,7 +16,7 @@
 	</div>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import http from "../../util/http";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";

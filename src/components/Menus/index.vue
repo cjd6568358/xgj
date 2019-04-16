@@ -25,8 +25,10 @@
 	</ul>
 </template>
 <script>
+import Reply from "./components/Reply/index.vue";
 export default {
-	props: ["url", "tid"],
+	props: ["url", "tid", "fid"],
+	components: { Reply },
 	data() {
 		return {
 			collections: [],
@@ -38,13 +40,6 @@ export default {
 			JSON.parse(localStorage.getItem("collections")) || [];
 	},
 	computed: {
-		// tid() {
-		//     if (this.url.includes("redirect.php?goto")) {
-		//         return this.url.replace(/^redirect.*ptid=/g, "");
-		//     } else {
-		//         return this.url.split("-")[1];
-		//     }
-		// },
 		readProgress() {
 			return this.collections.filter(item => {
 				return item.tid == this.tid;
@@ -87,7 +82,15 @@ export default {
 				JSON.stringify(this.collections)
 			);
 		},
-		onReply() {}
+		onReply() {
+			console.log(this.url)
+			this.$openModal({
+				position: "bottom",
+				maskClosable: true,
+				content: <Reply url={this.url} fid={this.fid} tid={this.tid} />
+			});
+			this.toggleclass();
+		}
 	}
 };
 </script>

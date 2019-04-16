@@ -1,6 +1,6 @@
 <template>
 	<div class="discuzThread-page">
-		<Menus :url="url" :tid="tid"></Menus>
+		<Menus :url="url" :tid="tid" :fid="fid"></Menus>
 		<div class="overflow-container">
 			<ul class="thread">
 				<li class="post" v-for="(post,i) of postList" :key="i">
@@ -19,7 +19,7 @@
 	</div>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import http from "../../util/http";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
@@ -31,6 +31,7 @@ export default {
 		return {
 			postList: [],
 			tid: "",
+			fid: "",
 			pageInfo: {
 				currPageNum: 1,
 				totalPageNum: 1,
@@ -45,11 +46,12 @@ export default {
 		prevUrl() {
 			let prevUrl = "";
 			if (this.pageInfo && this.pageInfo.currPageNum != 1 && this.url) {
+				let currPageNum = this.pageInfo.currPageNum;
 				prevUrl = this.url
 					.replace(/.*bbs\//g, "")
 					.replace(
-						/(\d*)\.html/,
-						`${this.pageInfo.currPageNum - 1}.html`
+						/(^.*\d{5,}-)(\d.*)(-1.html)/g,
+						"$1" + (currPageNum - 1) + "$3"
 					);
 			}
 			return prevUrl;
@@ -88,7 +90,15 @@ export default {
 			if (pageData.pageInfo) {
 				this.pageInfo = pageData.pageInfo;
 			}
-			this.tid = pageData.tid;
+			this.discuz.formhash = pageData.formhash
+			this.tid = pageData.replyUrl.replace(
+				/(^post.*tid=)(\d.*)(&extra=.*$)/g,
+				"$2"
+			);
+			this.fid = pageData.replyUrl.replace(
+				/(^post.*fid=)(\d.*)(&tid=.*$)/g,
+				"$2"
+			);
 			this.postList = pageData.postList;
 			this.postList.forEach(item => {
 				item.content = item.content
@@ -114,7 +124,8 @@ export default {
 <style lang="scss" >
 .discuzThread-page {
 	.thread {
-		padding: 0 20px;
+		background-color: #fff;
+		padding: 20px;
 		.post {
 			line-height: 1.8;
 			margin-bottom: 10px;
@@ -132,6 +143,7 @@ export default {
 			}
 			.post-content {
 				background: #fff;
+				overflow: auto;
 				img {
 					max-width: 100% !important;
 				}
