@@ -20,7 +20,6 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
-import http from "../../util/http";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
 import selectors from "../../util/html2JsonSelector";
@@ -86,37 +85,42 @@ export default {
 				sessionStorage.setItem(url, JSON.stringify(pageData));
 			}
 
-			document.title = pageData.documentTitle;
-			if (pageData.pageInfo) {
-				this.pageInfo = pageData.pageInfo;
+			let {
+				documentTitle,
+				pageInfo = {},
+				formhash,
+				replyUrl,
+				postList = []
+			} = pageData;
+
+			document.title = documentTitle;
+			this.discuz.formhash = formhash;
+			if (pageInfo) {
+				this.pageInfo = pageInfo;
 			}
-			this.discuz.formhash = pageData.formhash;
-			if (pageData.replyUrl) {
-				this.tid = pageData.replyUrl.replace(
+			if (replyUrl) {
+				this.tid = replyUrl.replace(
 					/(^post.*tid=)(\d.*)(&extra=.*$)/g,
 					"$2"
 				);
-				this.fid = pageData.replyUrl.replace(
+				this.fid = replyUrl.replace(
 					/(^post.*fid=)(\d.*)(&tid=.*$)/g,
 					"$2"
 				);
 			}
-			this.postList = pageData.postList;
+			this.postList = postList;
 			this.postList.forEach(item => {
 				item.content = item.content
 					.replace(/="attachment/g, `="${this.targetHost}attachment`)
 					.replace(/="images/g, `="${this.targetHost}images`)
 					.replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
-					.replace(
-						/="(viewthread|thread.*)" target/g,
-						($0, $1, $2, $3) => {
-							return `="${
-								process.env.BASE_URL
-							}discuz/thread/${encodeURIComponent(
-								this.targetHost + $1
-							)}" target`;
-						}
-					)
+					.replace(/="(viewthread|thread.*)" target/g, ($0, $1) => {
+						return `="${
+							process.env.BASE_URL
+						}discuz/thread/${encodeURIComponent(
+							this.targetHost + $1
+						)}" target`;
+					})
 					.replace(/:14pt/g, ":5vw");
 			});
 		}
