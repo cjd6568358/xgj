@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/xgj/css/PasswordView.27346599.css"
   },
   {
-    "revision": "920b5505061a3582fbd545720e97c87a",
+    "revision": "4d233ab32926d2e434996147926e2b4f",
     "url": "/xgj/index.html"
   },
   {
@@ -20,12 +20,12 @@ self.__precacheManifest = [
     "url": "/xgj/js/chunk-vendors-legacy.25772bc6.js"
   },
   {
-    "revision": "105f0fc4fdf3d5d7abea",
-    "url": "/xgj/js/DiscuzThreadView-legacy.0b18d13f.js"
+    "revision": "ab803ca23c0c0e1ecec2",
+    "url": "/xgj/js/DiscuzThreadView-legacy.114c13b3.js"
   },
   {
-    "revision": "eb5f137a1292316e1382",
-    "url": "/xgj/js/app-legacy.7685011b.js"
+    "revision": "4a5c307ec189249e50f4",
+    "url": "/xgj/js/app-legacy.d963b7d6.js"
   },
   {
     "revision": "d833f757700d910f82e6",
@@ -52,16 +52,16 @@ self.__precacheManifest = [
     "url": "/xgj/js/PasswordListView-legacy.730e8b1e.js"
   },
   {
-    "revision": "0184b37778268ba6a4f6",
-    "url": "/xgj/js/DiscuzForumView-legacy.56dfcf77.js"
+    "revision": "a1bacad78002059f739f",
+    "url": "/xgj/js/DiscuzForumView-legacy.4f4b0386.js"
   },
   {
     "revision": "05b3ff93d3e0ffef62e8",
     "url": "/xgj/js/PasswordView-legacy.55d45e05.js"
   },
   {
-    "revision": "105f0fc4fdf3d5d7abea",
-    "url": "/xgj/css/DiscuzThreadView.26871b17.css"
+    "revision": "ab803ca23c0c0e1ecec2",
+    "url": "/xgj/css/DiscuzThreadView.bb0c63e9.css"
   },
   {
     "revision": "5260347dde31ae3d0c73",
@@ -76,7 +76,7 @@ self.__precacheManifest = [
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "eb5f137a1292316e1382",
+    "revision": "4a5c307ec189249e50f4",
     "url": "/xgj/css/app.28fdefb7.css"
   },
   {
@@ -100,11 +100,11 @@ self.__precacheManifest = [
     "url": "/xgj/css/DiscuzMyView.1d2225b7.css"
   },
   {
-    "revision": "0184b37778268ba6a4f6",
-    "url": "/xgj/css/DiscuzForumView.814d8b82.css"
+    "revision": "a1bacad78002059f739f",
+    "url": "/xgj/css/DiscuzForumView.f11cad0d.css"
   },
   {
-    "revision": "920b5505061a3582fbd545720e97c87a",
+    "revision": "4d233ab32926d2e434996147926e2b4f",
     "url": "/xgj/404.html"
   }
 ];

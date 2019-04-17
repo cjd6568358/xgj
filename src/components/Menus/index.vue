@@ -28,7 +28,7 @@
 import Reply from "./components/Reply/index.vue";
 export default {
 	props: ["url", "tid", "fid"],
-	components: { Reply },
+	components: { },
 	data() {
 		return {
 			collections: [],
