@@ -36,6 +36,7 @@ export default {
 		};
 	},
 	mounted() {
+        console.log(this.url)
 		this.collections =
 			JSON.parse(localStorage.getItem("collections")) || [];
 	},

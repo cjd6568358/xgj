@@ -29,7 +29,9 @@ export default {
 				fid,
 				tid
 			});
-			this.closeModal(e);
+            this.closeModal(e);
+            localStorage.removeItem(this.url)
+            location.reload(true)
 		},
 		closeModal(e) {
 			this.$emit("closeModal", e);
