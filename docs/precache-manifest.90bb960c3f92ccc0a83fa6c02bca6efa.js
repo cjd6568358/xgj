@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/xgj/js/DiscuzMyView.fc517af5.js"
   },
   {
-    "revision": "b6bf2e247967f6f5bd5732a04dd1369a",
+    "revision": "123ed6cd29cbc8467626fcb28cfc702c",
     "url": "/xgj/index.html"
   },
   {
-    "revision": "bbc7dc6373f8d69135aa",
-    "url": "/xgj/js/DiscuzThreadView.a957bf2b.js"
+    "revision": "25c5d3f07e16f5ba2727",
+    "url": "/xgj/js/DiscuzThreadView.5f925232.js"
   },
   {
     "revision": "70f8b6fd89c6174ca2d725f8ebabfe43",
@@ -52,16 +52,16 @@ self.__precacheManifest = [
     "url": "/xgj/js/PasswordListView.8e25b8e5.js"
   },
   {
-    "revision": "22e3ed48419877bb1215",
-    "url": "/xgj/js/app.71dbf6d1.js"
+    "revision": "9a49b93cc483642d487a",
+    "url": "/xgj/js/app.878b6ce0.js"
   },
   {
     "revision": "63c0ff4e37a1e31506e2",
     "url": "/xgj/js/PasswordView.dff4b553.js"
   },
   {
-    "revision": "b73eb72e3ea25a027057",
-    "url": "/xgj/js/DiscuzForumView.b5e198ee.js"
+    "revision": "6af51b5bc80edc4c616f",
+    "url": "/xgj/js/DiscuzForumView.1898a186.js"
   },
   {
     "revision": "230e933271e525746858",
@@ -84,7 +84,7 @@ self.__precacheManifest = [
     "url": "/xgj/favicon.png"
   },
   {
-    "revision": "22e3ed48419877bb1215",
+    "revision": "9a49b93cc483642d487a",
     "url": "/xgj/css/app.28fdefb7.css"
   },
   {
@@ -104,19 +104,19 @@ self.__precacheManifest = [
     "url": "/xgj/css/MyView.8754bd7f.css"
   },
   {
-    "revision": "bbc7dc6373f8d69135aa",
-    "url": "/xgj/css/DiscuzThreadView.4e988d03.css"
+    "revision": "25c5d3f07e16f5ba2727",
+    "url": "/xgj/css/DiscuzThreadView.a5426c04.css"
   },
   {
     "revision": "601ed6f1bb69866ec3d1",
     "url": "/xgj/css/DiscuzMyView.1d2225b7.css"
   },
   {
-    "revision": "b73eb72e3ea25a027057",
-    "url": "/xgj/css/DiscuzForumView.f11cad0d.css"
+    "revision": "6af51b5bc80edc4c616f",
+    "url": "/xgj/css/DiscuzForumView.bb65618d.css"
   },
   {
-    "revision": "b6bf2e247967f6f5bd5732a04dd1369a",
+    "revision": "123ed6cd29cbc8467626fcb28cfc702c",
     "url": "/xgj/404.html"
   }
 ];

@@ -16,7 +16,7 @@
 		<li>
 			<span @click="saveReadProgress">收藏</span>
 		</li>
-		<li>
+		<li v-if="tid && fid">
 			<span @click="onReply">回复</span>
 		</li>
 		<li v-if="readProgress">

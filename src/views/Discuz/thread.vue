@@ -90,15 +90,17 @@ export default {
 			if (pageData.pageInfo) {
 				this.pageInfo = pageData.pageInfo;
 			}
-			this.discuz.formhash = pageData.formhash
-			this.tid = pageData.replyUrl.replace(
-				/(^post.*tid=)(\d.*)(&extra=.*$)/g,
-				"$2"
-			);
-			this.fid = pageData.replyUrl.replace(
-				/(^post.*fid=)(\d.*)(&tid=.*$)/g,
-				"$2"
-			);
+			this.discuz.formhash = pageData.formhash;
+			if (pageData.replyUrl) {
+				this.tid = pageData.replyUrl.replace(
+					/(^post.*tid=)(\d.*)(&extra=.*$)/g,
+					"$2"
+				);
+				this.fid = pageData.replyUrl.replace(
+					/(^post.*fid=)(\d.*)(&tid=.*$)/g,
+					"$2"
+				);
+			}
 			this.postList = pageData.postList;
 			this.postList.forEach(item => {
 				item.content = item.content
