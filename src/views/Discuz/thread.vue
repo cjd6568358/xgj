@@ -94,10 +94,10 @@ export default {
 			} = pageData;
 
 			document.title = documentTitle;
-			this.discuz.formhash = formhash;
+            this.discuz.formhash = formhash;
 			if (pageInfo) {
 				this.pageInfo = pageInfo;
-			}
+            }
 			if (replyUrl) {
 				this.tid = replyUrl.replace(
 					/(^post.*tid=)(\d.*)(&extra=.*$)/g,
