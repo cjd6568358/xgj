@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Agent from 'agentkeepalive'
-import temme from 'temme'
+// import temme from 'temme'
+let temme = null
 const keepaliveAgent = new Agent({
     maxSockets: 100,
     maxFreeSockets: 10,
@@ -11,7 +12,7 @@ const httpClient = axios.create({
     withCredentials: true
 });
 httpClient.defaults.httpAgent = keepaliveAgent;
-httpClient.interceptors.request.use(async(config) => {
+httpClient.interceptors.request.use(async (config) => {
     let temmeConvert = localStorage.getItem('temmeConvert')
     if (config.url.includes('html2Json') && temmeConvert === 'client') {
         config.temmeConvert = temmeConvert
@@ -22,14 +23,18 @@ httpClient.interceptors.request.use(async(config) => {
         config.headers['corscookies'] = document.cookie
     }
     return config;
-}, async function(error) {
+}, async function (error) {
     // Do something with request error
     return Promise.reject(error);
 });
 
 // Add a response interceptor
-httpClient.interceptors.response.use(async(response) => {
+httpClient.interceptors.response.use(async (response) => {
     if (response.config.temmeConvert === 'client') {
+        if (!temme) {
+            let { default: temmeLib } = await import(/* webpackChunkName: 'temme' */'temme')
+            temme = temmeLib
+        }
         let selector = JSON.parse(response.config.data).selector
         response.data.data = temme(response.data.data, selector)
     }
@@ -37,7 +42,7 @@ httpClient.interceptors.response.use(async(response) => {
     console.log('request url:' + response.request.responseURL);
     // Do something with response data
     return response;
-}, async function(error) {
+}, async function (error) {
     // Do something with response error
     return Promise.reject(error);
 });

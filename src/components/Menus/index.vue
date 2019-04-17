@@ -36,7 +36,6 @@ export default {
 		};
 	},
 	mounted() {
-        console.log(this.url)
 		this.collections =
 			JSON.parse(localStorage.getItem("collections")) || [];
 	},
@@ -84,7 +83,6 @@ export default {
 			);
 		},
 		onReply() {
-			console.log(this.url)
 			this.$openModal({
 				position: "bottom",
 				maskClosable: true,
