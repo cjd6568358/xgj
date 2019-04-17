@@ -87,7 +87,7 @@ export default {
 
 			let {
 				documentTitle,
-				pageInfo = {},
+				pageInfo,
 				formhash,
 				replyUrl,
 				postList = []
