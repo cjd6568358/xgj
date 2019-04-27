@@ -14,13 +14,16 @@
 			</svg>
 		</a>
 		<li>
-			<span @click="saveReadProgress">收藏</span>
+			<span @click="saveProgress">收藏</span>
+		</li>
+		<li v-if="hasProgress">
+			<span @click="delProgress">删除</span>
 		</li>
 		<li v-if="tid && fid">
 			<span @click="onReply">回复</span>
 		</li>
-		<li v-if="readProgress">
-			<span @click="deleteReadProgress">删除</span>
+		<li>
+			<span @click="onReload">刷新</span>
 		</li>
 	</ul>
 </template>
@@ -28,7 +31,7 @@
 import Reply from "./components/Reply/index.vue";
 export default {
 	props: ["url", "tid", "fid"],
-	components: { },
+	components: {},
 	data() {
 		return {
 			collections: [],
@@ -40,7 +43,7 @@ export default {
 			JSON.parse(localStorage.getItem("collections")) || [];
 	},
 	computed: {
-		readProgress() {
+		hasProgress() {
 			return this.collections.filter(item => {
 				return item.tid == this.tid;
 			})[0];
@@ -50,7 +53,7 @@ export default {
 		toggleclass() {
 			this.isOpened = !this.isOpened;
 		},
-		saveReadProgress() {
+		saveProgress() {
 			let i = this.collections.findIndex(item => {
 				return item.tid == this.tid;
 			});
@@ -72,7 +75,7 @@ export default {
 				JSON.stringify(this.collections)
 			);
 		},
-		deleteReadProgress() {
+		delProgress() {
 			let i = this.collections.findIndex(item => {
 				return item.tid == this.tid;
 			});
@@ -89,6 +92,10 @@ export default {
 				content: <Reply url={this.url} fid={this.fid} tid={this.tid} />
 			});
 			this.toggleclass();
+		},
+		onReload() {
+			sessionStorage.removeItem(this.url);
+			location.reload(true);
 		}
 	}
 };

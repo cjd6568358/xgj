@@ -30,7 +30,7 @@ export default {
 				tid
 			});
             this.closeModal(e);
-            localStorage.removeItem(this.url)
+            sessionStorage.removeItem(this.url)
             location.reload(true)
 		},
 		closeModal(e) {

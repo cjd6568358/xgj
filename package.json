@@ -3,32 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve --mode development --dashboard",
-    "build": "vue-cli-service build --mode production --dest docs --target app --dashboard",
-    "lint": "vue-cli-service lint"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
-    "agentkeepalive": "^4.0.0",
+    "agentkeepalive": "^4.0.2",
     "axios": "^0.18.0",
     "dexie": "^2.0.4",
     "js-cookie": "^2.2.0",
-    "register-service-worker": "^1.0.0",
+    "register-service-worker": "^1.6.2",
     "temme": "^0.8.3",
     "vue": "^2.5.21",
     "vue-router": "^3.0.2",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.2.0",
-    "@vue/cli-plugin-eslint": "^3.2.1",
-    "@vue/cli-plugin-pwa": "^3.2.0",
-    "@vue/cli-service": "^3.2.0",
+    "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-plugin-pwa": "^3.6.0",
+    "@vue/cli-service": "^3.6.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.11.0",
-    "postcss-px-to-viewport": "0.0.3",
-    "sass-loader": "^7.0.1",
+    "postcss-px-to-viewport": "1.1.0",
+    "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.21"
   }
 }
