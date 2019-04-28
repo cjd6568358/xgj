@@ -251,7 +251,7 @@ export default {
 	flex-direction: column;
 	font-size: 32px;
 	background: #fff;
-	padding: 10px 0;
+	padding: 10px;
 	box-shadow: 4px 4px 4px #ddd;
 }
 
