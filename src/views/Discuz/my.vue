@@ -27,7 +27,7 @@
 	</div>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import http from "../../util/http";
 import selectors from "../../util/html2JsonSelector";
 export default {
