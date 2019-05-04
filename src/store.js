@@ -171,11 +171,10 @@ export default new Vuex.Store({
                 let lastPostInfo = pageData.postList.slice(-1)[0];
                 let prevMonthSignInfo = {
                     pid: lastPostInfo.pid,
-                    tid: pageData.tid,
+                    tid: lastPostUrl.replace(/[^\d]/g,''),
                     count: parseInt(lastPostInfo.postFloor),
                     absPostUrl: lastPostInfo.absPostUrl
                 };
-
                 let httpConfig = {
                     url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
                     data: querystring.stringify({
