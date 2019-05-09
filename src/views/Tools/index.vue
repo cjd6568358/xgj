@@ -43,7 +43,7 @@ export default {
 			if (this.session) {
 				let HOST = proxyServers.filter(
 					item => item.platom === "N270"
-				)[0];
+				)[0].host;
 				this.$store.commit("SET_LOADING_STATUS", true);
 				let {
 					data: { data }
