@@ -35,9 +35,6 @@ export default {
 		...mapState(["isLoading", "discuz"]),
 		...mapGetters(["targetHost"])
 	},
-	mounted() {},
-	beforeMount() {},
-	destroyed() {},
 	methods: {
 		async updateSession() {
 			if (this.session) {
