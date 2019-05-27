@@ -1,7 +1,7 @@
 <template>
 	<div class="reply-modal">
-		<input type="text" v-model="subject" placeholder="请输入标题">
-		<textarea name v-model="message" id cols="30" rows="10" placeholder="请输入内容"></textarea>
+		<input type="text" v-model="subject" placeholder="选填,请输入标题">
+		<textarea name v-model="message" id cols="30" rows="10" placeholder="必填,请输入最少20个字内容"></textarea>
 		<ul>
 			<li class="btn submit" @click="submit">提交</li>
 			<li class="btn cancel" @click="closeModal">取消</li>
@@ -29,9 +29,11 @@ export default {
 				fid,
 				tid
 			});
-            this.closeModal(e);
-            sessionStorage.removeItem(this.url)
-            location.reload(true)
+			this.closeModal(e);
+			setTimeout(() => {
+				sessionStorage.removeItem(this.url);
+				location.reload(true);
+			}, 100);
 		},
 		closeModal(e) {
 			this.$emit("closeModal", e);
