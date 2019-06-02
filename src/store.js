@@ -45,7 +45,6 @@ export default new Vuex.Store({
             signInfo: {
                 isSigned: false,
                 tid: null,
-                lastPostUrl: ""
             }
         }
     },
@@ -97,8 +96,9 @@ export default new Vuex.Store({
             };
             Object.assign(postData.httpConfig, httpConfig)
             commit("SET_LOADING_STATUS", true);
-            await http.post(`${HOST}/api/advancedProxy`, postData);
+            let res = await http.post(`${HOST}/api/advancedProxy`, postData);
             commit("SET_LOADING_STATUS", false);
+            return res
         },
         async submitReply({ dispatch, state, getters }, { fid, tid, message = "", subject = "" }) {
             let { isLoading, discuz: { formhash } } = state;
@@ -158,29 +158,16 @@ export default new Vuex.Store({
                     discuz: {
                         formhash,
                         userInfo: { username },
-                        signInfo: { lastPostUrl }
                     }
                 } = state;
                 let { targetHost } = getters
-                if (!lastPostUrl) {
-                    return;
-                }
-                let url = `${targetHost + lastPostUrl}`
-                let selector = selectors.thread
-                let pageData = await dispatch('getPageData', { url, selector })
-                let lastPostInfo = pageData.postList.slice(-1)[0];
-                let prevMonthSignInfo = {
-                    pid: lastPostInfo.pid,
-                    tid: lastPostUrl.replace(/[^\d]/g,''),
-                    count: parseInt(lastPostInfo.postFloor),
-                    absPostUrl: lastPostInfo.absPostUrl
-                };
+                let lastMonthSignInfo = await dispatch('getLastMonthSignInfo')
                 let httpConfig = {
                     url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
                     data: querystring.stringify({
                         formhash,
                         subject: "",
-                        message: `ID: ${username}\r\n签到次数: ${prevMonthSignInfo.count}\r\n签到链接: [bbs]${encodeURIComponent(`thread-${prevMonthSignInfo.tid}-1-1.html`)}[/bbs]`,
+                        message: `ID: ${username}\r\n签到次数: ${lastMonthSignInfo.count}\r\n签到链接: [bbs]${encodeURIComponent(`thread-${lastMonthSignInfo.tid}-1-1.html`)}[/bbs]`,
                         fid: 420,
                         wysiwyg: 0
                     })
@@ -203,6 +190,36 @@ export default new Vuex.Store({
             let { data: { data } } = await http.post(`${HOST}/api/html2Json`, postData);
             commit("SET_LOADING_STATUS", false);
             return data
+        },
+        async getLastMonthSignInfo({ state, getters }) {
+            let { discuz: { userInfo: { username }, formhash } } = state;
+            let { targetHost } = getters
+            let postData = {
+                httpConfig: {
+                    url: `${targetHost}search.php`,
+                    data: `formhash=${formhash}&srchtxt=${username}&srchuname=&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=lastpost&ascdesc=desc&srchfid%5B%5D=all`,
+                    method: "post",
+                    responseType: "arraybuffer"
+                },
+                encoding: "gbk",
+                selector: selectors.search
+            };
+            let { data: { data } } = await http.post(`${state.discuz.HOST}/api/html2Json`, postData);
+            let lastMonthSignInfo = {}
+            let now = new Date()
+            let month = now.getMonth()
+            for (let index = 0; index < data.length; index++) {
+                const { title, count, tid } = data[index];
+                if (title == `${username}/${month || 12}月份/打卡签到帖`) {
+                    lastMonthSignInfo = {
+                        title,
+                        tid,
+                        count: ++count
+                    }
+                    break
+                }
+            }
+            return lastMonthSignInfo
         }
     },
     getters: {

@@ -187,27 +187,6 @@ export default {
 						} else {
 							signInfo.tid = item.tid;
 						}
-					} else if (
-						item &&
-						item.title ==
-							`${username}/${new Date().getMonth() ||
-								12}月份/打卡签到帖`
-					) {
-						signInfo.lastPostUrl =
-							item.lastPostUrl;
-					}
-				});
-
-			!signInfo.lastPostUrl &&
-				recentReply &&
-				recentReply.forEach(item => {
-					if (
-						item &&
-						item.title ==
-							`${username}/${new Date().getMonth() ||
-								12}月份/打卡签到帖`
-					) {
-						signInfo.lastPostUrl = item.href;
 					}
 				});
 		},

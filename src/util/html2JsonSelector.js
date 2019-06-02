@@ -87,5 +87,12 @@ export default {
         td:nth-child(3){$lastPost}
         td:nth-child(4){$status}
     }
+    `,
+    search:`
+    .mainbox.threadlist tbody@{
+        th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
+        // td.author em{$createDate}
+        td.nums strong{$count};
+    }
     `
 }
