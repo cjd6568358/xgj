@@ -304,15 +304,15 @@ a.btn {
 		left: 0;
 		width: 100%;
 		font-size: 32px;
-		padding-left: 20px;
-		height: 60px;
-		line-height: 60px;
+		padding-left: 24px;
+		height: 80px;
+		line-height: 80px;
 		color: #fff;
 		content: attr(data-title);
 		background: #2a6eb4;
 	}
 	li {
-		padding: 10px 20px;
+		padding: 20px 24px;
 		font-size: 30px;
 		line-height: 1.5;
 		&:nth-child(even) {

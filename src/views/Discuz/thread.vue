@@ -44,14 +44,9 @@ export default {
 		...mapGetters(["targetHost"]),
 		prevUrl() {
 			let prevUrl = "";
-			if (this.pageInfo && this.pageInfo.currPageNum != 1 && this.url) {
+			if (this.pageInfo && this.pageInfo.currPageNum != 1) {
 				let currPageNum = this.pageInfo.currPageNum;
-				prevUrl = this.url
-					.replace(/.*bbs\//g, "")
-					.replace(
-						/(^.*\d{5,}-)(\d.*)(-1.html)/g,
-						"$1" + (currPageNum - 1) + "$3"
-					);
+				prevUrl = `thread-${this.tid}-${currPageNum - 1}-1.html`;
 			}
 			return prevUrl;
 		}
@@ -94,10 +89,10 @@ export default {
 			} = pageData;
 
 			document.title = documentTitle;
-            this.discuz.formhash = formhash;
+			this.discuz.formhash = formhash;
 			if (pageInfo) {
 				this.pageInfo = pageInfo;
-            }
+			}
 			if (replyUrl) {
 				this.tid = replyUrl.replace(
 					/(^post.*tid=)(\d.*)(&extra=.*$)/g,
