@@ -112,7 +112,7 @@ export default {
 }
 .area {
 	position: relative;
-	padding-top: 60px;
+	padding-top: 80px;
 	background: #fff;
 	max-height: 99999px;
 	&::before {
@@ -122,16 +122,16 @@ export default {
 		width: 100%;
 		font-size: 32px;
 		padding-left: 20px;
-		height: 60px;
-		line-height: 60px;
+		height: 80px;
+		line-height: 80px;
 		color: #fff;
 		content: attr(data-title);
 		background: #2a6eb4;
 	}
 	li {
-		padding: 0 20px;
+		padding: 20px 24px;
 		font-size: 30px;
-		line-height: 1.8;
+		line-height: 1.5;
 		&:nth-child(even) {
 			background: #ddd;
 		}
