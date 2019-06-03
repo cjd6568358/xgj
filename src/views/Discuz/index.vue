@@ -295,7 +295,7 @@ a.btn {
 }
 .area {
 	position: relative;
-	padding-top: 60px;
+	padding-top: 80px;
 	background: #fff;
 	max-height: 99999px;
 	&::before {
