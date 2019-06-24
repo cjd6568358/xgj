@@ -23,5 +23,6 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "小管家",
     "navigationBarTextStyle": "black"
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }
