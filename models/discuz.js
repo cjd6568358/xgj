@@ -7,7 +7,7 @@ let HOST = wx.getStorageSync("proxy_host") || proxyServerList[0].host
 let PLATOM = proxyServerList.filter(
   item => item.host === HOST
 )[0].platom
-let temmeConvert = 'client'
+let temmeConvert = 'server'
 if (wx.getStorageSync("temmeConvert")) {
   temmeConvert = wx.getStorageSync("temmeConvert")
 } else {
@@ -18,7 +18,7 @@ let webSiteList = wx.getStorageSync("webSiteList") || []
 let webSite = wx.getStorageSync("webSite") || webSiteList[0]
 
 let isLoading = false
-console.log(HOST, PLATOM)
+
 export default {
   /**
    * model的全局唯一命名，是全局state中注册的key，可用于获取model state，触发model action
@@ -104,7 +104,7 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let res = await http.post(`${HOST}/api/advancedProxy`, postData);
+      let res = await http.post({ url: `${HOST}/api/advancedProxy`, data: postData });
       wx.hideLoading()
       isLoading = false
       return res
@@ -206,7 +206,7 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let { data } = await http.post(`${HOST}/api/html2Json`, postData);
+      let { data } = await http.post({ url: `${HOST}/api/html2Json`, data: postData });
       wx.hideLoading()
       isLoading = false
       return data
@@ -224,7 +224,7 @@ export default {
         encoding: "gbk",
         selector: selectors.search
       };
-      let { data } = await http.post(`${HOST}/api/html2Json`, postData);
+      let { data } = await http.post({ url: `${HOST}/api/html2Json`, data: postData });
       let lastMonthSignInfo = {}
       let now = new Date()
       let month = now.getMonth()
@@ -256,7 +256,7 @@ export default {
       if (info.webSite) {
         wx.setStorageSync('webSite', info.webSite)
       }
-      return { ...state, info }
+      return { ...state, ...info }
     },
   },
 }

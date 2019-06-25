@@ -1,1 +1,53 @@
 /* pages/discuz/index.wxss */
+
+page {
+  padding-bottom: 48rpx;
+}
+
+.user-info {
+  display: flex;
+  padding: 20rpx;
+  background: #fff;
+  font-size: 32rpx;
+}
+
+.user-info .item {
+  padding-right: 20rpx;
+  margin-right: 20rpx;
+  border-right: 2rpx solid #ddd;
+}
+
+.user-info .item:last-child {
+  border-right: 0;
+}
+
+.area {
+  position: relative;
+  padding-top: 80rpx;
+  background: #fff;
+}
+
+.area::before {
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 32rpx;
+  padding-left: 24rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  color: #fff;
+  content: attr(data-title);
+  background: #2a6eb4;
+}
+
+.area .item {
+  padding: 20rpx 24rpx;
+  font-size: 30rpx;
+  line-height: 1.5;
+}
+
+.area .item:nth-child(even) {
+  background: #ddd;
+}

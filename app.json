@@ -6,8 +6,10 @@
     "pages/tool/location",
     "pages/tool/systemInfo",
     "pages/tool/wifi",
-    
-    "pages/discuz/index"
+    "pages/discuz/index",
+    "pages/discuz/my",
+    "pages/discuz/thread",
+    "pages/discuz/forum"
   ],
   "permission": {
     "scope.userLocation": {

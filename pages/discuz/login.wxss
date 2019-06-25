@@ -34,6 +34,6 @@ page {
   border-radius: 8rpx;
 }
 
-.btn-switch {
+.btn-switch, .btn-login {
   margin-top: 40rpx;
 }

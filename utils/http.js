@@ -1,4 +1,4 @@
-import { sendMsg } from './util.js'
+import { sendMsg, querystring } from './util.js'
 const http = ((config) => {
   let request = {};
   let methods = ['get', 'post', 'put', 'delete'];
@@ -19,7 +19,7 @@ const http = ((config) => {
             let { data, statusCode, header } = res;
             if (header.corscookies) {
               header.corscookies.split("|$$|").forEach(cookie => {
-                let [key, value] = cookie.split('=')
+                let [key, value] = cookie.split(';')[0].split('=')
                 wx.setStorageSync(key, value)
               });
             }
@@ -29,13 +29,22 @@ const http = ((config) => {
             reject(res)
           }
         }
-        if (method == 'get' && !isAbsoluteUrl) {
-          defaultConfig.url = `${defaultConfig.url}?`;
-          defaultConfig.url += Object.keys(postData).map((key, index) => {
-            return `${key}=${postData[key]}`
-          }).join('&')
-        } else if (!isAbsoluteUrl) {
-          defaultConfig.data = postData
+        if (isAbsoluteUrl) {
+          if (method == 'get') {
+            let originData = {}
+            originData = querystring.parse(defaultConfig.url.split('?')[1])
+            defaultConfig.url = defaultConfig.url.split('?')[0] + '?' + querystring.stringify(Object.assign({}, originData, postData))
+          } else {
+            defaultConfig.data = postData
+          }
+        } else {
+          if (method == 'get') {
+            defaultConfig.url = '?' + Object.keys(postData).map((key, index) => {
+              return `${key}=${postData[key]}`
+            }).join('&')
+          } else {
+            defaultConfig.data = postData
+          }
         }
         let cdb3_cookietime = wx.getStorageSync('cdb3_cookietime')
         let cdb3_auth = wx.getStorageSync('cdb3_auth')

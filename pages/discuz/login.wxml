@@ -1,9 +1,9 @@
 <!--pages/discuz/login.wxml-->
 
 <view class="login-form">
-  <!-- <view class="title">
+  <view class="title">
     discuz阅读器
-  </view> -->
+  </view>
   <view class="input-warp">
     <!-- <select name id placeholder="请选择站点" v-model="webSite">
       <option v-for="item of discuz.webSiteList" :key="item" :value="item">{{item}}</option>

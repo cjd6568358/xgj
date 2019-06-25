@@ -3,8 +3,9 @@
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
+import http from '../../utils/http.js'
 let { discuz: { UPDATE_DISCUZ } } = dispatcher
-const config = connect(({ discuz: { pageCache, isLogin, HOST, PLATOM } }) => ({ pageCache, isLogin, HOST, PLATOM }))({
+const config = connect(({ discuz: { isLogin, HOST, PLATOM } }) => ({ isLogin, HOST, PLATOM }))({
   /**
    * 页面的初始数据
    */
@@ -19,13 +20,10 @@ const config = connect(({ discuz: { pageCache, isLogin, HOST, PLATOM } }) => ({ 
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(this.data)
     if (this.data.isLogin) {
       wx.navigateTo({
         url: '/pages/discuz/index',
       })
-    } else {
-
     }
   },
 
@@ -68,11 +66,11 @@ const config = connect(({ discuz: { pageCache, isLogin, HOST, PLATOM } }) => ({ 
       wx.showLoading({
         title: '加载中...',
       })
-      await http.post(`${HOST}/api/advancedProxy`, postData);
+      await http.post({ url: `${HOST}/api/advancedProxy`, data: postData });
       wx.hideLoading()
       let isLogin = !!wx.getStorageSync("cdb3_auth")
       if (isLogin) {
-        UPDATE_DISCUZ({ isLogin })
+        UPDATE_DISCUZ({ isLogin, webSite })
         wx.navigateTo({
           url: '/pages/discuz/index',
         })
