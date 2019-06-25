@@ -1,0 +1,57 @@
+<!--pages/my/my.wxml-->
+<wxs module="util">
+  var mapGender = function(gender) {
+    var tmp = ""
+    switch (gender) {
+      case 1:
+        tmp = '男';
+        break;
+      case 2:
+        tmp = '女';
+        break;
+      default:
+        tmp = '未知';
+    }
+    return tmp
+  }
+  module.exports.mapGender = mapGender;
+</wxs>
+<view class='user-info'>
+  <block wx:if="{{userInfo}}">
+    <image src='{{userInfo.avatarUrl}}'></image>
+    <view class='right'>
+      <view class='nick-name'>姓名: {{userInfo.nickName}}</view>
+      <view class='gender'>性别: {{util.mapGender(userInfo.gender)}}</view>
+    </view>
+  </block>
+  <block wx:else>
+    <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo">获取用户信息</button>
+  </block>
+</view>
+<view class='menu-list'>
+
+  <view class='item' bindtap='openLocation'>
+    <view class="name">查看定位</view>
+    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
+  </view>
+  <view class='item' bindtap='getSystemInfo'>
+    <view class="name">查看系统信息</view>
+    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
+  </view>
+  <view class='item' bindtap='openWifi'>
+    <view class="name">查看WIFI</view>
+    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
+  </view>
+  <view class='item' bindtap='clearAllStorage'>
+    <view class="name">清除全部数据</view>
+  </view>
+  <view class='item'>
+    <view class="name">网络状态({{networkType}})</view>
+  </view>
+  <view class='item'>
+    <view class="name">蓝牙</view>
+  </view>
+  <view class='item' bindlongpress='vibrateLong' bindtap='vibrateShort'>
+    <view class="name">振动</view>
+  </view>
+</view>

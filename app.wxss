@@ -1,10 +1,19 @@
 /**app.wxss**/
-.container {
-  height: 100%;
+page {
+  background-color: #f3f5f8;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  width: initial;
+}
+
+view, input, picker, cover-view, scroll-view {
   box-sizing: border-box;
-} 
+}
+
+input-placeholder {
+  color: #999;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}

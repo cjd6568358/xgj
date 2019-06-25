@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="28px" viewBox="0 0 16 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>返回</title>
+    <desc>Created with Sketch.</desc>
+    <g id="销售端" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="A1_2首页1" transform="translate(-704.000000, -165.000000)" fill="#999999">
+            <g id="今日销售统计" transform="translate(0.000000, 128.000000)">
+                <path d="M717.197889,51 L704.339953,38.8693221 C703.886682,38.4416888 703.886682,37.7483583 704.339953,37.320725 C704.793224,36.8930917 705.528121,36.8930917 705.981392,37.320725 L719.660047,50.2257014 C720.113318,50.6533347 720.113318,51.3466653 719.660047,51.7742986 L705.981392,64.679275 C705.528121,65.1069083 704.793224,65.1069083 704.339953,64.679275 C703.886682,64.2516417 703.886682,63.5583112 704.339953,63.1306779 L717.197889,51 Z" id="返回"></path>
+            </g>
+        </g>
+    </g>
+</svg>

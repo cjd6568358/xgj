@@ -14,16 +14,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (myApp.globalData.userInfo) {
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo) {
       this.setData({
-        userInfo: myApp.globalData.userInfo
+        userInfo
       })
-    } else {
-      myApp.userInfoReadyCallback = (res) => {
-        this.setData({
-          userInfo: res.userInfo
-        })
-      }
     }
     wx.getNetworkType({
       success: (res) => {
@@ -45,14 +40,11 @@ Page({
   onReady: function () {
 
   },
-  onGotUserInfo(e) {
-    // console.log(e.detail.errMsg)
-    // console.log(e.detail.userInfo)
-    // console.log(e.detail.rawData)
+  onGotUserInfo({ detail: { userInfo } }) {
     this.setData({
-      userInfo: e.detail.userInfo
+      userInfo
     })
-    myApp.globalData.userInfo = e.detail.userInfo
+    wx.setStorageSync('userInfo', userInfo)
   },
   clearAllStorage() {
     wx.showModal({
@@ -74,14 +66,14 @@ Page({
     wx.getLocation({
       success: function (res) {
         wx.navigateTo({
-          url: `/pages/location/location?lon=${res.longitude}&lat=${res.latitude}`,
+          url: `/pages/tool/location?lon=${res.longitude}&lat=${res.latitude}`,
         })
       },
     })
   },
   getSystemInfo() {
     wx.navigateTo({
-      url: `/pages/systemInfo/systemInfo`,
+      url: `/pages/tool/systemInfo`,
     })
   },
   vibrateLong() {
@@ -94,9 +86,9 @@ Page({
 
     })
   },
-  openWifi(){
+  openWifi() {
     wx.navigateTo({
-      url: `/pages/wifi/wifi`,
+      url: `/pages/tool/wifi`,
     })
   },
   /**

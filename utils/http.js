@@ -1,0 +1,53 @@
+import { sendMsg } from './util.js'
+const http = ((config) => {
+  let request = {};
+  let methods = ['get', 'post', 'put', 'delete'];
+  let baseUrl = 'https://cjd6568358.3322.org:6706/api/';
+  methods.forEach((method) => {
+    request[method] = (config) => {
+      return new Promise((resolve, reject) => {
+        let { data: postData = {}, url } = config;
+        let isAbsoluteUrl = url.indexOf("//") >= 0;
+        url = isAbsoluteUrl ? url : `${baseUrl}${url}`;
+        let defaultConfig = {
+          url,
+          data: '',
+          method,
+          dataType: 'json',
+          responseType: 'text',
+          success: (res) => {
+            let { data, statusCode, header } = res;
+            if (header.corscookies) {
+              header.corscookies.split("|$$|").forEach(cookie => {
+                let [key, value] = cookie.split('=')
+                wx.setStorageSync(key, value)
+              });
+            }
+            resolve(data)
+          },
+          fail: (res) => {
+            reject(res)
+          }
+        }
+        if (method == 'get' && !isAbsoluteUrl) {
+          defaultConfig.url = `${defaultConfig.url}?`;
+          defaultConfig.url += Object.keys(postData).map((key, index) => {
+            return `${key}=${postData[key]}`
+          }).join('&')
+        } else if (!isAbsoluteUrl) {
+          defaultConfig.data = postData
+        }
+        let cdb3_cookietime = wx.getStorageSync('cdb3_cookietime')
+        let cdb3_auth = wx.getStorageSync('cdb3_auth')
+        if (cdb3_cookietime && cdb3_auth) {
+          defaultConfig.header = {
+            corscookies: `cdb3_cookietime=${cdb3_cookietime};cdb3_auth=${cdb3_auth}`
+          }
+        }
+        wx.request(defaultConfig)
+      })
+    }
+  })
+  return request;
+})()
+export default http

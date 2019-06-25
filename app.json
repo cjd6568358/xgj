@@ -1,19 +1,31 @@
 {
   "pages": [
-    "pages/my/my",
-    "pages/sign/sign",
-    "pages/location/location",
-    "pages/systemInfo/systemInfo",
-    "pages/wifi/wifi"
+    "pages/discuz/login",
+    "pages/my/index",
+    "pages/tool/sign",
+    "pages/tool/location",
+    "pages/tool/systemInfo",
+    "pages/tool/wifi",
+    
+    "pages/discuz/index"
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于为您提供准确的定位"
+    }
+  },
   "tabBar": {
     "list": [
       {
-        "pagePath": "pages/sign/sign",
+        "pagePath": "pages/tool/sign",
         "text": "签到"
       },
       {
-        "pagePath": "pages/my/my",
+        "pagePath": "pages/discuz/login",
+        "text": "阅读器"
+      },
+      {
+        "pagePath": "pages/my/index",
         "text": "我的"
       }
     ]
