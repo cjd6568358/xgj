@@ -1,2 +1,15 @@
 <!--pages/discuz/thread.wxml-->
-<text>pages/discuz/thread.wxml</text>
+<view class="thread">
+  <view class="post" wx:for="{{postList}}" wx:key="index">
+    <view class="post-info">
+      <label>{{item.postFloor}}</label>
+      <label>{{item.authorName}}</label>
+      <label>{{item.authorLevel}}</label>
+      <view class="post-time">{{item.postTime}}</view>
+    </view>
+    <view>{{item.postTitle}}</view>
+    <rich-text class="post-content" nodes="{{item.content}}"></rich-text>
+  </view>
+</view>
+<shortcutMenu url="{{url}}" tid="{{tid}}" fid="{{fid}}" bindreload="reload"></shortcutMenu>
+<pagination wx:if="{{postList.length}}" currPageNum="{{pageInfo.currPageNum}}" totalPageNum="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>

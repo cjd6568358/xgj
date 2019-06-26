@@ -1,2 +1,21 @@
 <!--pages/discuz/my.wxml-->
-<text>pages/discuz/my.wxml</text>
+<view class="user-info">
+  <view>用户名:{{userInfo.username}}</view>
+  <view wx:if="signInfo.isSigned">签到状态:{{signInfo.isSigned ? '已签到':'未签到'}}</view>
+  <view wx:for="{{creditList}}" wx:key="item">{{item}}</view>
+</view>
+<view class="area" data-title="我的收藏">
+  <block wx:for="{{favorites}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
+    <view wx:if="thread" data-path="{{thread.href+'?scrollTop='+thread.scrollTop}}" bindtap="routerToThread">{{thread.title}}</view>
+  </block>
+</view>
+<view class="area" data-title="最近回复">
+  <block wx:for="{{recentReply}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
+    <view wx:if="thread" data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">{{thread.title}}</view>
+  </block>
+</view>
+<view class="area" data-title="最近主题">
+  <block wx:for="{{recentTopics}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
+    <view wx:if="thread" data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">{{thread.title}}</view>
+  </block>
+</view>

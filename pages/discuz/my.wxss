@@ -1,1 +1,47 @@
 /* pages/discuz/my.wxss */
+
+.user-info {
+  padding: 20rpx;
+  background: #fff;
+  font-size: 32rpx;
+}
+
+.user-info view {
+  padding-right: 20rpx;
+  margin-right: 20rpx;
+}
+
+.user-info view:last-child {
+  border-right: 0;
+}
+
+.area {
+  position: relative;
+  padding-top: 80rpx;
+  background: #fff;
+}
+
+.area::before {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 32rpx;
+  padding-left: 20rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  color: #fff;
+  content: attr(data-title);
+  background: #2a6eb4;
+}
+
+.area view {
+  padding: 20rpx 24rpx;
+  font-size: 30rpx;
+  line-height: 1.5;
+}
+
+.area view:nth-child(even) {
+  background: #ddd;
+}

@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "shortcutMenu": "/components/shortcutMenu/index",
+    "pagination": "/components/pagination/index"
+  }
 }

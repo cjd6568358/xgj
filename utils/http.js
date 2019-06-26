@@ -33,13 +33,16 @@ const http = ((config) => {
           if (method == 'get') {
             let originData = {}
             originData = querystring.parse(defaultConfig.url.split('?')[1])
-            defaultConfig.url = defaultConfig.url.split('?')[0] + '?' + querystring.stringify(Object.assign({}, originData, postData))
+            let query = querystring.stringify(Object.assign({}, originData, postData))
+            if (query) {
+              defaultConfig.url = defaultConfig.url.split('?')[0] + '?' + query
+            }
           } else {
             defaultConfig.data = postData
           }
         } else {
           if (method == 'get') {
-            defaultConfig.url = '?' + Object.keys(postData).map((key, index) => {
+            defaultConfig.url += '?' + Object.keys(postData).map((key, index) => {
               return `${key}=${postData[key]}`
             }).join('&')
           } else {

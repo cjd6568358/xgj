@@ -1,0 +1,28 @@
+<!--components/shortcutMenu/index.wxml-->
+<view class="menu {{isOpened && 'opened'}}">
+  <view class="btn-menu" bindtap="toggleclass">
+    <image class="icon-close" src="./images/icon-close.svg"></image>
+  </view>
+  <view class="item">
+    <label class="text" bindtap="saveProgress">收藏</label>
+  </view>
+  <view class="item" wx:if="{{hasProgress}}">
+    <label class="text" bindtap="delProgress">删除</label>
+  </view>
+  <view class="item" wx:if="{{tid && fid}}">
+    <label class="text" bindtap="onReply">回复</label>
+  </view>
+  <view class="item">
+    <label class="text" bindtap="onReload">刷新</label>
+  </view>
+</view>
+<modal options="{{modalOption}}" external-container-class="reply-modal" bind:maskClick="maskClick" wx:if="{{modalOption.showModal}}">
+  <view class="reply-modal">
+    <input class="subject" value="{{reply.subject}}" data-key="subject" bindinput="inputChange" placeholder="选填,请输入标题" />
+    <textarea class="message" value="{{reply.message}}" data-key="message" bindinput="inputChange" placeholder="必填,请输入最少20个字内容"></textarea>
+    <view class="btn-group">
+      <button class="btn submit" bindtap="submit">提交</button>
+      <button class="btn cancel" bindtap="maskClick">取消</button>
+    </view>
+  </view>
+</modal>

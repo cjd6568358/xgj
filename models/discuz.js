@@ -59,7 +59,7 @@ export default {
    *      const globalState = selectAll() 或者 const modelState = selectAll(state => state['modelName'])
    */
   async setup({ put, select, selectAll }) {
-    console.log('globalData init')
+    console.log('discuz init')
     // if (wx.getStorageSync('cartData')) {
     //   // put({ type: 'initCartData', payload: wx.getStorageSync('cartData'), meta, error })
     //   put({ type: 'initCartData', payload: wx.getStorageSync('cartData'), meta, error })
@@ -164,7 +164,11 @@ export default {
     },
     async monthSignIn({ payload }, { put, select, selectAll }) {
       try {
-        if (confirm("确认上报上月签到数据吗?") && confirm("再次确认") && confirm("三次确认")) {
+        if (new Date().getDate() > 10) {
+          toast('每月1-10号才可以签到')
+          return
+        }
+        if (await confirm("确认上报上月签到数据吗?") && await confirm("再次确认") && await confirm("三次确认")) {
           let {
             formhash,
             userInfo: { username },

@@ -1,0 +1,36 @@
+<!--components/modal.wxml-->
+<wxs module="util">
+  var positionClass = function(position) {
+    return 'position-' + position
+  }
+  var animateClass = function(position, status) {
+    var rtStr = ''
+    switch (position) {
+      case 'top':
+        rtStr = 'slide-down';
+        break;
+      case 'right':
+        rtStr = 'slide-left';
+        break;
+      case 'bottom':
+        rtStr = 'slide-up';
+        break;
+      case 'left':
+        rtStr = 'slide-right';
+        break;
+      default:
+        rtStr = 'fade-in';
+    }
+    if (status == 'closed') {
+      rtStr += '-reverse'
+    }
+    return rtStr
+  }
+  module.exports.positionClass = positionClass;
+  module.exports.animateClass = animateClass;
+</wxs>
+<view class='modal-wrap {{util.positionClass(options.position)}}' catch:touchmove="catchtap" bindtap='maskClick'>
+  <scroll-view class='container external-container-class {{util.animateClass(options.position,status)}}' catchtap='catchtap' scroll-y>
+    <slot></slot>
+  </scroll-view>
+</view>

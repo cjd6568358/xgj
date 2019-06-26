@@ -1,1 +1,32 @@
 /* pages/discuz/forum.wxss */
+
+.area {
+  position: relative;
+  padding-top: 60rpx;
+  background: #fff;
+}
+
+.area::before {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 32rpx;
+  padding-left: 20rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #fff;
+  content: attr(data-title);
+  background: #2a6eb4;
+}
+
+.area .item {
+  line-height: 1.8;
+  padding: 0 20rpx;
+  font-size: 30rpx;
+}
+
+.area .item:nth-child(even) {
+  background: #ddd;
+}

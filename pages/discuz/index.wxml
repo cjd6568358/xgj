@@ -1,11 +1,11 @@
 <!--pages/discuz/index.wxml-->
 <view class="user-info">
-  <view class="item">{{userInfo.username}}</view>
+  <view class="item" bindtap="routerToMy">{{userInfo.username}}</view>
   <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
   <view class="item" wx:else bindtap="dailySignIn">日签到</view>
   <view class="item" bindtap="monthSignIn">月签到</view>
   <view class="item" bindtap="logout ">退出</view>
 </view>
 <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
-  <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-params="{{forum.value}}">{{forum.name}}</view>
+  <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
 </view>

@@ -1,1 +1,25 @@
 /* pages/discuz/thread.wxss */
+.thread {
+  background-color: #fff;
+  padding: 20rpx;
+}
+.thread .post {
+  line-height: 1.8;
+  margin-bottom: 10rpx;
+}
+.thread .post .post-info {
+  background: #fbfbff;
+}
+.thread .post .post-info label {
+  margin-right: 10rpx;
+}
+.thread .post .post-info .post-time {
+  font-size: 14rpx;
+}
+.thread .post .post-content {
+  background: #fff;
+  overflow: auto;
+}
+.thread .post .post-content img {
+  max-width: 95vw;
+}

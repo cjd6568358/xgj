@@ -4,7 +4,7 @@ import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
 import http from '../../utils/http.js'
-let { discuz: { logout, UPDATE_DISCUZ, getPageData } } = dispatcher
+let { discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn } } = dispatcher
 const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, webSite } }) => ({ isLogin, HOST, PLATOM, signInfo, userInfo, webSite }))({
   /**
    * 页面的初始数据
@@ -20,10 +20,11 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
 
   },
   logout,
+  dailySignIn,
+  monthSignIn,
   async checkSigned() {
-    let { HOST, webSite, signInfo } = this.data;
-    let targetHost = `http://${webSite}/bbs/`
-    let url = `${targetHost}my.php`;
+    let { webSite, signInfo } = this.data;
+    let url = `http://${webSite}/bbs/my.php`;
     let selector = selectors.my;
     let pageData = await getPageData({ url, selector });
     let { formhash, username, recentReply, recentTopics } = pageData;
@@ -46,7 +47,7 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
           }
         }
       });
-    UPDATE_DISCUZ({ signInfo, formhash })
+    UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash })
   },
   async getIndexPageData() {
     let { webSite } = this.data;
@@ -70,6 +71,18 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
         areaList
       })
     }
+  },
+  routerToForum({ currentTarget: { dataset: { path } } }) {
+    let { webSite } = this.data;
+    let url = `http://${webSite}/bbs/` + path
+    wx.navigateTo({
+      url: '/pages/discuz/forum?url=' + encodeURIComponent(url),
+    })
+  },
+  routerToMy() {
+    wx.navigateTo({
+      url: '/pages/discuz/my'
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

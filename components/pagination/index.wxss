@@ -1,0 +1,15 @@
+/* components/pagination/index.wxss */
+.pagination {
+  text-align: center;
+  padding: 20rpx 0;
+}
+.pagination .btn {
+  display: inline-block;
+  padding: 20rpx;
+  background: #fff;
+  border: 2rpx solid #ddd;
+  border-radius: 10rpx;
+}
+.pagination .btn.currPageInfo {
+  margin: 0 20rpx;
+}

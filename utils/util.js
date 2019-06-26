@@ -183,9 +183,9 @@ const confirm = (text) => {
       content: text,
       success: function (res) {
         if (res.confirm) {
-          resolve()
+          resolve(true)
         } else if (res.cancel) {
-          reject()
+          resolve(false)
         }
       }
     })
