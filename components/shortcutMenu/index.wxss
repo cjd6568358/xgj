@@ -1,7 +1,7 @@
 /* components/shortcutMenu/index.wxss */
 
 .menu {
-  position: absolute;
+  position: fixed;
   bottom: 100rpx;
   right: 100rpx;
   z-index: 99;

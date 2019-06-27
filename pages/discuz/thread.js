@@ -68,6 +68,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
         .replace(/="images/g, `="${targetHost}images`)
         .replace(/\<img/gi, '<img style="max-width:100%;"')
         .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetHost}`)
+        .replace(/" margin-right: 850px;>/g, `;margin-right: 850px;">`)
         // .replace(/="(viewthread|thread.*)" target/g, ($0, $1) => {
         //   return `="${
         //     process.env.BASE_URL
@@ -79,7 +80,6 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     });
     if (pageInfo && pageInfo.currPageNum != 1) {
       pageInfo.prevUrl = `thread-${tid}-${pageInfo.currPageNum - 1}-1.html`;
-    } else {
     }
     UPDATE_DISCUZ({ formhash })
     this.setData({
@@ -87,6 +87,11 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
       tid,
       fid,
       pageInfo
+    }, () => {
+      wx.hideLoading()
+      wx.pageScrollTo({
+        scrollTop: 0,
+      })
     })
   },
   reload() {

@@ -1,15 +1,14 @@
 {
   "pages": [
-    "pages/discuz/login",
+    "pages/discuz/index",
+    "pages/discuz/my",
+    "pages/discuz/thread",
+    "pages/discuz/forum",
     "pages/my/index",
     "pages/tool/sign",
     "pages/tool/location",
     "pages/tool/systemInfo",
-    "pages/tool/wifi",
-    "pages/discuz/index",
-    "pages/discuz/my",
-    "pages/discuz/thread",
-    "pages/discuz/forum"
+    "pages/tool/wifi"
   ],
   "permission": {
     "scope.userLocation": {
@@ -23,7 +22,7 @@
         "text": "签到"
       },
       {
-        "pagePath": "pages/discuz/login",
+        "pagePath": "pages/discuz/index",
         "text": "阅读器"
       },
       {

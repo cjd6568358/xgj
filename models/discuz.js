@@ -28,6 +28,7 @@ export default {
    * state是model初始值，优先级如下：initial state < plugin state < model state，理论上可以是任意的值，但多数情况下，我们希望这是一个javascript的对象
    */
   state: {
+    proxyServerList,
     temmeConvert,
     formhash: "",
     HOST,
@@ -72,23 +73,22 @@ export default {
     logout(action, { put, select, selectAll }) {
       wx.removeStorageSync("cdb3_auth")
       pageCache.clear()
-      wx.navigateTo({
-        url: '/pages/discuz/login',
-      })
+      put({ type: 'UPDATE_DISCUZ', payload: { isLogin: false } })
     },
     switchProxy(action, { put, select, selectAll }) {
-      let HOST = proxyServerList[0].host
+      let { host: HOST, platom: PLATOM } = proxyServerList[0]
       let index = proxyServerList.findIndex(item => item.host === select().HOST)
       if (index < proxyServerList.length - 1) {
         HOST = proxyServerList[index + 1].host
+        PLATOM = proxyServerList[index + 1].platom
       }
       wx.setStorageSync("proxy_host", HOST)
-      put({ type: 'SET_HOST', payload: HOST })
+      put({ type: 'UPDATE_DISCUZ', payload: { HOST, PLATOM } })
     },
     switchTemmeConvert(action, { put, select, selectAll }) {
       let STATUS = select().temmeConvert === "client" ? 'server' : "client";
       wx.setStorageSync("temmeConvert", STATUS)
-      put({ type: 'SET_TEMMECONVERT', payload: STATUS })
+      put({ type: 'UPDATE_DISCUZ', payload: { temmeConvert: STATUS } })
     },
     async submitPost({ payload: httpConfig }, { put, select, selectAll }) {
       let { HOST } = select();
@@ -160,7 +160,7 @@ export default {
       }
       await put({ type: 'submitPost', payload: httpConfig })
       signInfo.isSigned = true
-      put({ type: 'UPDATE_DISCUZ', payload: signInfo })
+      put({ type: 'UPDATE_DISCUZ', payload: { signInfo } })
     },
     async monthSignIn({ payload }, { put, select, selectAll }) {
       try {
@@ -211,7 +211,7 @@ export default {
       })
       isLoading = true
       let { data } = await http.post({ url: `${HOST}/api/html2Json`, data: postData });
-      wx.hideLoading()
+      // wx.hideLoading()
       isLoading = false
       return data
     },
@@ -250,17 +250,11 @@ export default {
    * 用于定义同步action，也是唯一可修改redux state的入口
    */
   reducers: {
-    SET_HOST({ payload: HOST }, state) {
-      return { ...state, HOST }
-    },
-    SET_TEMMECONVERT({ payload: STATUS }, state) {
-      return { ...state, temmeConvert: STATUS }
-    },
-    UPDATE_DISCUZ({ payload: info }, state) {
-      if (info.webSite) {
-        wx.setStorageSync('webSite', info.webSite)
+    UPDATE_DISCUZ({ payload: newState }, state) {
+      if (newState.webSite) {
+        wx.setStorageSync('webSite', newState.webSite)
       }
-      return { ...state, ...info }
+      return { ...state, ...newState }
     },
   },
 }

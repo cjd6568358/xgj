@@ -64,6 +64,8 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     this.setData({
       forumList,
       pageInfo
+    }, () => {
+      wx.hideLoading()
     })
   },
   reload() {

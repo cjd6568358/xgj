@@ -4,8 +4,8 @@ import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
 import http from '../../utils/http.js'
-let { discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn } } = dispatcher
-const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, webSite } }) => ({ isLogin, HOST, PLATOM, signInfo, userInfo, webSite }))({
+let { discuz: { logout, UPDATE_DISCUZ, switchProxy, getPageData, dailySignIn, monthSignIn } } = dispatcher
+const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList } }) => ({ isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList }))({
   /**
    * 页面的初始数据
    */
@@ -22,6 +22,60 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
   logout,
   dailySignIn,
   monthSignIn,
+  switchProxy,
+  async login() {
+    let { HOST, webSite, userInfo: { username, password, QA } } = this.data;
+    let targetHost = `http://${webSite}/bbs/`
+    if (username && password) {
+      let QAarr = QA.split(",");
+      let questionid = (QAarr.length > 1 && QAarr[0]) || null;
+      let answer = (QAarr.length > 1 && QAarr[1]) || null;
+      let formData = {
+        formhash: "30b7da0e",
+        cookietime: "315360000",
+        loginfield: "username",
+        questionid,
+        answer,
+        username,
+        password,
+        userlogin: "true"
+      };
+      if (!questionid || !answer) {
+        delete formData.questionid;
+        delete formData.answer;
+      }
+      let postData = {
+        httpConfig: {
+          url: `${targetHost}logging.php?action=login&loginsubmit=true`,
+          method: "post",
+          responseType: "arraybuffer",
+          data: querystring.stringify(formData)
+        },
+        encoding: "gbk"
+      };
+      wx.showLoading({
+        title: '加载中...',
+      })
+      await http.post({ url: `${HOST}/api/advancedProxy`, data: postData });
+      wx.hideLoading()
+      let isLogin = !!wx.getStorageSync("cdb3_auth")
+      if (isLogin) {
+        UPDATE_DISCUZ({ isLogin, webSite })
+        this.checkSigned();
+        this.getIndexPageData();
+      }
+    }
+  },
+  inputChange({ currentTarget: { dataset: { key } }, detail: { value } }) {
+    if (key == "webSite") {
+      UPDATE_DISCUZ({ webSite: value })
+    } else {
+      this.data.userInfo[key] = value
+      let newUserInfo = Object.assign({}, this.data.userInfo)
+      UPDATE_DISCUZ({ userInfo: newUserInfo })
+    }
+
+  },
   async checkSigned() {
     let { webSite, signInfo } = this.data;
     let url = `http://${webSite}/bbs/my.php`;
@@ -48,6 +102,9 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
         }
       });
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash })
+    if (this.data.areaList.length) {
+      wx.hideLoading()
+    }
   },
   async getIndexPageData() {
     let { webSite } = this.data;
@@ -64,11 +121,14 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
     let { creditList, username, areaList } = pageData
     if (!username) {
       logout();
+      wx.hideLoading()
     } else {
       let userInfo = Object.assign({}, this.data.userInfo, { creditList, username });
       UPDATE_DISCUZ({ userInfo })
       this.setData({
         areaList
+      }, () => {
+        wx.hideLoading()
       })
     }
   },
@@ -84,14 +144,33 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
       url: '/pages/discuz/my'
     })
   },
+  async updateWebSiteList() {
+    let gfwProxyServers = this.data.proxyServerList.filter(item => item.gfw);
+    let HOST =
+      gfwProxyServers[
+        Math.floor(Math.random() * gfwProxyServers.length)
+      ].host;
+    let url = `http://www.oznewspaper.com/`;
+    let selector = selectors.webSiteList;
+    let pageData = await getPageData({ url, selector, HOST });
+    let webSiteList = [];
+    pageData.webSiteList.forEach(webSite => {
+      webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
+    });
+    wx.setStorageSync("webSiteList", webSiteList)
+    UPDATE_DISCUZ({ webSiteList })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    if (!this.data.signInfo.isSigned) {
-      this.checkSigned();
+    let { signInfo, isLogin } = this.data
+    if (isLogin) {
+      if (!signInfo.isSigned) {
+        this.checkSigned();
+      }
+      this.getIndexPageData();
     }
-    this.getIndexPageData();
   },
 
   /**

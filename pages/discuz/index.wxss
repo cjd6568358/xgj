@@ -4,6 +4,34 @@ page {
   padding-bottom: 48rpx;
 }
 
+.login-form {
+  margin: 32rpx;
+  background-color: #fff;
+  padding: 60rpx 40rpx;
+  box-shadow: 0rpx 20rpx 40rpx 0px rgba(0, 0, 0, 0.04);
+  border-radius: 16rpx;
+}
+
+.login-form .input-warp {
+  margin-top: 20rpx;
+  height: 100rpx;
+  display: flex;
+}
+
+.login-form .input-warp input, .login-form .input-warp select {
+  border: 1rpx solid #ddd;
+  padding-left: 40rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  flex: 1;
+  font-size: 32rpx;
+  border-radius: 8rpx;
+}
+
+.btn-switch, .btn-login {
+  margin-top: 40rpx;
+}
+
 .user-info {
   display: flex;
   padding: 20rpx;

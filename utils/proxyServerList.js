@@ -4,8 +4,8 @@ export default [{
   platom: 'N270',
   gfw: false
 }, {
-  protocol: 'all',
-  host: '//common-server.herokuapp.com',
+  protocol: 'https',
+  host: 'https://common-server.herokuapp.com',
   platom: 'HEROKUAPP',
   gfw: true
 }, {
