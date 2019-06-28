@@ -15,5 +15,5 @@
     <rich-text class="post-content" nodes="{{item.content}}"></rich-text>
   </view>
 </view>
-<shortcutMenu url="{{url}}" tid="{{tid}}" fid="{{fid}}" bindreload="reload"></shortcutMenu>
+<shortcutMenu wx:if="{{url && tid}}" url="{{url}}" tid="{{tid}}" fid="{{fid}}" bindreload="reload" title="{{documentTitle}}" scrollTop="{{scrollTop}}"></shortcutMenu>
 <pagination wx:if="{{postList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>

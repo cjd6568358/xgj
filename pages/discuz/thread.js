@@ -16,6 +16,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     tid: "",
     fid: "",
     documentTitle: '',
+    scrollTop: 0,
     pageInfo: {
       currPageNum: 1,
       totalPageNum: 1,
@@ -34,9 +35,9 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     }
     this.setData({
       url
-    }, this.getThreadPageJson(url))
+    }, this.getThreadPageJson(url, options.scrollTop))
   },
-  async getThreadPageJson(url) {
+  async getThreadPageJson(url, scrollTop = 0) {
     let pageData = {};
     if (pageCache.has(url)) {
       pageData = pageCache.get(url);
@@ -92,7 +93,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     }, () => {
       wx.hideLoading()
       wx.pageScrollTo({
-        scrollTop: 0,
+        scrollTop,
       })
     })
   },
@@ -116,6 +117,17 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
         }, this.getThreadPageJson(url))
       }
     }
+  },
+  onPageScroll({ scrollTop }) {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      this.timer = null
+      this.setData({
+        scrollTop
+      })
+    }, 500)
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

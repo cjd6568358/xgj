@@ -2,7 +2,7 @@
 
 .menu {
   position: fixed;
-  bottom: 100rpx;
+  bottom: 150rpx;
   right: 100rpx;
   z-index: 99;
 }
@@ -38,6 +38,14 @@
 
 .menu.opened .item:nth-of-type(3) .text {
   transform: rotate(-70deg);
+}
+
+.menu.opened .item:nth-of-type(4) {
+  transform: rotate(100deg);
+}
+
+.menu.opened .item:nth-of-type(4) .text {
+  transform: rotate(-100deg);
 }
 
 .menu .btn-menu {
@@ -82,7 +90,7 @@
 }
 
 .reply-modal {
-  padding: 20rpx;
+  padding: 60rpx 40rpx;
   width: 640rpx;
 }
 
@@ -107,16 +115,16 @@
 
 .reply-modal .btn-group {
   display: flex;
+  justify-content: space-between;
 }
 
 .reply-modal .btn-group .btn {
-  margin: 20rpx;
-  flex: 1;
+  margin: 20rpx 0;
   height: 80rpx;
   line-height: 80rpx;
-  border-radius: 8rpx;
   text-align: center;
   font-size: 28rpx;
+  width: 250rpx;
 }
 
 .reply-modal .btn-group .btn.submit {

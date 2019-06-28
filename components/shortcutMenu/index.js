@@ -1,12 +1,12 @@
 // components/shortcutMenu/index.js
-import { pageCache } from '../../utils/util.js'
+import { pageCache, toast } from '../../utils/util.js'
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connectComponent } from '../../utils/redux.weapp.js'
 let { discuz: { submitReply } } = dispatcher
 const config = connectComponent(({ discuz }) => ({}))({
   /**
-     * 组件的属性列表
-     */
+   * 组件的属性列表
+   */
   properties: {
     url: {
       type: String,
@@ -45,7 +45,16 @@ const config = connectComponent(({ discuz }) => ({}))({
       message: ''
     }
   },
-
+  attached: function () {
+    let hasProgress = false
+    let favorites = wx.getStorageSync('favorites') || []
+    hasProgress = !!favorites.filter(item => {
+      return item.tid == this.properties.tid;
+    })[0]
+    this.setData({
+      hasProgress
+    })
+  },
   /**
    * 组件的方法列表
    */
@@ -74,6 +83,7 @@ const config = connectComponent(({ discuz }) => ({}))({
         favorites.push(scrollObj);
       }
       wx.setStorageSync('favorites', favorites)
+      this.toggleclass()
     },
     delProgress() {
       let { tid } = this.properties
@@ -83,6 +93,7 @@ const config = connectComponent(({ discuz }) => ({}))({
       });
       favorites.splice(i, 1);
       wx.setStorageSync('favorites', favorites)
+      this.toggleclass()
     },
     onReply() {
       this.showModal();
@@ -105,6 +116,14 @@ const config = connectComponent(({ discuz }) => ({}))({
     async submit(e) {
       let { fid, tid } = this.properties;
       let { reply: { subject, message } } = this.data
+      if (!message) {
+        toast('内容不能为空')
+        return
+      }
+      if (message.length < 20) {
+        toast('内容长度不能少于20个字')
+        return
+      }
       await submitReply({
         subject,
         message,
@@ -114,7 +133,7 @@ const config = connectComponent(({ discuz }) => ({}))({
       this.maskClick()
       this.onReload()
     },
-    inputChange({ currentTarget: { dataset: key }, detail: { value } }) {
+    inputChange({ currentTarget: { dataset: { key } }, detail: { value } }) {
       let { reply } = this.data
       reply[key] = value
       this.setData({

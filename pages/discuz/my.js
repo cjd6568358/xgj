@@ -49,25 +49,22 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
     })
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash })
   },
-  routerToThread({ currentTarget: { dataset: { path } } }) {
-    wx.navigateTo({
-      url: '/pages/discuz/thread?url=' + encodeURIComponent(path),
-    })
+  routerToThread({ currentTarget: { dataset: { path, scrollTop } } }) {
+    if (scrollTop) {
+      wx.navigateTo({
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(path) + "&scrollTop=" + scrollTop,
+      })
+    } else {
+      wx.navigateTo({
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(path),
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: async function (options) {
-    if (this.data.isLogin) {
-      await this.getMyPageData();
-      this.setData({
-        favorites: wx.getStorageSync('favorites') || []
-      })
-    } else {
-      wx.redirectTo({
-        url: '/pages/discuz/login',
-      })
-    }
+  onLoad: function (options) {
+
   },
 
   /**
@@ -80,8 +77,17 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-
+  onShow: async function () {
+    if (this.data.isLogin) {
+      await this.getMyPageData();
+      this.setData({
+        favorites: wx.getStorageSync('favorites') || []
+      })
+    } else {
+      wx.redirectTo({
+        url: '/pages/discuz/login',
+      })
+    }
   },
 
   /**

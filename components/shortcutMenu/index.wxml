@@ -18,9 +18,9 @@
 </view>
 <modal options="{{modalOption}}" external-container-class="reply-modal" bind:maskClick="maskClick" wx:if="{{modalOption.showModal}}">
   <input class="subject" value="{{reply.subject}}" data-key="subject" bindinput="inputChange" placeholder="选填,请输入标题" />
-  <textarea class="message" value="{{reply.message}}" data-key="message" bindinput="inputChange" show-confirm-bar="false" placeholder="必填,请输入最少20个字内容"></textarea>
+  <textarea class="message" value="{{reply.message}}" data-key="message" bindinput="inputChange" show-confirm-bar="{{false}}" placeholder="必填,请输入最少20个字内容"></textarea>
   <view class="btn-group">
-    <button class="btn submit" bindtap="submit">提交</button>
-    <button class="btn cancel" bindtap="maskClick">取消</button>
+    <button size="mini" class="btn submit" bindtap="submit">提交</button>
+    <button size="mini" class="btn cancel" bindtap="maskClick">取消</button>
   </view>
 </modal>
