@@ -2,14 +2,18 @@
 <view class="thread">
   <view class="post" wx:for="{{postList}}" wx:key="index">
     <view class="post-info">
-      <label>{{item.postFloor}}</label>
-      <label>{{item.authorName}}</label>
-      <label>{{item.authorLevel}}</label>
-      <view class="post-time">{{item.postTime}}</view>
+      <view class="name-floor">
+        <label class="name">{{item.authorName}}</label>
+        <label class="floor">{{item.postFloor}}</label>
+      </view>
+      <view class="level-time">
+        <label class="level">{{item.authorLevel}}</label>
+        <label class="time">{{item.postTime}}</label>
+      </view>
     </view>
     <view>{{item.postTitle}}</view>
     <rich-text class="post-content" nodes="{{item.content}}"></rich-text>
   </view>
 </view>
 <shortcutMenu url="{{url}}" tid="{{tid}}" fid="{{fid}}" bindreload="reload"></shortcutMenu>
-<pagination wx:if="{{postList.length}}" currPageNum="{{pageInfo.currPageNum}}" totalPageNum="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>
+<pagination wx:if="{{postList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>

@@ -1,4 +1,5 @@
 /**app.wxss**/
+
 page {
   background-color: #f3f5f8;
   display: flex;
@@ -8,7 +9,7 @@ page {
   width: initial;
 }
 
-view, input, picker, cover-view, scroll-view {
+view, input, picker, cover-view, scroll-view, textarea {
   box-sizing: border-box;
 }
 

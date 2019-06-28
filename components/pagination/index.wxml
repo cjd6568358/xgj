@@ -1,6 +1,6 @@
 <!--components/pagination/index.wxml-->
 <view class="pagination">
-  <label wx:if="prevUrl" class="btn prev-btn" bindtap="prev">上一页</label>
-  <label class="btn currPageInfo">{{currPageNum + '/' + totalPageNum}}</label>
-  <label wx:if="nextUrl" class="btn next-btn" bindtap="next">下一页</label>
+  <image class="btn prev-btn {{curr == 1 && 'disabled'}}" bindtap="prev" src="./images/icon-arrow.svg"></image>
+  <label class="curr">{{curr + '/' + total}}</label>
+  <image class="btn next-btn {{curr == total && 'disabled'}}" bindtap="next" src="./images/icon-arrow.svg"></image>
 </view>

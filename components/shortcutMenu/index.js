@@ -20,6 +20,10 @@ const config = connectComponent(({ discuz }) => ({}))({
       type: String,
       value: ''
     },
+    title: {
+      type: String,
+      value: ''
+    },
     scrollTop: {
       type: Number,
       value: 0

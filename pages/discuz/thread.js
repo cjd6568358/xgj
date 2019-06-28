@@ -15,6 +15,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     url: "",
     tid: "",
     fid: "",
+    documentTitle: '',
     pageInfo: {
       currPageNum: 1,
       totalPageNum: 1,
@@ -84,6 +85,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     UPDATE_DISCUZ({ formhash })
     this.setData({
       postList,
+      documentTitle,
       tid,
       fid,
       pageInfo

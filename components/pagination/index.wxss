@@ -1,15 +1,36 @@
 /* components/pagination/index.wxss */
+
 .pagination {
-  text-align: center;
-  padding: 20rpx 0;
-}
-.pagination .btn {
-  display: inline-block;
+  margin-top: 20rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
   padding: 20rpx;
+}
+
+.pagination .btn {
+  width: 40rpx;
+  height: 40rpx;
+  color: #2196f3;
+}
+.pagination .btn.disabled {
+  visibility: hidden;
+}
+
+.btn.prev-btn {
+  transform: rotate(180deg);
+}
+
+.pagination .curr {
+  box-sizing: border-box;
   background: #fff;
   border: 2rpx solid #ddd;
   border-radius: 10rpx;
-}
-.pagination .btn.currPageInfo {
-  margin: 0 20rpx;
+  width: 160rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  margin: 0 40rpx;
 }

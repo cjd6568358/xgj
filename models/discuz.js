@@ -61,10 +61,6 @@ export default {
    */
   async setup({ put, select, selectAll }) {
     console.log('discuz init')
-    // if (wx.getStorageSync('cartData')) {
-    //   // put({ type: 'initCartData', payload: wx.getStorageSync('cartData'), meta, error })
-    //   put({ type: 'initCartData', payload: wx.getStorageSync('cartData'), meta, error })
-    // }
   },
   /**
    * 用于定义异步action，支持async，await
@@ -160,7 +156,7 @@ export default {
       }
       await put({ type: 'submitPost', payload: httpConfig })
       signInfo.isSigned = true
-      put({ type: 'UPDATE_DISCUZ', payload: { signInfo } })
+      put({ type: 'UPDATE_DISCUZ', payload: { signInfo: Object.assign({}, signInfo) } })
     },
     async monthSignIn({ payload }, { put, select, selectAll }) {
       try {

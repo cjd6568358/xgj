@@ -9,4 +9,4 @@
   </block>
 </view>
 <shortcutMenu url="{{url}}" bindreload="reload"></shortcutMenu>
-<pagination wx:if="{{forumList.length}}" currPageNum="{{pageInfo.currPageNum}}" totalPageNum="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>
+<pagination wx:if="{{forumList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>

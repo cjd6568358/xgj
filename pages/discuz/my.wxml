@@ -9,11 +9,11 @@
     <view wx:if="thread" data-path="{{thread.href+'?scrollTop='+thread.scrollTop}}" bindtap="routerToThread">{{thread.title}}</view>
   </block>
 </view>
-<view class="area" data-title="最近回复">
+<!-- <view class="area" data-title="最近回复">
   <block wx:for="{{recentReply}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
     <view wx:if="thread" data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">{{thread.title}}</view>
   </block>
-</view>
+</view> -->
 <view class="area" data-title="最近主题">
   <block wx:for="{{recentTopics}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
     <view wx:if="thread" data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">{{thread.title}}</view>

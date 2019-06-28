@@ -4,11 +4,11 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    currPageNum: {
+    curr: {
       type: Number,
       value: 0
     },
-    totalPageNum: {
+    total: {
       type: Number,
       value: 0
     }
