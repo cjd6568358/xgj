@@ -7,7 +7,7 @@
 					<router-link v-if="thread.type != '投票'" :key="ii" :to="{name: 'DiscuzThreadView', params: { url: targetHost + thread.href }}" tag="li">
 						{{thread.title}}
 						<template v-if="thread.permission">[阅读权限{{thread.permission}}]</template>
-						♥{{thread.thanks}} ({{thread.nums}})
+						♥{{thread.thanks}} ({{thread.nums}}) (发表日期:{{thread.date}})
 					</router-link>
 				</template>
 			</ul>
