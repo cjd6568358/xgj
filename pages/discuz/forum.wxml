@@ -4,7 +4,7 @@
     <view class="item" wx:if="{{thread.type != '投票'}}"  data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">
       {{thread.title}}
       <block wx:if="{{thread.permission}}">[阅读权限{{thread.permission}}]</block>
-      ♥{{thread.thanks}} ({{thread.nums}})
+      ♥{{thread.thanks}} ({{thread.nums}})(发表日期:{{thread.date}})
     </view>
   </block>
 </view>

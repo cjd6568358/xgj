@@ -29,7 +29,7 @@ export default {
             td.icon img[alt=$type];
             span.bold{$permission|Number}
             .author cite{html($thanks|replace(/<a(.*)absmiddle">/g,'')|Number)}
-            .lastpost a{$date}
+            .author em{$date}
         }
     };
     .mainbox.threadlist+.pages_btns .pages@pageInfo|pack{
