@@ -43,9 +43,9 @@ const http = ((config) => {
           }
         } else {
           if (method == 'get') {
-            let qs = Object.keys(postData).map((key, index) => {
-              return `${key}=${postData[key]}`
-            }).join('&')
+            let qs = Object.keys(config.data).filter(key => config.data[key]).map((key, index) => {
+                return `${key}=${config.data[key]}`
+              }).join('&')
             if (qs) {
               defaultConfig.url += '?' + qs
             }
