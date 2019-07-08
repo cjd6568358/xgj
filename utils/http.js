@@ -43,8 +43,8 @@ const http = ((config) => {
           }
         } else {
           if (method == 'get') {
-            let qs = Object.keys(config.data).filter(key => config.data[key]).map((key, index) => {
-                return `${key}=${config.data[key]}`
+            let qs = Object.keys(postData).filter(key => postData[key]).map((key, index) => {
+                return `${key}=${postData[key]}`
               }).join('&')
             if (qs) {
               defaultConfig.url += '?' + qs
