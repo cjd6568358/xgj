@@ -5,9 +5,9 @@
 			<ul class="area" v-for="(forum,i) of forumList" :key="i" :data-title="forum.name">
 				<template v-for="(thread,ii) of forum.value">
 					<router-link v-if="thread.type != '投票'" :key="ii" :to="{name: 'DiscuzThreadView', params: { url: targetHost + thread.href }}" tag="li">
-						{{thread.title}}
+						[{{thread.date}}] {{thread.title}}
 						<template v-if="thread.permission">[阅读权限{{thread.permission}}]</template>
-						♥{{thread.thanks}} ({{thread.nums}}) (发表日期:{{thread.date}})
+						♥{{thread.thanks}} ({{thread.nums}}) 
 					</router-link>
 				</template>
 			</ul>
