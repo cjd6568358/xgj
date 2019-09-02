@@ -173,7 +173,7 @@ export default {
           let targetHost = `http://${webSite}/bbs/`
           let lastMonthSignInfo = await put({ type: 'getLastMonthSignInfo' })
           let httpConfig = {
-            url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
+            url: `${targetHost}post.php?action=reply&fid=420&tid=8186986&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",
