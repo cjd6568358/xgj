@@ -163,7 +163,7 @@ export default new Vuex.Store({
                 let { targetHost } = getters
                 let lastMonthSignInfo = await dispatch('getLastMonthSignInfo')
                 let httpConfig = {
-                    url: `${targetHost}post.php?action=reply&fid=420&tid=6953091&extra=page%3D1&replysubmit=yes`,
+                    url: `${targetHost}post.php?action=reply&fid=420&tid=8186986&extra=page%3D1&replysubmit=yes`,
                     data: querystring.stringify({
                         formhash,
                         subject: "",
