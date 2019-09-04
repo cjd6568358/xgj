@@ -4,17 +4,17 @@
 			<defs>
 				<symbol id="icon-arrow" viewBox="0 0 32 32">
 					<title>arrow</title>
-					<path d="M21.653 15.093l-10.027-9.28c-0.427-0.373-1.067-0.32-1.387 0.053-0.373 0.427-0.32 1.013 0.053 1.387l9.227 8.587-9.227 8.96c-0.373 0.373-0.427 1.013 0 1.44 0.373 0.373 1.013 0.427 1.44 0l10.027-9.707c0.32-0.373 0.32-1.013-0.107-1.44 0.053 0 0 0 0 0z"></path>
+					<path d="M21.653 15.093l-10.027-9.28c-0.427-0.373-1.067-0.32-1.387 0.053-0.373 0.427-0.32 1.013 0.053 1.387l9.227 8.587-9.227 8.96c-0.373 0.373-0.427 1.013 0 1.44 0.373 0.373 1.013 0.427 1.44 0l10.027-9.707c0.32-0.373 0.32-1.013-0.107-1.44 0.053 0 0 0 0 0z" />
 				</symbol>
 			</defs>
 		</svg>
 		<div class="calendar-header">
 			<svg class="left" @click="prevClick">
-				<use xlink:href="#icon-arrow"></use>
+				<use xlink:href="#icon-arrow" />
 			</svg>
 			<div class="title">{{headerText}}</div>
 			<svg class="right" @click="nextClick">
-				<use xlink:href="#icon-arrow"></use>
+				<use xlink:href="#icon-arrow" />
 			</svg>
 		</div>
 		<div class="calendar-body">
@@ -105,7 +105,7 @@ export default {
 							break;
 						}
 					}
-                }
+				}
 				return item;
 			});
 		},
@@ -128,14 +128,17 @@ export default {
 				}
 			}
 			// 上一月日期
-			let firstWeek = weeks[0];
-			let { year, month } = this.$data;
-			let prev = {
-				year: month - 1 === 0 ? year - 1 : year,
-				month: month - 1 === 0 ? 12 : month - 1
-			};
-			let prevMonthTotalDays = getTotalDaysArr(prev.year, prev.month).map(
-				day => {
+            let firstWeek = weeks[0];
+            let { year, month } = this.$data;
+			if (firstWeek.length < 7) {
+				let prev = {
+					year: month - 1 === 0 ? year - 1 : year,
+					month: month - 1 === 0 ? 12 : month - 1
+				};
+				let prevMonthTotalDays = getTotalDaysArr(
+					prev.year,
+					prev.month
+				).map(day => {
 					let dateTime = new Date(prev.year, prev.month - 1, day);
 					let item = {
 						year: prev.year,
@@ -146,12 +149,12 @@ export default {
 						dayOfWeek: dateTime.getDay()
 					};
 					return item;
-				}
-			);
-			firstWeek.unshift(
-				...prevMonthTotalDays.slice(firstWeek.length - 7)
-			);
-			weeks[0] = firstWeek;
+				});
+				firstWeek.unshift(
+					...prevMonthTotalDays.slice(firstWeek.length - 7)
+				);
+				weeks[0] = firstWeek;
+			}
 			// 下一月日期
 			let lastWeek = weeks[weeks.length - 1];
 			let next = {
