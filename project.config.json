@@ -12,6 +12,7 @@
 		"newFeature": true,
 		"coverView": true,
 		"autoAudits": false,
+		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": false,
 		"uploadWithSourceMap": true,
@@ -20,10 +21,10 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"uglifyFileName": true
+		"bundle": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.8",
+	"libVersion": "2.8.3",
 	"appid": "wxac884d9f8dfbc9b6",
 	"projectname": "xgj",
 	"isGameTourist": false,

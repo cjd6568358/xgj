@@ -42,6 +42,10 @@
     <view class="name">查看WIFI</view>
     <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
   </view>
+  <view class='item' bindtap='openStorage'>
+    <view class="name">设置缓存</view>
+    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
+  </view>
   <view class='item' bindtap='clearAllStorage'>
     <view class="name">清除全部数据</view>
   </view>

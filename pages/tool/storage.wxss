@@ -1,0 +1,15 @@
+/* pages/tool/storage.wxss */
+
+page {
+  background-color: #fff;
+  padding: 20rpx;
+}
+
+input {
+  margin-bottom: 20rpx;
+  padding-left: 20rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}

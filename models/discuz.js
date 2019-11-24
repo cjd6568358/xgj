@@ -159,6 +159,7 @@ export default {
       put({ type: 'UPDATE_DISCUZ', payload: { signInfo: Object.assign({}, signInfo) } })
     },
     async monthSignIn({ payload }, { put, select, selectAll }) {
+      let tid = wx.getStorageSync('tid') || '8186986'
       try {
         if (new Date().getDate() > 10) {
           toast('每月1-10号才可以签到')
@@ -173,7 +174,7 @@ export default {
           let targetHost = `http://${webSite}/bbs/`
           let lastMonthSignInfo = await put({ type: 'getLastMonthSignInfo' })
           let httpConfig = {
-            url: `${targetHost}post.php?action=reply&fid=420&tid=8186986&extra=page%3D1&replysubmit=yes`,
+            url: `${targetHost}post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",

@@ -1,0 +1,5 @@
+<!--pages/tool/storage.wxml-->
+<input data-key="key" value="{{key}}" bindinput="inputChange" placeholder="请输入缓存键名" />
+<input data-key="value" value="{{value}}" bindinput="inputChange" placeholder="请输入缓存键值" />
+
+<button type="primary" bindtap="save">保存</button>

@@ -1,5 +1,6 @@
 // pages/sign/sign.js
-import { formatTime, getTotalDaysArr, http } from '../../utils/util.js'
+import { formatTime, getTotalDaysArr } from '../../utils/util.js'
+import http from '../../utils/http.js'
 Page({
 
   /**
@@ -69,7 +70,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    http({
+    http.get({
       url:'https://cjd6568358.3322.org:6706/api/test'
     })
   },

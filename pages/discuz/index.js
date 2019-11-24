@@ -11,13 +11,18 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
    */
   data: {
     areaList: [],
+    isOwner: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    if (wx.getStorageSync('openid') === 'oZ_Zn5KcVjk5CyWfgHLm4T8MQ_3s') {
+      this.setData({
+        isOwner: true
+      })
+    }
   },
   logout,
   dailySignIn,

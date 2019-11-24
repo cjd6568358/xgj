@@ -1,35 +1,40 @@
 <!--pages/discuz/index.wxml-->
-<block wx:if="{{isLogin}}">
-  <view class="user-info">
-    <view class="item" bindtap="routerToMy">{{userInfo.username}}</view>
-    <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
-    <view class="item" wx:else bindtap="dailySignIn">日签到</view>
-    <view class="item" bindtap="monthSignIn">月签到</view>
-    <view class="item" bindtap="logout ">退出</view>
-  </view>
-  <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
-    <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
-  </view>
+<block wx:if="{{isOwner}}">
+  <block wx:if="{{isLogin}}">
+    <view class="user-info">
+      <view class="item" bindtap="routerToMy">{{userInfo.username}}</view>
+      <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
+      <view class="item" wx:else bindtap="dailySignIn">日签到</view>
+      <view class="item" bindtap="monthSignIn">月签到</view>
+      <view class="item" bindtap="logout ">退出</view>
+    </view>
+    <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
+      <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="login-form">
+      <view class="input-warp">
+        <select name id placeholder="请选择站点" v-model="webSite">
+          <option v-for="item of discuz.webSiteList" :key="item" :value="item">{{item}}</option>
+        </select>
+        <button size="mini" bindtap="updateWebSiteList">更新列表</button>
+        <input data-key="webSite" value="{{webSite}}" bindinput="inputChange" placeholder="请输入站点"></input>
+      </view>
+      <view class="input-warp">
+        <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入用户名" />
+      </view>
+      <view class="input-warp">
+        <input data-key="password" value="{{userInfo.password}}" bindinput="inputChange" password placeholder="请输入密码" />
+      </view>
+      <view class="input-warp">
+        <input data-key="QA" value="{{userInfo.QA}}" bindinput="inputChange" placeholder="请输入问题ID和答案(以逗号分隔)" />
+      </view>
+      <button class="btn btn-login" type="primary" bindtap="login">登录</button>
+    </view>
+  </block>
+  <button class="btn btn-switch" type="primary" bindtap="switchProxy">切换代理源({{PLATOM}})</button>
 </block>
 <block wx:else>
-  <view class="login-form">
-    <view class="input-warp">
-      <!-- <select name id placeholder="请选择站点" v-model="webSite">
-      <option v-for="item of discuz.webSiteList" :key="item" :value="item">{{item}}</option>
-    </select>
-    <button size="mini" bindtap="updateWebSiteList">更新列表</button> -->
-      <input data-key="webSite" value="{{webSite}}" bindinput="inputChange" placeholder="请输入站点"></input>
-    </view>
-    <view class="input-warp">
-      <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入用户名" />
-    </view>
-    <view class="input-warp">
-      <input data-key="password" value="{{userInfo.password}}" bindinput="inputChange" password placeholder="请输入密码" />
-    </view>
-    <view class="input-warp">
-      <input data-key="QA" value="{{userInfo.QA}}" bindinput="inputChange" placeholder="请输入问题ID和答案(以逗号分隔)" />
-    </view>
-    <button class="btn btn-login" type="primary" bindtap="login">登录</button>
-  </view>
+  <view>体验优化中,敬请期待</view>
 </block>
-<button class="btn btn-switch" type="primary" bindtap="switchProxy">切换代理源({{PLATOM}})</button>

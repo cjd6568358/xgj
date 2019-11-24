@@ -76,6 +76,11 @@ Page({
       url: `/pages/tool/systemInfo`,
     })
   },
+  openStorage() {
+    wx.navigateTo({
+      url: `/pages/tool/storage`,
+    })
+  },
   vibrateLong() {
     wx.vibrateLong({
 

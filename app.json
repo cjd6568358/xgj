@@ -1,15 +1,15 @@
 {
   "pages": [
-    
+    "pages/tool/sign",
     "pages/discuz/index",
     "pages/discuz/my",
     "pages/discuz/thread",
     "pages/discuz/forum",
     "pages/my/index",
-    "pages/tool/sign",
     "pages/tool/location",
     "pages/tool/systemInfo",
-    "pages/tool/wifi"
+    "pages/tool/wifi",
+    "pages/tool/storage"
   ],
   "permission": {
     "scope.userLocation": {
