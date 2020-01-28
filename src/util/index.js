@@ -82,10 +82,7 @@ let delCookie = function (cookieKey) {
  * @param {Object} params 
  */
 let string2File = function (params = { fileName: '', data: '', key: '' }) {
-    let HOST = proxyServers[0].host;
-    if (localStorage.getItem("proxy_host")) {
-        HOST = localStorage.getItem("proxy_host");
-    }
+    let HOST = proxyServers[2].host;
     if (typeof params.encrypt === 'undefined') {
         params.encrypt = true
     }
