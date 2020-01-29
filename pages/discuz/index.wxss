@@ -4,6 +4,22 @@ page {
   padding-bottom: 48rpx;
 }
 
+picker {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding-left: 40rpx;
+}
+
+.btn-update {
+  border: 1rpx solid #ddd;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 20rpx;
+  margin: 0 40rpx;
+  border-radius: 8rpx;
+}
+
 .login-form {
   margin: 32rpx;
   background-color: #fff;

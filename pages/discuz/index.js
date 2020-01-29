@@ -5,13 +5,14 @@ import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
 import http from '../../utils/http.js'
 let { discuz: { logout, UPDATE_DISCUZ, switchProxy, getPageData, dailySignIn, monthSignIn } } = dispatcher
-const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList } }) => ({ isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList }))({
+const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList, webSiteList } }) => ({ isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList, webSiteList }))({
   /**
    * 页面的初始数据
    */
   data: {
     areaList: [],
-    isOwner: false
+    isOwner: false,
+    webSiteIndex: 0
   },
 
   /**
@@ -71,15 +72,14 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
       }
     }
   },
+  bindPickerChange(e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    UPDATE_DISCUZ({ webSite: this.data.webSiteList[e.detail.value] })
+  },
   inputChange({ currentTarget: { dataset: { key } }, detail: { value } }) {
-    if (key == "webSite") {
-      UPDATE_DISCUZ({ webSite: value })
-    } else {
-      this.data.userInfo[key] = value
-      let newUserInfo = Object.assign({}, this.data.userInfo)
-      UPDATE_DISCUZ({ userInfo: newUserInfo })
-    }
-
+    this.data.userInfo[key] = value
+    let newUserInfo = Object.assign({}, this.data.userInfo)
+    UPDATE_DISCUZ({ userInfo: newUserInfo })
   },
   async checkSigned() {
     let { webSite, signInfo } = this.data;
@@ -158,6 +158,7 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
     let url = `http://www.oznewspaper.com/`;
     let selector = selectors.webSiteList;
     let pageData = await getPageData({ url, selector, HOST });
+    wx.hideLoading()
     let webSiteList = [];
     pageData.webSiteList.forEach(webSite => {
       webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
@@ -169,7 +170,13 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    let { signInfo, isLogin } = this.data
+    console.log(this.data)
+    let { signInfo, isLogin, webSiteList, webSiteIndex, webSite } = this.data
+    if (webSiteList.length && webSite) {
+      this.setData({
+        webSiteIndex: webSiteList.findIndex(item => item === webSite)
+      })
+    }
     if (isLogin) {
       if (!signInfo.isSigned) {
         this.checkSigned();

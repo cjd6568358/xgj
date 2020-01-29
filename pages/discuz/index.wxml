@@ -15,11 +15,12 @@
   <block wx:else>
     <view class="login-form">
       <view class="input-warp">
-        <select name id placeholder="请选择站点" v-model="webSite">
-          <option v-for="item of discuz.webSiteList" :key="item" :value="item">{{item}}</option>
-        </select>
-        <button size="mini" bindtap="updateWebSiteList">更新列表</button>
-        <input data-key="webSite" value="{{webSite}}" bindinput="inputChange" placeholder="请输入站点"></input>
+        <picker bindchange="bindPickerChange" value="{{index}}" range="{{webSiteList}}">
+          <view class="picker">
+            {{webSite||'请选择站点'}}
+          </view>
+        </picker>
+        <view class="btn-update" bindtap="updateWebSiteList">更新列表</view>
       </view>
       <view class="input-warp">
         <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入用户名" />
@@ -36,5 +37,7 @@
   <button class="btn btn-switch" type="primary" bindtap="switchProxy">切换代理源({{PLATOM}})</button>
 </block>
 <block wx:else>
-  <view>体验优化中,敬请期待</view>
+  <view>1、签到数据仅存储在本地，请放心使用</view>
+  <view>2、目前暂时不支持签到数据的导入导出</view>
+  <view>3、使用过程中如遇到问题欢迎及时反馈</view>
 </block>
