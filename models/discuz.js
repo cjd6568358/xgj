@@ -3,10 +3,7 @@ import selectors from "../utils/html2JsonSelector";
 import proxyServerList from "../utils/proxyServerList";
 import http from "../utils/http";
 
-let HOST = wx.getStorageSync("proxy_host") || proxyServerList[0].host
-let PLATOM = proxyServerList.filter(
-  item => item.host === HOST
-)[0].platom
+let HOST = proxyServerList[0].host
 let temmeConvert = 'server'
 if (wx.getStorageSync("temmeConvert")) {
   temmeConvert = wx.getStorageSync("temmeConvert")
@@ -32,7 +29,6 @@ export default {
     temmeConvert,
     formhash: "",
     HOST,
-    PLATOM,
     isLogin,
     webSiteList,
     webSite,
@@ -70,16 +66,6 @@ export default {
       wx.removeStorageSync("cdb3_auth")
       pageCache.clear()
       put({ type: 'UPDATE_DISCUZ', payload: { isLogin: false } })
-    },
-    switchProxy(action, { put, select, selectAll }) {
-      let { host: HOST, platom: PLATOM } = proxyServerList[0]
-      let index = proxyServerList.findIndex(item => item.host === select().HOST)
-      if (index < proxyServerList.length - 1) {
-        HOST = proxyServerList[index + 1].host
-        PLATOM = proxyServerList[index + 1].platom
-      }
-      wx.setStorageSync("proxy_host", HOST)
-      put({ type: 'UPDATE_DISCUZ', payload: { HOST, PLATOM } })
     },
     switchTemmeConvert(action, { put, select, selectAll }) {
       let STATUS = select().temmeConvert === "client" ? 'server' : "client";
@@ -190,10 +176,7 @@ export default {
 
       }
     },
-    async getPageData({ payload: { url, selector, HOST } }, { put, select, selectAll }) {
-      if (!HOST) {
-        HOST = select().HOST
-      }
+    async getPageData({ payload: { url, selector } }, { put, select, selectAll }) {
       let postData = {
         httpConfig: {
           url,
@@ -207,7 +190,7 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let { data } = await http.post({ url: `${HOST}/api/html2Json`, data: postData });
+      let { data } = await http.post({ url: `${select().HOST}/api/html2Json`, data: postData });
       // wx.hideLoading()
       isLoading = false
       return data

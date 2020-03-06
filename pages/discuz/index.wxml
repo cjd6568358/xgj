@@ -34,7 +34,6 @@
       <button class="btn btn-login" type="primary" bindtap="login">登录</button>
     </view>
   </block>
-  <button class="btn btn-switch" type="primary" bindtap="switchProxy">切换代理源({{PLATOM}})</button>
 </block>
 <block wx:else>
   <view>1、签到数据仅存储在本地，请放心使用</view>

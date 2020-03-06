@@ -4,8 +4,8 @@ import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
 import http from '../../utils/http.js'
-let { discuz: { logout, UPDATE_DISCUZ, switchProxy, getPageData, dailySignIn, monthSignIn } } = dispatcher
-const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList, webSiteList } }) => ({ isLogin, HOST, PLATOM, signInfo, userInfo, webSite, proxyServerList, webSiteList }))({
+let { discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn } } = dispatcher
+const config = connect(({ discuz: { isLogin, HOST, signInfo, userInfo, webSite, webSiteList } }) => ({ isLogin, HOST, signInfo, userInfo, webSite, webSiteList }))({
   /**
    * 页面的初始数据
    */
@@ -19,7 +19,7 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (wx.getStorageSync('openid') === 'oZ_Zn5KcVjk5CyWfgHLm4T8MQ_3s') {
+    if (wx.getStorageSync('openid') === 'oZ_Zn5KcVjk5CyWfgHLm4T8MQ_3s' || wx.getStorageSync('openkey') === 'openkey') {
       this.setData({
         isOwner: true
       })
@@ -28,7 +28,6 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
   logout,
   dailySignIn,
   monthSignIn,
-  switchProxy,
   async login() {
     let { HOST, webSite, userInfo: { username, password, QA } } = this.data;
     let targetHost = `http://${webSite}/bbs/`
@@ -150,14 +149,9 @@ const config = connect(({ discuz: { isLogin, HOST, PLATOM, signInfo, userInfo, w
     })
   },
   async updateWebSiteList() {
-    let gfwProxyServers = this.data.proxyServerList.filter(item => item.gfw);
-    let HOST =
-      gfwProxyServers[
-        Math.floor(Math.random() * gfwProxyServers.length)
-      ].host;
     let url = `http://www.oznewspaper.com/`;
     let selector = selectors.webSiteList;
-    let pageData = await getPageData({ url, selector, HOST });
+    let pageData = await getPageData({ url, selector });
     wx.hideLoading()
     let webSiteList = [];
     pageData.webSiteList.forEach(webSite => {
