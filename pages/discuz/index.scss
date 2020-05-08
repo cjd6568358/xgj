@@ -1,0 +1,85 @@
+/* pages/discuz/index.wxss */
+page {
+  padding-bottom: 48rpx;
+}
+picker {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding-left: 40rpx;
+}
+.btn-update {
+  border: 1rpx solid #ddd;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 20rpx;
+  margin: 0 40rpx;
+  border-radius: 8rpx;
+}
+.login-form {
+  margin: 32rpx;
+  background-color: #fff;
+  padding: 60rpx 40rpx;
+  box-shadow: 0rpx 20rpx 40rpx 0px rgba(0, 0, 0, 0.04);
+  border-radius: 16rpx;
+  .input-warp {
+    margin-top: 20rpx;
+    height: 100rpx;
+    display: flex;
+  }
+}
+.login-form .input-warp input,
+.login-form .input-warp select {
+  border: 1rpx solid #ddd;
+  padding-left: 40rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  flex: 1;
+  font-size: 32rpx;
+  border-radius: 8rpx;
+}
+.btn-switch,
+.btn-login {
+  margin-top: 40rpx;
+}
+.user-info {
+  display: flex;
+  padding: 20rpx;
+  background: #fff;
+  font-size: 32rpx;
+  .item {
+    padding-right: 20rpx;
+    margin-right: 20rpx;
+    border-right: 2rpx solid #ddd;
+    &:last-child {
+      border-right: 0;
+    }
+  }
+}
+.area {
+  position: relative;
+  padding-top: 80rpx;
+  background: #fff;
+  &::before {
+    position: absolute;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 32rpx;
+    padding-left: 24rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    color: #fff;
+    content: attr(data-title);
+    background: #2a6eb4;
+  }
+  .item {
+    padding: 20rpx 24rpx;
+    font-size: 30rpx;
+    line-height: 1.5;
+    &:nth-child(even) {
+      background: #ddd;
+    }
+  }
+}

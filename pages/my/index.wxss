@@ -1,13 +1,16 @@
 /* pages/my/my.wxss */
-
 page {
   background: #f3f5f7;
 }
 
 .user-info {
   padding: 48rpx;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-color: #fff;
   margin-bottom: 16rpx;
 }
@@ -45,15 +48,19 @@ page {
   background-color: #fff;
   height: 96rpx;
   padding: 28rpx 32rpx;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.menu-list .item + .item {
+  margin-top: 2rpx;
 }
 
 .menu-list .icon-arrow {
   width: 40rpx;
   height: 40rpx;
-}
-
-.menu-list .item+.item {
-  margin-top: 2rpx;
 }

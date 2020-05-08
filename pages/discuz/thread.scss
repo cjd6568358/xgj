@@ -1,0 +1,32 @@
+/* pages/discuz/thread.wxss */
+.thread {
+  background: #fff;
+  padding: 20rpx;
+  .post {
+    line-height: 1.8;
+    margin-bottom: 10rpx;
+    .post-info {
+      background: #fbfbff;
+      margin: 0 -20rpx;
+      padding: 10rpx 20rpx;
+    }
+    .post-content {
+      overflow: auto;
+      img {
+        max-width: 95vw;
+      }
+    }
+  }
+}
+.name-floor,
+.level-time {
+  display: flex;
+  justify-content: space-between;
+}
+.name {
+  font-weight: 500;
+  color: #2196f3;
+}
+.level-time {
+  color: #666;
+}

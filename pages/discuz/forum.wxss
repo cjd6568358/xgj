@@ -1,5 +1,4 @@
 /* pages/discuz/forum.wxss */
-
 .area {
   position: relative;
   padding-top: 60rpx;

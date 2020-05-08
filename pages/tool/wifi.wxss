@@ -1,16 +1,21 @@
 /* pages/wifi/wifi.wxss */
-
 page {
-  /* padding: 20rpx; */
   width: 100%;
 }
-.wifi-list{
+
+.wifi-list {
   padding: 20rpx;
 }
-.wifi-list .item{
+
+.wifi-list .item {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-top: 10rpx;
 }
-.wifi-list text:first-child{
-  flex: 1;
+
+.wifi-list text:first-child {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
