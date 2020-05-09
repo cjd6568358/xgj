@@ -1,0 +1,20 @@
+/**app.wxss**/
+
+page {
+  background-color: #f3f5f8;
+  display: flex;
+  flex-direction: column;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  width: initial;
+}
+
+view, input, picker, cover-view, scroll-view, textarea {
+  box-sizing: border-box;
+}
+
+input-placeholder {
+  color: #999;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
