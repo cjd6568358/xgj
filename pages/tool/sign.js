@@ -71,7 +71,7 @@ Page({
    */
   onLoad: function (options) {
     http.get({
-      url:'https://cjd6568358.3322.org:6706/api/test'
+      url: 'https://cjd6568358.3322.org:6706/api/test'
     })
   },
 
