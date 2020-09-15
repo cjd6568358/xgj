@@ -72,7 +72,6 @@ Page({
     confirm('确认要删除该条记录?').then(() => {
       let { year, month, timestamp } = item
       let signData = this.getSignData(year, month).filter(data => data.timestamp !== timestamp);
-      console.log(signData)
       this.setSignData(year, month, signData)
       this.setData({
         signData

@@ -1,61 +1,80 @@
 <!--pages/my/my.wxml-->
-<wxs module="util">
-  var mapGender = function(gender) {
-    var tmp = ""
-    switch (gender) {
-      case 1:
-        tmp = '男';
-        break;
-      case 2:
-        tmp = '女';
-        break;
-      default:
-        tmp = '未知';
-    }
-    return tmp
-  }
-  module.exports.mapGender = mapGender;
-</wxs>
-<view class='user-info'>
-  <block wx:if="{{userInfo}}">
-    <image src='{{userInfo.avatarUrl}}'></image>
-    <view class='right'>
-      <view class='nick-name'>姓名: {{userInfo.nickName}}</view>
-      <view class='gender'>性别: {{util.mapGender(userInfo.gender)}}</view>
-    </view>
-  </block>
-  <block wx:else>
-    <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo">获取用户信息</button>
-  </block>
+<view class="user-info">
+	<view class="avatar">
+		<open-data type="userAvatarUrl"></open-data>
+	</view>
+	<view class="right">
+		<view class="nick-name">
+			<open-data type="userNickName"></open-data>
+		</view>
+		<view class="gender">
+			性别：
+			<open-data type="userGender" lang="zh_CN"></open-data>
+		</view>
+	</view>
 </view>
-<view class='menu-list'>
-
-  <view class='item' bindtap='openLocation'>
-    <view class="name">查看定位</view>
-    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
-  </view>
-  <view class='item' bindtap='getSystemInfo'>
-    <view class="name">查看系统信息</view>
-    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
-  </view>
-  <view class='item' bindtap='openWifi'>
-    <view class="name">查看WIFI</view>
-    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
-  </view>
-  <view class='item' bindtap='openStorage'>
-    <view class="name">设置缓存</view>
-    <image class="icon-arrow" src="./images/icon-arrow.svg"></image>
-  </view>
-  <view class='item' bindtap='clearAllStorage'>
-    <view class="name">清除全部数据</view>
-  </view>
-  <view class='item'>
-    <view class="name">网络状态({{networkType}})</view>
-  </view>
-  <view class='item'>
-    <view class="name">蓝牙</view>
-  </view>
-  <view class='item' bindlongpress='vibrateLong' bindtap='vibrateShort'>
-    <view class="name">振动</view>
-  </view>
+<view class="menu-section">
+	<view class="item" bindtap="openLocation">
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="location"></mp-icon>
+			<text>查看定位</text>
+		</view>
+		<view class="value">
+			<mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon>
+		</view>
+	</view>
+	<view class="item" bindtap="getSystemInfo">
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="setting"></mp-icon>
+			<text>系统信息</text>
+		</view>
+		<view class="value">
+			<mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon>
+		</view>
+	</view>
+	<view class="item" bindtap='openWifi'>
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="info"></mp-icon>
+			<text>查看WIFI</text>
+		</view>
+		<view class="value">
+			<mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon>
+		</view>
+	</view>
+	<view class="item" bindtap='openStorage'>
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="pencil"></mp-icon>
+			<text>设置缓存</text>
+		</view>
+		<view class="value">
+			<mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon>
+		</view>
+	</view>
+	<view class="item" bindtap='clearAllStorage'>
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="delete"></mp-icon>
+			<text>清除数据</text>
+		</view>
+		<view class="value">
+			<mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon>
+		</view>
+	</view>
+	<view class="item" bindlongpress='vibrateLong' bindtap='vibrateShort'>
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="info"></mp-icon>
+			<text>振动</text>
+		</view>
+		<view class="value">
+			<mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon>
+		</view>
+	</view>
+	<view class="item">
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="{{18}}" color="#999" icon="info"></mp-icon>
+			<text>网络状态({{networkType}})</text>
+		</view>
+		<view class="value">
+			<!-- <mp-icon extClass="value_icon_extClass" size="{{16}}" color="#999" icon="arrow"></mp-icon> -->
+		</view>
+	</view>
 </view>

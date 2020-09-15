@@ -4,9 +4,7 @@ page {
 }
 
 picker {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   height: 88rpx;
   line-height: 88rpx;
   padding-left: 40rpx;
@@ -25,16 +23,13 @@ picker {
   margin: 32rpx;
   background-color: #fff;
   padding: 60rpx 40rpx;
-  -webkit-box-shadow: 0rpx 20rpx 40rpx 0px rgba(0, 0, 0, 0.04);
-          box-shadow: 0rpx 20rpx 40rpx 0px rgba(0, 0, 0, 0.04);
+  box-shadow: 0rpx 20rpx 40rpx 0px rgba(0, 0, 0, 0.04);
   border-radius: 16rpx;
 }
 
 .login-form .input-warp {
   margin-top: 20rpx;
   height: 100rpx;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -44,9 +39,7 @@ picker {
   padding-left: 40rpx;
   height: 88rpx;
   line-height: 88rpx;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   font-size: 32rpx;
   border-radius: 8rpx;
 }
@@ -57,8 +50,6 @@ picker {
 }
 
 .user-info {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding: 20rpx;
   background: #fff;
@@ -83,8 +74,7 @@ picker {
 
 .area::before {
   position: absolute;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   top: 0;
   left: 0;
   width: 100%;

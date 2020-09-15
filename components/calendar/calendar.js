@@ -12,29 +12,23 @@ Component({
   properties: {
     defaultValue: {
       type: null, // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
-      value: Date.now(), // 属性初始值（可选），如果未指定则会根据类型选择一个
+      value: Date.now() // 属性初始值（可选），如果未指定则会根据类型选择一个
     },
     headerTitleFmt: {
       type: String,
-      value: 'yyyy年M月',
+      value: 'yyyy年M月'
     },
     mapData: {
       type: Array,
-      value: [],
-      // observer: function (newVal, oldVal) {
-      //   console.log('newVal, oldVal', JSON.stringify(newVal), JSON.stringify(oldVal))
-
-      // }
+      value: []
     },
   },
   observers: {
     'mapData': function (mapData) {
-      console.log(11111, mapData, this.data.mapData)
-      if (mapData.length == 0 && this.data.mapData.length == 0) {
-        return
-      }
       let { headerTitleFmt, year, month } = this.data
-      this.setData(this.parseDate(new Date(year, month - 1, 1), headerTitleFmt, mapData))
+      if (year && month) {
+        this.setData(this.parseDate(new Date(year, month - 1, 1), headerTitleFmt, mapData))
+      }
     }
   },
   /**
@@ -119,7 +113,6 @@ Component({
         }
         return item
       });
-      console.log('mapData', mapData)
       this.triggerEvent('cellClick', activeItem)
       return {
         activeItem,
