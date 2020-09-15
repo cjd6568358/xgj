@@ -1,6 +1,8 @@
 {
-  "navigationBarTitleText": "签到",
+  "navigationBarTitleText": "每日签到",
   "usingComponents": {
-    "calendar": "/components/calendar/calendar"
+    "calendar": "/components/calendar/calendar",
+    "sub-title": "../../components/subTitle",
+    "mp-slideview": "weui-miniprogram/slideview/slideview"
   }
 }

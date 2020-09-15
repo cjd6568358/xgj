@@ -1,34 +1,42 @@
 /* pages/sign/sign.wxss */
-.has-data {
-  background: #00b26a;
+scroll-view {
+  background: linear-gradient(#2b91fd, 20%, #f5f5f5, 50%, #f5f5f5);
+}
+
+.calendar_extDataClass {
+  background: #2b91fd;
   color: #fff;
   border-radius: 50%;
 }
 
+.calendar_extActiveClass {
+  background-color: #2b91fd;
+  color: #fff;
+}
+
 .btn-sign {
-  margin-top: 20rpx;
-  width: 300rpx;
+  margin: 40rpx auto;
+  width: 80vw;
+  border-radius: 60rpx;
+  color: #fff;
+  background-color: #48b7fc;
 }
 
-.table {
-  margin-top: 20rpx;
-  padding: 20rpx;
+.btn-sign::after {
+  border: none;
 }
 
-.table .row {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.data-log {
+  margin: 20rpx auto;
+  width: 90vw;
+  border-radius: 20rpx;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.data-log .weui-slide {
+  padding: 10rpx 30rpx;
+  height: 80rpx;
   display: flex;
-  margin-bottom: 10rpx;
-}
-
-.row label {
-  width: 200rpx;
-  text-align: center;
-}
-
-.row text {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  align-items: center;
 }

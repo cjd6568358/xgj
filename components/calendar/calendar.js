@@ -2,7 +2,7 @@
 import { formatTime, getTotalDaysArr } from '../../utils/util.js'
 
 Component({
-  externalClasses: ['has-data-class'],
+  externalClasses: ['ext-active-class', 'ext-data-class'],
   options: {
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
@@ -21,16 +21,22 @@ Component({
     mapData: {
       type: Array,
       value: [],
-      observer: function (newVal, oldVal) {
-        if (newVal.length == 0 && oldVal.length == 0) {
-          return
-        }
-        let { headerTitleFmt, mapData, year, month } = this.data
-        this.setData(this.parseDate(new Date(year, month - 1, 1), headerTitleFmt, mapData))
-      }
+      // observer: function (newVal, oldVal) {
+      //   console.log('newVal, oldVal', JSON.stringify(newVal), JSON.stringify(oldVal))
+
+      // }
     },
   },
-
+  observers: {
+    'mapData': function (mapData) {
+      console.log(11111, mapData, this.data.mapData)
+      if (mapData.length == 0 && this.data.mapData.length == 0) {
+        return
+      }
+      let { headerTitleFmt, year, month } = this.data
+      this.setData(this.parseDate(new Date(year, month - 1, 1), headerTitleFmt, mapData))
+    }
+  },
   /**
    * 组件的初始数据
    */
@@ -43,8 +49,7 @@ Component({
    */
   methods: {
     prevClick: function () {
-      let year = this.data.year
-      let month = this.data.month
+      let { year, month } = this.data
       if (month == 1) {
         year = year - 1
         month = 12
@@ -58,8 +63,7 @@ Component({
       this.triggerEvent('prevClick', { year, month })
     },
     nextClick: function () {
-      let year = this.data.year
-      let month = this.data.month
+      let { year, month } = this.data
       if (month == 12) {
         year = year + 1
         month = 1
@@ -71,14 +75,12 @@ Component({
       this.setData(parsedDate)
       this.triggerEvent('nextClick', { year, month })
     },
-    cellClick(event) {
-      if (!event.target.dataset.day || this.data.activeItem.timestamp == event.target.dataset.day.timestamp) return
+    cellClick({ target: { dataset: { day } } }) {
+      if (!day || this.data.activeItem.timestamp == day.timestamp) return
       this.setData({
-        activeItem: event.target.dataset.day,
+        activeItem: day,
       })
-      let year = this.data.year
-      let month = this.data.month
-      this.triggerEvent('cellClick', event.target.dataset.day)
+      this.triggerEvent('cellClick', day)
     },
     parseDate(ymd, fmt = 'yyyy年M月', mapData) {
       let now = null

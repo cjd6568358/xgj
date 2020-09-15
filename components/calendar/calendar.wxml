@@ -38,7 +38,7 @@
       <view class='cell6'>六</view>
     </view>
     <view class='row' wx:for="{{util.totalDays2Weeks(totalDays)}}" wx:key="i" wx:for-item="week">
-      <view class='cell{{day.dayOfWeek}} {{day.timestamp == activeItem.timestamp ? "active":""}} {{day.data ? "has-data-class":""}}' wx:for="{{week}}" wx:key="ii" wx:for-item="day" data-day="{{day}}">
+      <view class='cell{{day.dayOfWeek}} {{day.timestamp == activeItem.timestamp ? "active-class ext-active-class":""}} {{day.data ? "data-class ext-data-class":""}}' wx:for="{{week}}" wx:key="ii" wx:for-item="day" data-day="{{day}}">
         {{day.date}}
       </view>
     </view>

@@ -1,6 +1,5 @@
 // pages/sign/sign.js
-import { formatTime, getTotalDaysArr } from '../../utils/util.js'
-import http from '../../utils/http.js'
+import { formatTime, getTotalDaysArr, confirm } from '../../utils/util.js'
 Page({
 
   /**
@@ -9,11 +8,14 @@ Page({
   data: {
     signData: [],
     selectedItem: [],
-    totalDays: getTotalDaysArr(new Date().getFullYear(), new Date().getMonth() + 1)
+    totalDays: getTotalDaysArr(new Date().getFullYear(), new Date().getMonth() + 1),
+    slideButtons: [{
+      type: 'warn',
+      text: '删除',
+    }]
   },
   // 自定义事件监听
   onCalendarCellClick(e) {
-    // console.log(e.detail)
     let selectedItem = (e.detail && e.detail.data) || []
     selectedItem.forEach(item => {
       item.hms = formatTime(new Date(item.timestamp), 'yyyy-MM-dd hh:mm:ss')
@@ -66,13 +68,22 @@ Page({
       wx.setStorageSync(`signData${year}${month}`, data);
     }
   },
+  slideButtonTap({ currentTarget: { dataset: { item } } }) {
+    confirm('确认要删除该条记录?').then(() => {
+      let { year, month, timestamp } = item
+      let signData = this.getSignData(year, month).filter(data => data.timestamp !== timestamp);
+      console.log(signData)
+      this.setSignData(year, month, signData)
+      this.setData({
+        signData
+      })
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    http.get({
-      url: 'https://cjd6568358.3322.org:6706/api/test'
-    })
+
   },
 
   /**

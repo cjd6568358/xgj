@@ -1,39 +1,41 @@
 <!--pages/sign/sign.wxml-->
 <wxs module="util">
-  var mapData = function(signData, totalDays) {
-    var mapData = [];
-    if (signData.length) {
-      var year = signData[0].year;
-      var month = signData[0].month;
-      totalDays.forEach(function(date, i) {
-        var tmp = {
-          year: year,
-          month: month,
-          date: date,
-          data: []
-        };
-        for (var ii = 0; ii < signData.length; ii++) {
-          if (date == signData[ii].date) {
-            tmp.data.push(signData[ii])
-          }
-        }
-        if (tmp.data.length) {
-          mapData.push(tmp)
-        }
-      })
-    }
-    return mapData
-  }
-  module.exports.mapData = mapData;
+	var mapData = function(signData, totalDays) {
+		var mapData = [];
+		if (signData.length) {
+			var year = signData[0].year;
+			var month = signData[0].month;
+			totalDays.forEach(function(date, i) {
+				var tmp = {
+					year: year,
+					month: month,
+					date: date,
+					data: []
+				};
+				for (var ii = 0; ii < signData.length; ii++) {
+					if (date == signData[ii].date) {
+						tmp.data.push(signData[ii])
+					}
+				}
+				if (tmp.data.length) {
+					mapData.push(tmp)
+				}
+			})
+		}
+		return mapData
+	}
+	module.exports.mapData = mapData;
 </wxs>
 <scroll-view>
-  <calendar map-data="{{util.mapData(signData,totalDays)}}" has-data-class="has-data" bindprevClick="onCalendarPrevClick" bindnextClick="onCalendarNextClick" bindcellClick="onCalendarCellClick">
-  </calendar>
-  <button class='btn btn-sign' bindtap='sign'>签到</button>
-  <view class="table">
-    <view class='row' wx:for="{{selectedItem}}" wx:key="index" wx:for-item="item">
-      <label>{{index+1}}.</label>
-      <text class="">{{item.hms}}</text>
-    </view>
-  </view>
+	<button class='btn-sign' bindtap='sign'>签 到</button>
+	<calendar map-data="{{util.mapData(signData,totalDays)}}" extActiveClass="calendar_extActiveClass" extDataClass="calendar_extDataClass" bindprevClick="onCalendarPrevClick" bindnextClick="onCalendarNextClick" bindcellClick="onCalendarCellClick">
+	</calendar>
+	<view class="data-log" wx:if="{{selectedItem.length}}">
+		<sub-title>签到历史</sub-title>
+		<mp-slideview wx:for="{{selectedItem}}" wx:key="index" wx:for-item="item" buttons="{{slideButtons}}" data-item="{{item}}" bindbuttontap="slideButtonTap">
+			<view class="weui-slide">
+				{{item.hms}}
+			</view>
+		</mp-slideview>
+	</view>
 </scroll-view>
