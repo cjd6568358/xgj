@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "shortcutMenu": "/components/shortcutMenu/index",
-    "pagination":"/components/pagination/index"
+    "pagination": "/components/pagination/index",
+    "parser": "/components/parser.min/parser"
   }
 }
