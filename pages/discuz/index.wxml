@@ -2,7 +2,7 @@
 <block wx:if="{{isOwner}}">
   <block wx:if="{{isLogin}}">
     <view class="user-info">
-      <view class="item" bindtap="routerToMy">{{userInfo.username}}</view>
+      <view class="item" bindtap="routerToUser">{{userInfo.username}}</view>
       <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
       <view class="item" wx:else bindtap="dailySignIn">日签到</view>
       <view class="item" bindtap="monthSignIn">月签到</view>
@@ -14,13 +14,14 @@
   </block>
   <block wx:else>
     <view class="login-form">
+      <view class="title">登 录</view>
       <view class="input-warp">
         <picker bindchange="bindPickerChange" value="{{index}}" range="{{webSiteList}}">
-          <view class="picker">
+          <view class="picker {{!webSite && 'placeholder'}}">
             {{webSite||'请选择站点'}}
           </view>
         </picker>
-        <view class="btn-update" bindtap="updateWebSiteList">更新列表</view>
+        <view class="btn-update" bindtap="updateWebSiteList"><mp-icon icon="refresh" color="black" size="{{18}}"></mp-icon>更新</view>
       </view>
       <view class="input-warp">
         <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入用户名" />
@@ -31,7 +32,7 @@
       <view class="input-warp">
         <input data-key="QA" value="{{userInfo.QA}}" bindinput="inputChange" placeholder="请输入问题ID和答案(以逗号分隔)" />
       </view>
-      <button class="btn btn-login" type="primary" bindtap="login">登录</button>
+      <button class="btn-login" type="default" bindtap="login">登录</button>
     </view>
   </block>
 </block>

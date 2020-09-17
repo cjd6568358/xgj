@@ -1,8 +1,9 @@
 {
   "pages": [
-    "pages/tool/sign",
     "pages/discuz/index",
-    "pages/discuz/my",
+    "pages/tool/sign",
+    
+    "pages/discuz/user",
     "pages/discuz/thread",
     "pages/discuz/forum",
     "pages/my/index",

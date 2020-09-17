@@ -1,4 +1,4 @@
-<!--pages/discuz/my.wxml-->
+<!--pages/discuz/user.wxml-->
 <view class="user-info">
   <view>用户名:{{userInfo.username}}</view>
   <view wx:if="signInfo.isSigned">签到状态:{{signInfo.isSigned ? '已签到':'未签到'}}</view>

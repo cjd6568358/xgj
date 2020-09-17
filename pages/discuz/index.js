@@ -169,9 +169,9 @@ const config = connect(
       url: "/pages/discuz/forum?url=" + encodeURIComponent(url),
     });
   },
-  routerToMy() {
+  routerToUser() {
     wx.navigateTo({
-      url: "/pages/discuz/my",
+      url: "/pages/discuz/user",
     });
   },
   async updateWebSiteList() {

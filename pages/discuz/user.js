@@ -1,4 +1,4 @@
-// pages/discuz/my.js
+// pages/discuz/user.js
 import selectors from "../../utils/html2JsonSelector";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
