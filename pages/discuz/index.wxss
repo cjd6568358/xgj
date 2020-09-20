@@ -40,7 +40,6 @@ page {
   border: 1rpx solid #ddd;
   height: 60rpx;
   padding: 0 30rpx;
-  margin: 0 30rpx;
   border-radius: 40rpx;
 }
 

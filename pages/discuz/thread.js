@@ -66,6 +66,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     }
     postList.forEach(item => {
       item.content = item.content
+        .replace(/\t/g, ``)
         .replace(/="attachment/g, `="${targetHost}attachment`)
         .replace(/="images/g, `="${targetHost}images`)
         .replace(/\<img/gi, '<img style="max-width:100%;"')
