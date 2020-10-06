@@ -1,8 +1,4 @@
 /* pages/discuz/index.wxss */
-page {
-  padding-bottom: 48rpx;
-}
-
 .login-form {
   margin: 32rpx;
   background-color: #fff;

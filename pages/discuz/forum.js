@@ -13,6 +13,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
   data: {
     url: '',
     forumList: [],
+    threadList: [],
     pageInfo: {
       currPageNum: 1,
       totalPageNum: 1,
@@ -33,6 +34,13 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
       url
     }, this.getForumPageData(url))
   },
+  routerToForum({ currentTarget: { dataset: { path }, }, }) {
+    let { webSite } = this.data;
+    let url = `http://${webSite}/bbs/` + path;
+    wx.navigateTo({
+      url: "/pages/discuz/forum?url=" + encodeURIComponent(url),
+    });
+  },
   routerToThread({ currentTarget: { dataset: { path } } }) {
     wx.navigateTo({
       url: '/pages/discuz/thread?url=' + encodeURIComponent(path),
@@ -47,7 +55,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
       pageData = await getPageData({ url, selector });
       pageCache.set(url, pageData);
     }
-    let { forumList, pageInfo, documentTitle } = pageData
+    let { forumList, threadList, pageInfo, documentTitle } = pageData
     wx.setNavigationBarTitle({
       title: documentTitle,
     })
@@ -63,6 +71,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     }
     this.setData({
       forumList,
+      threadList,
       pageInfo
     }, () => {
       wx.hideLoading()

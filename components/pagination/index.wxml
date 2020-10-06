@@ -1,5 +1,5 @@
 <!--components/pagination/index.wxml-->
-<view class="pagination">
+<view class="pagination" wx:if="{{total > 1}}">
   <image class="btn prev-btn {{curr == 1 && 'disabled'}}" bindtap="prev" src="./images/icon-arrow.svg"></image>
   <label class="curr">{{curr + '/' + total}}</label>
   <image class="btn next-btn {{curr == total && 'disabled'}}" bindtap="next" src="./images/icon-arrow.svg"></image>

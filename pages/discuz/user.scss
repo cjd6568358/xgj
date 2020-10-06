@@ -3,18 +3,48 @@
   padding: 20rpx;
   background: #fff;
   font-size: 32rpx;
+
   view {
     padding-right: 20rpx;
     margin-right: 20rpx;
+
     &:last-child {
       border-right: 0;
     }
   }
 }
+
 .area {
   position: relative;
   padding-top: 80rpx;
   background: #fff;
+
+  .empty {
+    text-align: center;
+  }
+
+  &.credit {
+    display: flex;
+    flex-wrap: wrap;
+
+    view {
+      width: 50vw;
+
+      &:nth-child(even) {
+        background: transparent;
+      }
+
+      &:nth-child(4n+2),
+      &:nth-child(4n+1) {
+        background: #ddd;
+      }
+
+      &:last-child {
+        width: 100vw;
+      }
+    }
+  }
+
   &::before {
     box-sizing: border-box;
     position: absolute;
@@ -29,10 +59,12 @@
     content: attr(data-title);
     background: #2a6eb4;
   }
+
   view {
     padding: 20rpx 24rpx;
     font-size: 30rpx;
     line-height: 1.5;
+
     &:nth-child(even) {
       background: #ddd;
     }

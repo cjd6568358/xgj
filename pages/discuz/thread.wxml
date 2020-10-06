@@ -1,18 +1,18 @@
 <!--pages/discuz/thread.wxml-->
-<view class="thread">
+<view class="thread" wx:if="{{postList.length > 0}}" >
 	<view class="post" wx:for="{{postList}}" wx:key="index">
 		<view class="post-info">
 			<view class="name-floor">
 				<label class="name">{{item.authorName}}</label>
-				<label class="floor">{{item.postFloor}}</label>
+				<label class="level">{{item.authorLevel}}</label>
 			</view>
 			<view class="level-time">
-				<label class="level">{{item.authorLevel}}</label>
 				<label class="time">{{item.postTime}}</label>
+				<label class="floor">{{item.postFloor}}</label>
 			</view>
 		</view>
 		<view>{{item.postTitle}}</view>
-		<parser selectable use-cache class="post-content" html="{{item.content}}" />
+		<parser selectable use-cache compress="1" class="post-content" html="{{item.content}}" />
 	</view>
 </view>
 <shortcutMenu wx:if="{{url && tid}}" url="{{url}}" tid="{{tid}}" fid="{{fid}}" bindreload="reload" title="{{documentTitle}}" scrollTop="{{scrollTop}}"></shortcutMenu>

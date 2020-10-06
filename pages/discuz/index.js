@@ -18,7 +18,7 @@ const config = connect(
   data: {
     areaList: [],
     isOwner: false,
-    webSiteIndex: 0,
+    webSiteIndex: 0
   },
 
   /**
@@ -190,8 +190,7 @@ const config = connect(
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    console.log(this.data);
-    let { signInfo, isLogin, webSiteList, webSiteIndex, webSite } = this.data;
+    let { signInfo, isLogin, webSiteList, webSite } = this.data;
     if (webSiteList.length && webSite) {
       this.setData({
         webSiteIndex: webSiteList.findIndex((item) => item === webSite),

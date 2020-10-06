@@ -1,7 +1,7 @@
 <!--pages/discuz/index.wxml-->
 <block wx:if="{{isOwner}}">
   <block wx:if="{{isLogin}}">
-    <view class="user-info">
+    <view class="user-info" wx:if="{{userInfo.username}}">
       <view class="item" bindtap="routerToUser">{{userInfo.username}}</view>
       <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
       <view class="item" wx:else bindtap="dailySignIn">日签到</view>
@@ -9,7 +9,8 @@
       <view class="item" bindtap="logout ">退出</view>
     </view>
     <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
-      <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
+      <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii"
+        data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
     </view>
   </block>
   <block wx:else>
@@ -21,7 +22,9 @@
             {{webSite||'请选择站点'}}
           </view>
         </picker>
-        <view class="btn-update" bindtap="updateWebSiteList"><mp-icon icon="refresh" color="black" size="{{18}}"></mp-icon>更新</view>
+        <view class="btn-update" bindtap="updateWebSiteList">
+          <mp-icon icon="refresh" color="black" size="{{18}}"></mp-icon>更新
+        </view>
       </view>
       <view class="input-warp">
         <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入用户名" />

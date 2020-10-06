@@ -20,6 +20,31 @@
   background: #fff;
 }
 
+.area .empty {
+  text-align: center;
+}
+
+.area.credit {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.area.credit view {
+  width: 50vw;
+}
+
+.area.credit view:nth-child(even) {
+  background: transparent;
+}
+
+.area.credit view:nth-child(4n+2), .area.credit view:nth-child(4n+1) {
+  background: #ddd;
+}
+
+.area.credit view:last-child {
+  width: 100vw;
+}
+
 .area::before {
   box-sizing: border-box;
   position: absolute;

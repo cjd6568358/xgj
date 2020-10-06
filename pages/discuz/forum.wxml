@@ -1,7 +1,12 @@
 <!--pages/discuz/forum.wxml-->
-<view class="area" wx:for="{{forumList}}" wx:key="i" wx:for-index="i" wx:for-item="area" data-title="{{area.name}}">
-  <block wx:for="{{area.value}}" wx:key="ii" wx:for-index="ii" wx:for-item="thread" >
-    <view class="item" wx:if="{{thread.type != '投票'}}"  data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">
+<view class="area" wx:if="{{forumList.length}}" data-title="子版块">
+  <view wx:for="{{forumList}}" wx:for-index="i" wx:for-item="forum" wx:key="i" class="item" data-path="{{forum.href}}"
+    bindtap="routerToForum">{{forum.name}}</view>
+</view>
+<view class="area" wx:for="{{threadList}}" wx:key="i" wx:for-index="i" wx:for-item="area" data-title="{{area.name}}">
+  <block wx:for="{{area.value}}" wx:key="ii" wx:for-index="ii" wx:for-item="thread">
+    <view class="item" wx:if="{{thread.type != '投票'}}" data-path="{{'http://'+ webSite +'/bbs/'+thread.href}}"
+      bindtap="routerToThread">
       [{{thread.date}}] {{thread.title}}
       <block wx:if="{{thread.permission}}">[阅读权限{{thread.permission}}]</block>
       ♥{{thread.thanks}} ({{thread.nums}})
@@ -9,4 +14,5 @@
   </block>
 </view>
 <shortcutMenu url="{{url}}" bindreload="reload"></shortcutMenu>
-<pagination wx:if="{{forumList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>
+<pagination wx:if="{{threadList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}"
+  bindpageChange="pageChange"></pagination>
