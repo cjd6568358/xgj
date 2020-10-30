@@ -19,7 +19,7 @@ module.exports = {
                 // 配置路由请求缓存
                 {
                     urlPattern: /\/xgj\/(tools|discuz|sign|password|my)$/, // 匹配文件
-                    handler: 'networkFirst', // 网络优先
+                    handler: 'NetworkFirst', // 网络优先
                     options: {
                         cacheableResponse: {
                             statuses: [200, 404]
