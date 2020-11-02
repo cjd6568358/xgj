@@ -21,7 +21,10 @@ export default {
         return Math.ceil(this/10)
     };
     head title{$documentTitle};
-    table:has(thead.separation)@forumList{
+    .mainbox.forumlist tbody:has(.lastpost a)@forumList{
+        h2 a[href=$href]{$name}
+    }
+    .mainbox.threadlist table:has(thead.separation)@threadList{
         thead.separation td b{$name};
         tbody:has(th)@value{
             th span[id^=thread_] a[href=$href]{$title};
@@ -54,8 +57,9 @@ export default {
         .postauthor p:nth-of-type(1){$authorLevel};
         // .postauthor .profile{$authorProfile}
         .postcontent .postinfo strong[id=$pid|replace(/postnum_/g,'')][onclick=$absPostUrl|replace(/',.*/g,'')|match(/viewth.*/g)|first]{$postFloor}
-        .postcontent .postinfo{find('小',$postTime, '只看该作者')}
+        .postcontent .postinfo{find('小',$postTime|replace(/^.*发表于 /g,''), '只看该作者')}
         .postcontent .postmessage>h2{html($postTitle)}
+        .postcontent .postmessage .notice{html($content|replace(/border(.*)alt=""/g,""))}
         .postcontent .postmessage .t_msgfont{html($content|replace(/border(.*)alt=""/g,""))}
     };
     form+.pages_btns .pages@pageInfo|pack{
