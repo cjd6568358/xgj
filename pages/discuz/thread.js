@@ -5,7 +5,7 @@ import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
 import http from '../../utils/http.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
-const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({ formhash, HOST, userInfo, webSite }))({
+const config = connect(({ discuz: { formhash, proxyPrefix, userInfo, webSite } }) => ({ formhash, proxyPrefix, userInfo, webSite }))({
 
   /**
    * 页面的初始数据
@@ -47,7 +47,7 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
       pageCache.set(url, pageData);
     }
     let { tid, fid, webSite } = this.data
-    let targetHost = `http://${webSite}/bbs/`
+    let targetPrefix = `http://${webSite}/bbs/`
     let {
       documentTitle,
       pageInfo,
@@ -67,16 +67,16 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
     postList.forEach(item => {
       item.content = item.content
         .replace(/\t/g, ``)
-        .replace(/="attachment/g, `="${targetHost}attachment`)
-        .replace(/="images/g, `="${targetHost}images`)
+        .replace(/="attachment/g, `="${targetPrefix}attachment`)
+        .replace(/="images/g, `="${targetPrefix}images`)
         .replace(/\<img/gi, '<img style="max-width:100%;"')
-        .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetHost}`)
+        .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetPrefix}`)
         .replace(/" margin-right: 850px;>/g, `;margin-right: 850px;">`)
         // .replace(/="(viewthread|thread.*)" target/g, ($0, $1) => {
         //   return `="${
         //     process.env.BASE_URL
         //     }discuz/thread/${encodeURIComponent(
-        //       targetHost + $1
+        //       targetPrefix + $1
         //     )}" target`;
         // })
         .replace(/:14pt/g, ":5vw");
@@ -104,15 +104,15 @@ const config = connect(({ discuz: { formhash, HOST, userInfo, webSite } }) => ({
   },
   pageChange({ detail }) {
     let { webSite, pageInfo: { prevUrl, nextUrl } } = this.data
-    let targetHost = `http://${webSite}/bbs/`
+    let targetPrefix = `http://${webSite}/bbs/`
     if (detail == 'prev') {
-      let url = targetHost + prevUrl
+      let url = targetPrefix + prevUrl
       this.setData({
         url
       }, this.getThreadPageJson(url))
     } else {
       if (nextUrl) {
-        let url = targetHost + nextUrl
+        let url = targetPrefix + nextUrl
         this.setData({
           url
         }, this.getThreadPageJson(url))
