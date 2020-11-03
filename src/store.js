@@ -214,7 +214,7 @@ export default new Vuex.Store({
                     lastMonthSignInfo = {
                         title,
                         tid,
-                        count: ++count
+                        count: count + 1
                     }
                     break
                 }
