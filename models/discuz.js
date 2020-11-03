@@ -1,15 +1,8 @@
-import { querystring, toast, confirm, pageCache } from "../utils/util";
+import { querystring, toast, baseUrl, confirm, pageCache } from "../utils/util";
 import selectors from "../utils/html2JsonSelector";
-import proxyServerList from "../utils/proxyServerList";
 import http from "../utils/http";
 
-let proxyPrefix = proxyServerList[0].prefix
-let temmeConvert = 'server'
-if (wx.getStorageSync("temmeConvert")) {
-  temmeConvert = wx.getStorageSync("temmeConvert")
-} else {
-  wx.setStorageSync("temmeConvert", temmeConvert)
-}
+let proxyBaseUrl = baseUrl
 let isLogin = !!wx.getStorageSync("cdb3_auth")
 let webSiteList = wx.getStorageSync("webSiteList") || []
 let webSite = wx.getStorageSync("webSite") || webSiteList[0]
@@ -25,11 +18,9 @@ export default {
    * state是model初始值，优先级如下：initial state < plugin state < model state，理论上可以是任意的值，但多数情况下，我们希望这是一个javascript的对象
    */
   state: {
-    proxyServerList,
-    temmeConvert,
     formhash: "",
-    proxyPrefix,
     isLogin,
+    proxyBaseUrl,
     webSiteList,
     webSite,
     userInfo: {
@@ -67,13 +58,8 @@ export default {
       pageCache.clear()
       put({ type: 'UPDATE_DISCUZ', payload: { isLogin: false } })
     },
-    switchTemmeConvert(action, { put, select, selectAll }) {
-      let STATUS = select().temmeConvert === "client" ? 'server' : "client";
-      wx.setStorageSync("temmeConvert", STATUS)
-      put({ type: 'UPDATE_DISCUZ', payload: { temmeConvert: STATUS } })
-    },
     async submitPost({ payload: httpConfig }, { put, select, selectAll }) {
-      let { proxyPrefix } = select();
+      let { proxyBaseUrl } = select();
       let postData = {
         httpConfig: {
           method: "post",
@@ -86,19 +72,19 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let res = await http.post({ url: `${proxyPrefix}/api/advancedProxy`, data: postData });
+      let res = await http.post({ url: `${proxyBaseUrl}advancedProxy`, data: postData });
       wx.hideLoading()
       isLoading = false
       return res
     },
     async submitReply({ payload: { fid, tid, message = "", subject = "" } }, { put, select, selectAll }) {
       let { formhash, webSite } = select();
-      let targetPrefix = `http://${webSite}/bbs/`
+      let targetBaseUrl = `http://${webSite}/bbs/`
       if (isLoading || !message) {
         return;
       }
       let httpConfig = {
-        url: `${targetPrefix}post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+        url: `${targetBaseUrl}post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
         data: querystring.stringify({
           formhash,
           message,
@@ -109,7 +95,7 @@ export default {
     },
     async dailySignIn({ payload }, { put, select, selectAll }) {
       let { userInfo: { username }, formhash, webSite, signInfo } = select();
-      let targetPrefix = `http://${webSite}/bbs/`
+      let targetBaseUrl = `http://${webSite}/bbs/`
       if (isLoading) {
         return;
       }
@@ -118,7 +104,7 @@ export default {
       if (!signInfo.tid) {
         // 主题帖签到
         Object.assign(httpConfig, {
-          url: `${targetPrefix}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+          url: `${targetBaseUrl}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -132,7 +118,7 @@ export default {
       } else {
         // 回复帖签到
         Object.assign(httpConfig, {
-          url: `${targetPrefix}post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+          url: `${targetBaseUrl}post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -157,10 +143,10 @@ export default {
             userInfo: { username },
             webSite
           } = select();
-          let targetPrefix = `http://${webSite}/bbs/`
+          let targetBaseUrl = `http://${webSite}/bbs/`
           let lastMonthSignInfo = await put({ type: 'getLastMonthSignInfo' })
           let httpConfig = {
-            url: `${targetPrefix}post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+            url: `${targetBaseUrl}post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",
@@ -190,17 +176,17 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let { data } = await http.post({ url: `${select().proxyPrefix}/api/html2Json`, data: postData });
+      let { data } = await http.post({ url: `${select().proxyBaseUrl}html2Json`, data: postData });
       // wx.hideLoading()
       isLoading = false
       return data
     },
     async getLastMonthSignInfo({ payload }, { put, select, selectAll }) {
-      let { userInfo: { username }, formhash, webSite, proxyPrefix } = select();
-      let targetPrefix = `http://${webSite}/bbs/`
+      let { userInfo: { username }, formhash, webSite, proxyBaseUrl } = select();
+      let targetBaseUrl = `http://${webSite}/bbs/`
       let postData = {
         httpConfig: {
-          url: `${targetPrefix}search.php`,
+          url: `${targetBaseUrl}search.php`,
           data: `formhash=${formhash}&srchtxt=${username}&srchuname=&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=lastpost&ascdesc=desc&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer"
@@ -208,7 +194,7 @@ export default {
         encoding: "gbk",
         selector: selectors.search
       };
-      let { data } = await http.post({ url: `${proxyPrefix}/api/html2Json`, data: postData });
+      let { data } = await http.post({ url: `${proxyBaseUrl}html2Json`, data: postData });
       let lastMonthSignInfo = {}
       let now = new Date()
       let month = now.getMonth()

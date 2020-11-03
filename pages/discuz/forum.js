@@ -5,7 +5,7 @@ import { connect } from '../../utils/redux.weapp.js'
 import { pageCache, querystring } from '../../utils/util.js'
 import http from '../../utils/http.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
-const config = connect(({ discuz: { formhash, proxyPrefix, userInfo, webSite } }) => ({ formhash, proxyPrefix, userInfo, webSite }))({
+const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } }) => ({ formhash, proxyBaseUrl, userInfo, webSite }))({
 
   /**
    * 页面的初始数据
@@ -83,15 +83,15 @@ const config = connect(({ discuz: { formhash, proxyPrefix, userInfo, webSite } }
   },
   pageChange({ detail }) {
     let { webSite, pageInfo: { prevUrl, nextUrl } } = this.data
-    let targetPrefix = `http://${webSite}/bbs/`
+    let targetBaseUrl = `http://${webSite}/bbs/`
     if (detail == 'prev') {
-      let url = targetPrefix + prevUrl
+      let url = targetBaseUrl + prevUrl
       this.setData({
         url
       }, this.getForumPageData(url))
     } else {
       if (nextUrl) {
-        let url = targetPrefix + nextUrl
+        let url = targetBaseUrl + nextUrl
         this.setData({
           url
         }, this.getForumPageData(url))

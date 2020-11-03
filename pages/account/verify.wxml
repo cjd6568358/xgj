@@ -1,0 +1,13 @@
+<!--pages/account/verify.wxml-->
+<page-meta>
+	<navigation-bar title="{{cipherText === '' ? '设置秘钥':'校验秘钥'}}" />
+</page-meta>
+<view class="verify-form">
+	<view class="input-warp">
+		<input model:value="{{verifyCode}}" maxlength="12" password placeholder="请输入秘钥" />
+	</view>
+	<view class="input-warp">
+		<input model:value="{{verifyCode2}}" maxlength="12" password placeholder="请再次输入" />
+	</view>
+	<button class="btn-verify" type="default" bindtap="bindClick">{{cipherText === '' ? '设置':'校验'}}</button>
+</view>

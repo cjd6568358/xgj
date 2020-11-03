@@ -9,8 +9,8 @@ let {
 } = dispatcher;
 const config = connect(
   ({
-    discuz: { isLogin, proxyPrefix, signInfo, userInfo, webSite, webSiteList },
-  }) => ({ isLogin, proxyPrefix, signInfo, userInfo, webSite, webSiteList })
+    discuz: { isLogin, proxyBaseUrl, signInfo, userInfo, webSite, webSiteList },
+  }) => ({ isLogin, proxyBaseUrl, signInfo, userInfo, webSite, webSiteList })
 )({
   /**
    * 页面的初始数据
@@ -39,11 +39,11 @@ const config = connect(
   monthSignIn,
   async login() {
     let {
-      proxyPrefix,
+      proxyBaseUrl,
       webSite,
       userInfo: { username, password, QA },
     } = this.data;
-    let targetPrefix = `http://${webSite}/bbs/`;
+    let targetBaseUrl = `http://${webSite}/bbs/`;
     if (username && password) {
       let QAarr = QA.split(",");
       let questionid = (QAarr.length > 1 && QAarr[0]) || null;
@@ -64,7 +64,7 @@ const config = connect(
       }
       let postData = {
         httpConfig: {
-          url: `${targetPrefix}logging.php?action=login&loginsubmit=true`,
+          url: `${targetBaseUrl}logging.php?action=login&loginsubmit=true`,
           method: "post",
           responseType: "arraybuffer",
           data: querystring.stringify(formData),
@@ -74,7 +74,7 @@ const config = connect(
       wx.showLoading({
         title: "加载中...",
       });
-      await http.post({ url: `${proxyPrefix}/api/advancedProxy`, data: postData });
+      await http.post({ url: `${proxyBaseUrl}advancedProxy`, data: postData });
       wx.hideLoading();
       let isLogin = !!wx.getStorageSync("cdb3_auth");
       if (isLogin) {
@@ -128,8 +128,8 @@ const config = connect(
   },
   async getIndexPageData() {
     let { webSite } = this.data;
-    let targetPrefix = `http://${webSite}/bbs/`;
-    let url = `${targetPrefix}index.php`;
+    let targetBaseUrl = `http://${webSite}/bbs/`;
+    let url = `${targetBaseUrl}index.php`;
     let selector = selectors.index;
     let pageData = {};
     if (pageCache.has(url)) {

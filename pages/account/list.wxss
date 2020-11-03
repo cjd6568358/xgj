@@ -1,0 +1,36 @@
+page {
+  height: 100%;
+  background-color: #fff;
+  background: linear-gradient(#2b91fd, 20%, #fff, 50%, #fff);
+}
+
+.searchbar {
+  margin-bottom: 40rpx;
+}
+
+.ext-searchbar {
+  height: 96rpx;
+  background-color: transparent !important;
+}
+
+.ext-searchbar .weui-search-bar__cancel-btn {
+  color: #fff;
+}
+
+.scroll_wrap {
+  flex: 1;
+  padding: 0 20rpx 40px;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.slide-item {
+  height: 100rpx !important;
+}
+
+.weui-slide {
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid #eee;
+}

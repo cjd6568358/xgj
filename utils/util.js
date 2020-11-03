@@ -1,5 +1,7 @@
 import { code2Session } from './api.js';
 
+const baseUrl = 'https://cjd6568358.3322.org:6706/api/'
+
 const formatTime = (date, fmt) => {
   var o = {
     "M+": date.getMonth() + 1, //月份
@@ -199,6 +201,7 @@ export {
   getTotalDaysArr,
   calculatGUID,
   sendMsg,
+  baseUrl,
   toast,
   compareVersion,
   getOpenId,

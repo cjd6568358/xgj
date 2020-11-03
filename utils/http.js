@@ -1,8 +1,7 @@
-import { sendMsg, querystring } from './util.js'
+import { sendMsg, baseUrl, querystring } from './util.js'
 const http = ((config) => {
   let request = {};
   let methods = ['get', 'post', 'put', 'delete'];
-  let baseUrl = 'https://cjd6568358.3322.org:6706/api/';
   methods.forEach((method) => {
     request[method] = (config) => {
       return new Promise((resolve, reject) => {
@@ -44,8 +43,8 @@ const http = ((config) => {
         } else {
           if (method == 'get') {
             let qs = Object.keys(postData).filter(key => postData[key]).map((key, index) => {
-                return `${key}=${postData[key]}`
-              }).join('&')
+              return `${key}=${postData[key]}`
+            }).join('&')
             if (qs) {
               defaultConfig.url += '?' + qs
             }
