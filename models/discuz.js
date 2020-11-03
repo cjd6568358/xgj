@@ -218,7 +218,7 @@ export default {
           lastMonthSignInfo = {
             title,
             tid,
-            count: ++count
+            count: count + 1
           }
           break
         }
