@@ -1,6 +1,6 @@
 import { code2Session } from './api.js';
 
-const baseUrl = 'https://cjd6568358.3322.org:6706/api/'
+let baseUrl = 'https://cjd6568358.3322.org:6706/api/';
 
 const formatTime = (date, fmt) => {
   var o = {
@@ -45,7 +45,7 @@ const sendMsg = (title, content) => {
   }
   wx.request({
     method: 'POST',
-    url: 'https://cjd6568358.3322.org:6706/api/sendMsg',
+    url: baseUrl + 'sendMsg',
     dataType: 'json',
     responseType: 'text',
     data: {
@@ -194,6 +194,46 @@ const confirm = (text) => {
   })
 }
 
+const accountTypeList = [
+  { type: 'default', typeName: '默认' },
+  { type: 'QQ', typeName: 'QQ' },
+  { type: 'wechat', typeName: '微信' },
+  { type: 'email', typeName: '邮箱' },
+  { type: 'OA', typeName: 'OA' },
+  { type: 'APP', typeName: 'APP' },
+  { type: 'website', typeName: '网站' },
+  { type: 'card', typeName: '证件' }
+]
+
+const getHash = (str) => {
+  var I64BIT_TABLE =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+  var hash = 5381;
+  var i = str.length - 1;
+
+  if (typeof str == 'string') {
+    for (; i > -1; i--)
+      hash += (hash << 5) + str.charCodeAt(i);
+  } else {
+    for (; i > -1; i--)
+      hash += (hash << 5) + str[i];
+  }
+  var value = hash & 0x7FFFFFFF;
+
+  var retValue = '';
+  do {
+    retValue += I64BIT_TABLE[value & 0x3F];
+  }
+  // eslint-disable-next-line
+  while (value >>= 6);
+
+  return retValue;
+}
+
+// setTimeout(() => {
+//   baseUrl = "2222222222222"
+// }, 5000);
+
 const pageCache = new Map()
 
 export {
@@ -208,5 +248,7 @@ export {
   arrayBuffer2String,
   querystring,
   confirm,
-  pageCache
+  pageCache,
+  accountTypeList,
+  getHash
 }

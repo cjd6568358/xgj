@@ -9,8 +9,11 @@ page {
     margin-top: 10rpx;
   }
   text {
+    margin-right: 20rpx;
+    text-align: center;
     &:first-child {
       flex: 1;
+      text-align: left;
     }
   }
 }

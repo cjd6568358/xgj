@@ -57,3 +57,20 @@ page .menu-section .item:last-child {
   top: 22rpx;
   right: 0;
 }
+
+.half_extClass .half-desc checkbox-group {
+  display: flex;
+}
+
+.half_extClass .half-desc checkbox-group .item {
+  flex: 1;
+  text-align: center;
+}
+
+.half_extClass .weui-half-screen-dialog__ft {
+  padding-top: 20rpx;
+}
+
+.half_extClass .weui-half-screen-dialog__ft button {
+  background-color: #2b91fd;
+}

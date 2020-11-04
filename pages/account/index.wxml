@@ -1,0 +1,26 @@
+<!--pages/account/index.wxml-->
+<page-meta>
+	<navigation-bar title="{{guid ? '编辑帐号':'新建帐号'}}" />
+</page-meta>
+<view class="account-form">
+	<view class="input-warp">
+		<picker header-text="请选择帐号类型" bindchange="bindPickerChange" value="{{typeIndex}}" range="{{typeList}}" range-key="typeName">
+			<view class="picker">
+				类型 : {{typeList[type].typeName}}
+			</view>
+		</picker>
+	</view>
+	<view class="input-warp">
+		<input model:value="{{username}}" placeholder="请输入帐号" />
+		<view data-key="username" class="copy" bindtap="onCopy">复制</view>
+	</view>
+	<view class="input-warp">
+		<input model:value="{{password}}" placeholder="请输入密码" />
+		<view data-key="password" class="copy" bindtap="onCopy">复制</view>
+	</view>
+	<view class="input-warp">
+		<input model:value="{{remark}}" placeholder="请输入备注" />
+		<view data-key="remark" class="copy" bindtap="onCopy">复制</view>
+	</view>
+	<button class="btn-save" type="default" bindtap="onSave">保存</button>
+</view>

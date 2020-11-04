@@ -1,12 +1,18 @@
 <!--pages/account/list.wxml-->
 <mp-searchbar ext-class="ext-searchbar" class="searchbar" cancel="{{false}}" bindclear="onClear" search="{{onSearch}}"></mp-searchbar>
 <view class="scroll_wrap">
-	<block wx:if="{{resultList.length === 0}}"></block>
+	<view class="empty" wx:if="{{resultList.length === 0}}">
+		<mp-icon class="icon_error" size="24" color="#999" icon="error"></mp-icon>
+		暂无数据
+	</view>
 	<block wx:else>
-		<mp-slideview ext-class="slide-item" wx:for="{{resultList}}" wx:key="index" wx:for-item="item" buttons="{{slideButtons}}" data-item="{{item}}" bindbuttontap="slideButtonTap">
-			<view class="weui-slide">
-				{{item.typeName}}:{{item.remark}}
+		<mp-slideview ext-class="slide-item" wx:for="{{resultList}}" wx:key="index" wx:for-item="item" buttons="{{slideButtons}}" bindbuttontap="slideButtonTap">
+			<view class="weui-slide" bindtap="onItemClick" data-item="{{item}}">
+				{{accountTypeList[item.type].typeName}} : {{item.remark}}
 			</view>
 		</mp-slideview>
 	</block>
+</view>
+<view class="acount-add" bindtap="onCreateAcount">
+	<mp-icon size="40" color="#999" icon="add2"></mp-icon>
 </view>

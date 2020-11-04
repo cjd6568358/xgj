@@ -1,0 +1,44 @@
+.account-form {
+  margin: 32rpx;
+  background-color: #fff;
+  padding: 60rpx 40rpx;
+  box-shadow: 0rpx 20rpx 40rpx 0px rgba(0, 0, 0, 0.04);
+  border-radius: 16rpx;
+
+  .btn-save {
+    margin-top: 60rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    width: 100%;
+    padding: 0;
+    background-color: #2b91fd;
+    color: #fff;
+  }
+
+  .input-warp {
+    display: flex;
+    align-items: center;
+    border-bottom: 1rpx solid #eee;
+    position: relative;
+    
+    picker,
+    input {
+      padding-left: 40rpx;
+      height: 88rpx;
+      line-height: 88rpx;
+      flex: 1;
+      border-radius: 8rpx;
+    }
+
+    .copy {
+      z-index: 99;
+      position: absolute;
+      right: 20rpx;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 4rpx 16rpx;
+      border-radius: 8rpx;
+      border: 1rpx solid #eee;
+    }
+  }
+}

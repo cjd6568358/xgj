@@ -10,14 +10,15 @@
     "pages/tool/systemInfo",
     "pages/tool/wifi",
     "pages/tool/storage",
-    "pages/account/verify"
+    "pages/account/list",
+    "pages/account/index"
   ],
   "permission": {
     "scope.userLocation": {
       "desc": "您的位置信息将用于为您提供准确的定位"
     }
   },
-  "entryPagePath": "pages/account/verify",
+  "entryPagePath": "pages/setting/index",
   "tabBar": {
     "selectedColor": "#2b91fd",
     "list": [
@@ -26,7 +27,7 @@
         "text": "签到"
       },
       {
-        "pagePath": "pages/account/verify",
+        "pagePath": "pages/account/list",
         "text": "帐号"
       },
       {

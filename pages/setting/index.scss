@@ -62,3 +62,24 @@ page {
   top: 22rpx;
   right: 0;
 }
+
+.half_extClass {
+  .half-desc {
+    checkbox-group {
+      display: flex;
+
+      .item {
+        flex: 1;
+        text-align: center;
+      }
+    }
+  }
+
+  .weui-half-screen-dialog__ft {
+    padding-top: 20rpx;
+
+    button {
+      background-color: #2b91fd;
+    }
+  }
+}

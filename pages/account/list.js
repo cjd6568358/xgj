@@ -1,11 +1,13 @@
 // pages/account/list.js
-import { confirm } from '../../utils/util.js'
+import { accountTypeList, confirm } from '../../utils/util.js'
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    accountTypeList: [],
     resultList: [],
     slideButtons: [{
       type: 'warn',
@@ -18,25 +20,13 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
+      accountTypeList,
       onSearch: this.onSearch.bind(this)
     })
-    //获取事件对象
-    const eventChannel = this.getOpenerEventChannel()
-    // 监听acceptData事件，获取上一页面通过eventChannel传送到当前页面的数据
-    eventChannel.on('content', (accountData) => {
-      this.accountList = [{ type: 'default', typeName: '默认', remark: '百度', username: '111', password: '222' },
-      { type: 'QQ', typeName: 'QQ', remark: '百度', username: '111', password: '222' },
-      { type: 'wechat', typeName: '微信', remark: '百度', username: '111', password: '222' },
-      { type: 'email', typeName: '邮箱', remark: '百度', username: '111', password: '222' },
-      { type: 'OA', typeName: 'OA', remark: '百度', username: '111', password: '222' },
-      { type: 'APP', typeName: 'APP', remark: '百度', username: '111', password: '222' },
-      { type: 'website', typeName: '网站', remark: '百度', username: '111', password: '222' },
-      { type: 'card', typeName: '证件', remark: '百度', username: '111', password: '222' },
-      { type: 'other', typeName: '其他', remark: '百度', username: '111', password: '222' },
-      ]
-      this.setData({
-        resultList: this.accountList
-      })
+  },
+  onDialogConfirm() {
+    this.setData({
+      dialogVisible: false,
     })
   },
   onSearch(value) {
@@ -53,19 +43,38 @@ Page({
     return Promise.resolve([])
   },
   onClear() {
-    console.log('onClear')
     this.setData({
       resultList: this.accountList
     })
   },
   slideButtonTap({ currentTarget: { dataset: { item } } }) {
     confirm('确认要删除吗?').then(() => {
-      let { year, month, timestamp } = item
-      let signData = this.getSignData(year, month).filter(data => data.timestamp !== timestamp);
-      this.setSignData(year, month, signData)
+      let i = this.accountList.findIndex(info => info.guid === item.guid)
+      this.accountList.splice(i, 1)
+      let resultList = this.data.resultList
+      let ii = resultList.findIndex(info => info.guid === item.guid)
+      resultList.splice(ii, 1)
       this.setData({
-        signData
+        resultList
       })
+    })
+  },
+  onItemClick({ currentTarget: { dataset: { item } } }) {
+    wx.navigateTo({
+      url: '/pages/account/index',
+      success: function (res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('accountInfo', item)
+      }
+    })
+  },
+  onCreateAcount() {
+    wx.navigateTo({
+      url: '/pages/account/index',
+      success: function (res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('accountInfo', {})
+      }
     })
   },
   /**
@@ -79,7 +88,33 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    let accountList = wx.getStorageSync('accountData') || [
+      // { type: 0, remark: '百度', username: '111', password: '222' },
+      // { type: 1, remark: '百度', username: '111', password: '222' },
+      // { type: 2, remark: '百度', username: '111', password: '222' },
+      // { type: 3, remark: '百度', username: '111', password: '222' },
+      // { type: 4, remark: '百度', username: '111', password: '222' },
+      // { type: 5, remark: '百度', username: '111', password: '222' },
+      // { type: 6, remark: '百度', username: '111', password: '222' },
+      // { type: 7, remark: '百度', username: '111', password: '222' },
+      // { type: 0, remark: '百度', username: '111', password: '222' },
+      // { type: 1, remark: '百度', username: '111', password: '222' },
+      // { type: 2, remark: '百度', username: '111', password: '222' },
+      // { type: 3, remark: '百度', username: '111', password: '222' },
+      // { type: 4, remark: '百度', username: '111', password: '222' },
+      // { type: 5, remark: '百度', username: '111', password: '222' },
+      // { type: 6, remark: '百度', username: '111', password: '222' },
+      // { type: 7, remark: '百度', username: '111', password: '222' },
+    ]
+    this.accountList = accountList
+    this.setData({
+      resultList: this.accountList
+    })
+    // this.setData({
+    //   cipherText,
+    //   dialogVisible: true,
+    //   dialogTitle: '输入密钥',
+    // })
   },
 
   /**
