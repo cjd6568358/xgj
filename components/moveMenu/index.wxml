@@ -1,0 +1,6 @@
+<!--components/moveMenu/index.wxml-->
+<movable-area class="movable-area">
+  <movable-view class="movable-view" bindchange="onMoveChange" x="{{local.x}}" y="{{local.y}}" direction="all">
+    <slot></slot>
+  </movable-view>
+</movable-area>

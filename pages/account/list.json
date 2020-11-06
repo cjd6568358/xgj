@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "move-menu": "/components/moveMenu/index",
     "mp-searchbar": "weui-miniprogram/searchbar/searchbar",
     "mp-slideview": "weui-miniprogram/slideview/slideview",
     "mp-icon": "weui-miniprogram/icon/icon"

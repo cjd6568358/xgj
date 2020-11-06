@@ -9,8 +9,8 @@ let {
 } = dispatcher;
 const config = connect(
   ({
-    discuz: { isLogin, proxyBaseUrl, signInfo, userInfo, webSite, webSiteList },
-  }) => ({ isLogin, proxyBaseUrl, signInfo, userInfo, webSite, webSiteList })
+    discuz: { isLogin, signInfo, userInfo, webSite, webSiteList },
+  }) => ({ isLogin, signInfo, userInfo, webSite, webSiteList })
 )({
   /**
    * 页面的初始数据
@@ -39,7 +39,6 @@ const config = connect(
   monthSignIn,
   async login() {
     let {
-      proxyBaseUrl,
       webSite,
       userInfo: { username, password, QA },
     } = this.data;
@@ -74,7 +73,7 @@ const config = connect(
       wx.showLoading({
         title: "加载中...",
       });
-      await http.post({ url: `${proxyBaseUrl}advancedProxy`, data: postData });
+      await http.post({ url: `advancedProxy`, data: postData });
       wx.hideLoading();
       let isLogin = !!wx.getStorageSync("cdb3_auth");
       if (isLogin) {
@@ -185,6 +184,30 @@ const config = connect(
     });
     wx.setStorageSync("webSiteList", webSiteList);
     UPDATE_DISCUZ({ webSiteList });
+  },
+  async openMenu() {
+    let { signInfo, userInfo } = this.data
+    let itemList = ['每日一签', '每月一签', `个人中心(${userInfo.username})`, '退出登录']
+    if (signInfo.isSigned) {
+      itemList.shift()
+    }
+    wx.showActionSheet({
+      itemList,
+      success: ({ tapIndex }) => {
+        let itemText = itemList[tapIndex]
+        if (itemText.includes('每日一签')) {
+          this.dailySignIn()
+        } else if (itemText.includes('每月一签')) {
+          this.monthSignIn()
+        } else if (itemText.includes('个人中心')) {
+          this.routerToUser()
+        } else if (itemText.includes('退出登录')) {
+          this.logout()
+        } else {
+
+        }
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

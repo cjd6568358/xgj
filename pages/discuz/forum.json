@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "shortcutMenu": "/components/shortcutMenu/index",
-    "pagination": "/components/pagination/index"
+    "move-menu": "/components/moveMenu/index",
+    "pagination": "/components/pagination/index",
+    "mp-icon": "weui-miniprogram/icon/icon"
   }
 }

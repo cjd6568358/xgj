@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "move-menu": "/components/moveMenu/index",
     "mp-icon": "weui-miniprogram/icon/icon"
   },
   "navigationBarTitleText": "使用须知"

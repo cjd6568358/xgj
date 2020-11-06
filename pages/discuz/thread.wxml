@@ -1,5 +1,5 @@
 <!--pages/discuz/thread.wxml-->
-<view class="thread" wx:if="{{postList.length > 0}}" >
+<view class="thread" wx:if="{{postList.length > 0}}">
 	<view class="post" wx:for="{{postList}}" wx:key="index">
 		<view class="post-info">
 			<view class="name-floor">
@@ -15,5 +15,8 @@
 		<parser selectable use-cache compress="1" class="post-content" html="{{item.content}}" />
 	</view>
 </view>
-<shortcutMenu wx:if="{{url && tid}}" url="{{url}}" tid="{{tid}}" fid="{{fid}}" bindreload="reload" title="{{documentTitle}}" scrollTop="{{scrollTop}}"></shortcutMenu>
-<pagination wx:if="{{postList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}" bindpageChange="pageChange"></pagination>
+<move-menu wx:if="{{url && tid}}" x="{{-30}}" y="{{-30}}" key="discuz_thread">
+	<mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="setting"></mp-icon>
+</move-menu>
+<pagination wx:if="{{postList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}"
+	bindpageChange="pageChange"></pagination>

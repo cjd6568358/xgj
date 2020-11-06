@@ -1,13 +1,13 @@
 <!--pages/discuz/index.wxml-->
 <block wx:if="{{isOwner}}">
   <block wx:if="{{isLogin}}">
-    <view class="user-info" wx:if="{{userInfo.username}}">
+    <!-- <view class="user-info" wx:if="{{userInfo.username}}">
       <view class="item" bindtap="routerToUser">{{userInfo.username}}</view>
       <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
       <view class="item" wx:else bindtap="dailySignIn">日签到</view>
       <view class="item" bindtap="monthSignIn">月签到</view>
       <view class="item" bindtap="logout">退出</view>
-    </view>
+    </view> -->
     <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
       <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii"
         data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
@@ -38,6 +38,9 @@
       <button class="btn-login" type="default" bindtap="login">登录</button>
     </view>
   </block>
+  <move-menu x="{{-30}}" y="{{-30}}" key="discuz_index">
+    <mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="home"></mp-icon>
+  </move-menu>
 </block>
 <block wx:else>
   <view>1、数据仅存储在本地，请放心使用</view>

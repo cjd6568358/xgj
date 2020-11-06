@@ -2,10 +2,9 @@
 import selectors from "../../utils/html2JsonSelector";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { pageCache, querystring } from '../../utils/util.js'
-import http from '../../utils/http.js'
+import { pageCache } from '../../utils/util.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
-const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } }) => ({ formhash, proxyBaseUrl, userInfo, webSite }))({
+const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 
   /**
    * 页面的初始数据
@@ -98,10 +97,6 @@ const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } 
       })
     })
   },
-  reload() {
-    pageCache.delete(this.data.url)
-    this.getThreadPageJson(this.data.url)
-  },
   pageChange({ detail }) {
     let { webSite, pageInfo: { prevUrl, nextUrl } } = this.data
     let targetBaseUrl = `http://${webSite}/bbs/`
@@ -129,6 +124,77 @@ const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } 
         scrollTop
       })
     }, 500)
+  },
+  onReload() {
+    let { url } = this.data
+    pageCache.delete(url)
+    this.getThreadPageJson(url)
+  },
+  addFavorites() {
+    let { url, tid, documentTitle, scrollTop } = this.data
+    let favorites = wx.getStorageSync('favorites') || []
+    let i = favorites.findIndex(item => {
+      return item.tid == tid;
+    });
+    let scrollObj = {
+      href: url,
+      tid: tid,
+      title: documentTitle,
+      scrollTop
+    };
+    if (i >= 0) {
+      favorites.splice(i, 1, scrollObj);
+    } else {
+      favorites.push(scrollObj);
+    }
+    wx.setStorageSync('favorites', favorites)
+  },
+  removeFavorites() {
+    let { tid } = this.data
+    let favorites = wx.getStorageSync('favorites') || []
+    let i = favorites.findIndex(item => {
+      return item.tid == tid;
+    });
+    favorites.splice(i, 1);
+    wx.setStorageSync('favorites', favorites)
+  },
+  async openMenu() {
+    let { fid, tid, documentTitle } = this.data
+    let itemList = ['刷新', '回复']
+    let favoritesHit = !!(wx.getStorageSync('favorites') || []).filter(item => {
+      return item.tid == tid;
+    })[0]
+    if (favoritesHit) {
+      itemList.push('删除')
+    } else {
+      itemList.push('收藏')
+    }
+    wx.showActionSheet({
+      itemList,
+      success: ({ tapIndex }) => {
+        let itemText = itemList[tapIndex]
+        if (itemText.includes('刷新')) {
+          this.onReload()
+        } else if (itemText.includes('回复')) {
+          wx.navigateTo({
+            url: '/pages/discuz/reply',
+            events: {
+              reload: this.onReload
+            },
+            success: function (res) {
+              // 通过eventChannel向被打开页面传送数据
+              res.eventChannel.emit('content', { fid, tid, title: documentTitle })
+            }
+          })
+        } else if (itemText.includes('收藏')) {
+          this.addFavorites()
+        } else if (itemText.includes('删除')) {
+          this.removeFavorites()
+        } else {
+
+        }
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

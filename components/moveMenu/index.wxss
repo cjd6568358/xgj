@@ -1,0 +1,15 @@
+.movable-area {
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.movable-view {
+  width: 40px;
+  height: 40px;
+  pointer-events: auto;
+}

@@ -13,6 +13,8 @@
     </view>
   </block>
 </view>
-<shortcutMenu url="{{url}}" bindreload="reload"></shortcutMenu>
+<move-menu x="{{-30}}" y="{{-30}}" key="discuz_forum">
+	<mp-icon bindtap="onReload" size="40" color="#2b91fd" icon="refresh"></mp-icon>
+</move-menu>
 <pagination wx:if="{{threadList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}"
   bindpageChange="pageChange"></pagination>

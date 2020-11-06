@@ -2,10 +2,9 @@
 import selectors from "../../utils/html2JsonSelector";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { pageCache, querystring } from '../../utils/util.js'
-import http from '../../utils/http.js'
-let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
-const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } }) => ({ formhash, proxyBaseUrl, userInfo, webSite }))({
+import { pageCache } from '../../utils/util.js'
+let { discuz: { getPageData } } = dispatcher
+const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 
   /**
    * 页面的初始数据
@@ -77,10 +76,6 @@ const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } 
       wx.hideLoading()
     })
   },
-  reload() {
-    pageCache.delete(this.data.url)
-    this.getForumPageData(this.data.url)
-  },
   pageChange({ detail }) {
     let { webSite, pageInfo: { prevUrl, nextUrl } } = this.data
     let targetBaseUrl = `http://${webSite}/bbs/`
@@ -97,6 +92,11 @@ const config = connect(({ discuz: { formhash, proxyBaseUrl, userInfo, webSite } 
         }, this.getForumPageData(url))
       }
     }
+  },
+  onReload() {
+    let { url } = this.data
+    pageCache.delete(url)
+    this.getForumPageData(url)
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

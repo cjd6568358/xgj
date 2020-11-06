@@ -1,7 +1,8 @@
 {
   "usingComponents": {
-    "shortcutMenu": "/components/shortcutMenu/index",
+    "move-menu": "/components/moveMenu/index",
     "pagination": "/components/pagination/index",
-    "parser": "/components/parser.min/parser"
+    "parser": "/components/parser.min/parser",
+    "mp-icon": "weui-miniprogram/icon/icon"
   }
 }
