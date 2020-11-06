@@ -1,7 +1,12 @@
 {
 	"description": "微信版小管家",
 	"packOptions": {
-		"ignore": []
+		"ignore": [
+			{
+				"type": "folder",
+				"value": "node_modules"
+			}
+		]
 	},
 	"setting": {
 		"urlCheck": false,
