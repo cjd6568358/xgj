@@ -30,7 +30,7 @@ Page({
     })
   },
   onSearch(value) {
-    let resultList = this.accountList.map(item => {
+    let resultList = this.accountData.map(item => {
       if (JSON.stringify(item).includes(value)) {
         return item
       } else {
@@ -44,13 +44,13 @@ Page({
   },
   onClear() {
     this.setData({
-      resultList: this.accountList
+      resultList: this.accountData
     })
   },
   slideButtonTap({ currentTarget: { dataset: { item } } }) {
     confirm('确认要删除吗?').then(() => {
-      let i = this.accountList.findIndex(info => info.guid === item.guid)
-      this.accountList.splice(i, 1)
+      let i = this.accountData.findIndex(info => info.guid === item.guid)
+      this.accountData.splice(i, 1)
       let resultList = this.data.resultList
       let ii = resultList.findIndex(info => info.guid === item.guid)
       resultList.splice(ii, 1)
@@ -88,7 +88,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let accountList = wx.getStorageSync('accountData') || [
+    let accountData = wx.getStorageSync('accountData') || [
       // { type: 0, remark: '百度', username: '111', password: '222' },
       // { type: 1, remark: '百度', username: '111', password: '222' },
       // { type: 2, remark: '百度', username: '111', password: '222' },
@@ -106,15 +106,10 @@ Page({
       // { type: 6, remark: '百度', username: '111', password: '222' },
       // { type: 7, remark: '百度', username: '111', password: '222' },
     ]
-    this.accountList = accountList
+    this.accountData = accountData
     this.setData({
-      resultList: this.accountList
+      resultList: this.accountData
     })
-    // this.setData({
-    //   cipherText,
-    //   dialogVisible: true,
-    //   dialogTitle: '输入密钥',
-    // })
   },
 
   /**

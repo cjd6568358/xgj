@@ -14,6 +14,8 @@ const http = ((config) => {
           method,
           dataType: 'json',
           responseType: 'text',
+          enableHttp2: true,
+          enableQuic: true,
           success: (res) => {
             let { data, statusCode, header } = res;
             if (header.corscookies) {

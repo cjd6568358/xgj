@@ -6,7 +6,7 @@
       <view class="item" wx:if="{{signInfo.isSigned}}">已签到</view>
       <view class="item" wx:else bindtap="dailySignIn">日签到</view>
       <view class="item" bindtap="monthSignIn">月签到</view>
-      <view class="item" bindtap="logout ">退出</view>
+      <view class="item" bindtap="logout">退出</view>
     </view>
     <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
       <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii"
@@ -40,7 +40,7 @@
   </block>
 </block>
 <block wx:else>
-  <view>1、签到数据仅存储在本地，请放心使用</view>
-  <view>2、目前暂时不支持签到数据的导入导出</view>
+  <view>1、数据仅存储在本地，请放心使用</view>
+  <view>2、支持签到/帐号数据的导入导出</view>
   <view>3、使用过程中如遇到问题欢迎及时反馈</view>
 </block>

@@ -1,6 +1,20 @@
-import { code2Session } from './api.js';
+// import { code2Session } from './api.js';
+import http from './http.js'
+
+const pageCache = new Map()
 
 let baseUrl = 'https://cjd6568358.3322.org:6706/api/';
+
+let accountTypeList = [
+  { type: 'default', typeName: '默认' },
+  { type: 'QQ', typeName: 'QQ' },
+  { type: 'wechat', typeName: '微信' },
+  { type: 'email', typeName: '邮箱' },
+  { type: 'OA', typeName: 'OA' },
+  { type: 'APP', typeName: 'APP' },
+  { type: 'website', typeName: '网站' },
+  { type: 'card', typeName: '证件' }
+];
 
 const formatTime = (date, fmt) => {
   var o = {
@@ -39,28 +53,6 @@ const calculatGUID = () => {
   return guid;
 }
 
-const sendMsg = (title, content) => {
-  if (typeof content == "object") {
-    content = JSON.stringify(content)
-  }
-  wx.request({
-    method: 'POST',
-    url: baseUrl + 'sendMsg',
-    dataType: 'json',
-    responseType: 'text',
-    data: {
-      title, content
-    }
-  })
-}
-
-const toast = (msg) => {
-  wx.showToast({
-    title: msg,
-    icon: 'none'
-  })
-}
-
 const compareVersion = (v1, v2) => {
   v1 = v1.split('.')
   v2 = v2.split('.')
@@ -87,37 +79,10 @@ const compareVersion = (v1, v2) => {
   return 0
 }
 
-const getOpenId = () => {
-  return new Promise((resolve, reject) => {
-    let openid = wx.getStorageSync('openid')
-    if (!openid) {
-      // 登录
-      wx.login({
-        success: res => {
-          if (res.code) {
-            // 发送 res.code 到后台换取 openid, sessionKey, unionId
-            code2Session(res.code).then(({ statusCode, statusMsg, data }) => {
-              if (statusCode == 1) {
-                wx.setStorageSync('openid', data.openid)
-                resolve(data.openid)
-              } else {
-                sendMsg('微信小管家', "code2Session error:" + statusMsg)
-                reject(statusMsg)
-              }
-            })
-          } else {
-            sendMsg('微信小管家', "wx.login error:" + res.errMsg)
-            reject(res.errMsg)
-          }
-        },
-        fail: () => {
-          sendMsg('微信小管家', "wx.login error:")
-          reject("wx.login error:")
-        }
-      })
-    } else {
-      resolve(openid)
-    }
+const toast = (msg) => {
+  wx.showToast({
+    title: msg,
+    icon: 'none'
   })
 }
 
@@ -194,17 +159,6 @@ const confirm = (text) => {
   })
 }
 
-const accountTypeList = [
-  { type: 'default', typeName: '默认' },
-  { type: 'QQ', typeName: 'QQ' },
-  { type: 'wechat', typeName: '微信' },
-  { type: 'email', typeName: '邮箱' },
-  { type: 'OA', typeName: 'OA' },
-  { type: 'APP', typeName: 'APP' },
-  { type: 'website', typeName: '网站' },
-  { type: 'card', typeName: '证件' }
-]
-
 const getHash = (str) => {
   var I64BIT_TABLE =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
@@ -230,11 +184,100 @@ const getHash = (str) => {
   return retValue;
 }
 
-// setTimeout(() => {
-//   baseUrl = "2222222222222"
-// }, 5000);
+const groupBy = (list, fn) => {
+  const groups = {};
+  list.forEach((item) => {
+    const group = JSON.stringify(fn(item));
+    groups[group] = groups[group] || [];
+    groups[group].push(item);
+  });
+  return groups;
+}
 
-const pageCache = new Map()
+const sendMsg = (title, content) => {
+  if (typeof content == "object") {
+    content = JSON.stringify(content)
+  }
+  wx.request({
+    method: 'POST',
+    url: baseUrl + 'sendMsg',
+    dataType: 'json',
+    responseType: 'text',
+    data: {
+      title, content
+    }
+  })
+}
+
+const code2Session = (code) => {
+  return http.get({
+    url: `wechat/code2Session/${code}`
+  })
+}
+
+const getOpenId = () => {
+  return new Promise((resolve, reject) => {
+    let openid = wx.getStorageSync('openid')
+    if (!openid) {
+      // 登录
+      wx.login({
+        success: res => {
+          if (res.code) {
+            // 发送 res.code 到后台换取 openid, sessionKey, unionId
+            code2Session(res.code).then(({ statusCode, statusMsg, data }) => {
+              if (statusCode == 1) {
+                resolve(data.openid)
+              } else {
+                sendMsg('微信小管家', "code2Session error:" + statusMsg)
+                reject(statusMsg)
+              }
+            })
+          } else {
+            sendMsg('微信小管家', "wx.login error:" + res.errMsg)
+            reject(res.errMsg)
+          }
+        },
+        fail: () => {
+          sendMsg('微信小管家', "wx.login error:")
+          reject("wx.login error:")
+        }
+      })
+    } else {
+      resolve(openid)
+    }
+  })
+}
+
+let getGlobalConfig = () => {
+  return new Promise((reslove, reject) => {
+    http.get({
+      url: 'https://cjd6568358.gitee.io/static/xgj/config.json'
+    }).then(res => {
+      wx.setStorageSync('globalConfig', res)
+      reslove(res)
+    }).catch(e => {
+      let globalConfig = wx.getStorageSync('globalConfig')
+      if (globalConfig) {
+        console.log('globalConfig is cache')
+        reslove(globalConfig)
+      } else {
+        console.warn('globalConfig初始化异常')
+        reslove({})
+      }
+    })
+  })
+}
+
+let initApp = async () => {
+  let config = getGlobalConfig()
+  if (config['baseUrl']) {
+    baseUrl = config['baseUrl']
+  }
+  if (config['accountTypeList']) {
+    accountTypeList = config['accountTypeList']
+  }
+  return await getOpenId()
+}
 
 export {
   formatTime,
@@ -250,5 +293,7 @@ export {
   confirm,
   pageCache,
   accountTypeList,
-  getHash
+  getHash,
+  groupBy,
+  initApp
 }

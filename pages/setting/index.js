@@ -1,6 +1,6 @@
-import { getHash } from '../../utils/util'
-var myApp = getApp()
-// pages/my/my.js
+import { getHash, toast, groupBy } from '../../utils/util'
+import { encryptAES, decryptAES, string2File } from '../../utils/api'
+
 Page({
 
   /**
@@ -9,7 +9,7 @@ Page({
   data: {
     halfDialog: {
       show: false,
-      title: "数据备份",
+      type: 'export',
       items: [{ value: 1, name: '签到数据' }, { value: 2, name: '帐号数据' }],
       buttons: [{
         type: 'primary',
@@ -17,29 +17,19 @@ Page({
         value: 1
       }]
     },
-    dialogVisible: false,
-    dialogTitle: '输入密钥',
-    userInfo: wx.getStorageSync('userInfo') || null,
-    networkType: ''
+    keyDialog: {
+      show: false,
+      title: "输入密钥",
+    },
+    key: '',
+    email: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.checkboxValues = ["1", "2"]
-    wx.getNetworkType({
-      success: (res) => {
-        this.setData({
-          networkType: res.networkType
-        })
-      },
-    })
-    wx.onNetworkStatusChange((res) => {
-      this.setData({
-        networkType: res.networkType
-      })
-    })
+    this.checkedValues = ["1", "2"]
   },
 
   /**
@@ -56,44 +46,138 @@ Page({
           // 备份
           let { halfDialog } = this.data
           halfDialog.show = true
+          halfDialog.type = 'export'
           this.setData({
             halfDialog
           })
         } else {
           // 还原
+          let { halfDialog } = this.data
+          halfDialog.show = true
+          halfDialog.type = 'import'
+          this.setData({
+            halfDialog
+          })
         }
       }
     })
   },
-  bindCheckboxChange({ detail: { value } }) {
-    this.checkboxValues = value
-  },
-  bindHalfDialogClose() {
-    this.checkboxValues = ["1", "2"]
-  },
   bindHalfDialogClick() {
-    console.log(this.checkboxValues)
-    let backup = {};
-    let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
-    if (this.checkboxValues.includes('1')) {
-      backup.accountData = wx.getStorageSync('accountData');
+    let { halfDialog } = this.data
+    if (halfDialog.type === 'export') {
+      let backup = {};
+      if (this.checkedValues.includes('1')) {
+        backup.accountData = wx.getStorageSync('accountData');
+      }
+      if (this.checkedValues.includes('2')) {
+        let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
+        let signData = {}
+        signKeys.forEach(key => signData[key] = wx.getStorageSync(key))
+        backup.signData = signData;
+      }
+      backup.hash = getHash(JSON.stringify(backup));
+      this.fileData = JSON.stringify(backup);
+      this.setData({
+        "halfDialog.show": false,
+        "keyDialog.show": true
+      })
+    } else {
+      wx.chooseMessageFile({
+        count: 1,
+        type: 'all',
+        success: async (res) => {
+          let fs = wx.getFileSystemManager()
+          this.encryptText = fs.readFileSync(res.tempFiles[0].path, "utf8")
+          this.setData({
+            "keyDialog.show": true
+          })
+
+        }
+      })
+      this.setData({
+        "halfDialog.show": false,
+      })
     }
-    if (this.checkboxValues.includes('2')) {
-      // backup.signData = await DbHelper.signRecords.toArray();
-    }
-    backup.hash = getHash(JSON.stringify(backup));
-    let params = {
-      fileName,
-      data: JSON.stringify(backup),
-      key
-    };
   },
-  onGotUserInfo({ detail: { userInfo } }) {
+  async onDialogConfirm() {
+    let { halfDialog, key, email } = this.data
+    if (halfDialog.type === 'export') {
+      let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
+      if (key && email) {
+        // 小程序本地存储
+        let encryptText = await encryptAES(this.fileData, key)
+        let filePath = wx.env.USER_DATA_PATH + '/' + fileName
+        let fs = wx.getFileSystemManager()
+        fs.writeFileSync(filePath, encryptText, "utf8")
+        // 线上邮箱保存
+        await string2File(encryptText, "", email, fileName)
+        toast('备份成功,文件已发送至您的邮箱')
+        this.setData({
+          "halfDialog.show": false,
+          "keyDialog.show": false
+        })
+        this.bindDialogClose();
+      } else {
+        toast('密钥&&邮箱必填')
+      }
+    } else {
+      let backupData = await decryptAES(this.encryptText, key)
+      if (backupData) {
+        try {
+          backupData = JSON.parse(backupData)
+        } catch (error) {
+          toast.info("文件序列化校验失败");
+          return;
+        }
+        let oldHash = backupData.hash;
+        delete backupData.hash;
+        let newHash = getHash(JSON.stringify(backupData));
+        if (oldHash != newHash) {
+          toast.info("文件hash校验失败:" + newHash + "-" + oldHash);
+          return;
+        }
+        let { accountData, signData } = backupData
+        if (this.checkedValues.includes('1') && accountData) {
+          wx.setStorageSync('accountData', accountData);
+        }
+        if (this.checkedValues.includes('2') && signData) {
+          // 清除本地签到数据
+          let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
+          signKeys.forEach(key => wx.removeStorageSync(key))
+          // 如果是indexedDb导出的数据结构
+          if (Array.isArray(signData)) {
+            signData = groupBy(signData, ({ year, month }) => `signData${year}${month}`)
+          }
+          // 恢复备份数据
+          Object.keys(signData).forEach(key => wx.setStorageSync(key, signData[key]))
+        }
+        this.setData({
+          "keyDialog.show": false
+        })
+        toast('数据还原成功')
+        this.bindDialogClose()
+      } else {
+        toast('解析失败,请更换文件或密钥!')
+      }
+    }
+  },
+  bindCheckboxChange({ detail: { value } }) {
+    this.checkedValues = value
+  },
+  bindDialogClose() {
+    this.checkedValues = ["1", "2"]
+    this.encryptText = ""
     this.setData({
-      userInfo
+      key: '',
+      email: ''
     })
-    wx.setStorageSync('userInfo', userInfo)
   },
+  // onGotUserInfo({ detail: { userInfo } }) {
+  //   this.setData({
+  //     userInfo
+  //   })
+  //   wx.setStorageSync('userInfo', userInfo)
+  // },
   clearAllStorage() {
     wx.showModal({
       title: '提示',
@@ -131,6 +215,11 @@ Page({
   openWifi() {
     wx.navigateTo({
       url: `/pages/tool/wifi`,
+    })
+  },
+  routerToReadMe(){
+    wx.navigateTo({
+      url: `/pages/discuz/index`,
     })
   },
   /**

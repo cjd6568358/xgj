@@ -30,14 +30,14 @@ Page({
     })
   },
   onSave() {
-    let accountList = wx.getStorageSync('accountData');
+    let accountData = wx.getStorageSync('accountData');
     let { username, password, remark, type, guid } = this.data
     if (username && password) {
       if (guid) {
-        accountList = accountList.filter(info => info.guid !== guid)
+        accountData = accountData.filter(info => info.guid !== guid)
       }
-      accountList.push({ username, password, remark, type, guid: calculatGUID() })
-      wx.setStorageSync('accountList', accountList)
+      accountData.push({ username, password, remark, type, guid: calculatGUID() })
+      wx.setStorageSync('accountData', accountData)
       wx.navigateBack({
         delta: 1,
       })

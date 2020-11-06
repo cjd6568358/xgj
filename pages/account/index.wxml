@@ -12,15 +12,15 @@
 	</view>
 	<view class="input-warp">
 		<input model:value="{{username}}" placeholder="请输入帐号" />
-		<view data-key="username" class="copy" bindtap="onCopy">复制</view>
+		<view wx:if="{{guid}}" data-key="username" class="copy" bindtap="onCopy">复制</view>
 	</view>
 	<view class="input-warp">
 		<input model:value="{{password}}" placeholder="请输入密码" />
-		<view data-key="password" class="copy" bindtap="onCopy">复制</view>
+		<view wx:if="{{guid}}" data-key="password" class="copy" bindtap="onCopy">复制</view>
 	</view>
 	<view class="input-warp">
 		<input model:value="{{remark}}" placeholder="请输入备注" />
-		<view data-key="remark" class="copy" bindtap="onCopy">复制</view>
+		<view wx:if="{{guid}}" data-key="remark" class="copy" bindtap="onCopy">复制</view>
 	</view>
 	<button class="btn-save" type="default" bindtap="onSave">保存</button>
 </view>

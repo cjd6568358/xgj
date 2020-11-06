@@ -1,8 +1,7 @@
-import { querystring, toast, baseUrl, confirm, pageCache } from "../utils/util";
+import { querystring, toast, confirm, pageCache } from "../utils/util";
 import selectors from "../utils/html2JsonSelector";
 import http from "../utils/http";
 
-let proxyBaseUrl = baseUrl
 let isLogin = !!wx.getStorageSync("cdb3_auth")
 let webSiteList = wx.getStorageSync("webSiteList") || []
 let webSite = wx.getStorageSync("webSite") || webSiteList[0]
@@ -20,7 +19,6 @@ export default {
   state: {
     formhash: "",
     isLogin,
-    proxyBaseUrl,
     webSiteList,
     webSite,
     userInfo: {
@@ -59,7 +57,6 @@ export default {
       put({ type: 'UPDATE_DISCUZ', payload: { isLogin: false } })
     },
     async submitPost({ payload: httpConfig }, { put, select, selectAll }) {
-      let { proxyBaseUrl } = select();
       let postData = {
         httpConfig: {
           method: "post",
@@ -72,7 +69,7 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let res = await http.post({ url: `${proxyBaseUrl}advancedProxy`, data: postData });
+      let res = await http.post({ url: `advancedProxy`, data: postData });
       wx.hideLoading()
       isLoading = false
       return res
@@ -176,13 +173,13 @@ export default {
         title: '加载中...',
       })
       isLoading = true
-      let { data } = await http.post({ url: `${select().proxyBaseUrl}html2Json`, data: postData });
+      let { data } = await http.post({ url: `html2Json`, data: postData });
       // wx.hideLoading()
       isLoading = false
       return data
     },
     async getLastMonthSignInfo({ payload }, { put, select, selectAll }) {
-      let { userInfo: { username }, formhash, webSite, proxyBaseUrl } = select();
+      let { userInfo: { username }, formhash, webSite } = select();
       let targetBaseUrl = `http://${webSite}/bbs/`
       let postData = {
         httpConfig: {
@@ -194,7 +191,7 @@ export default {
         encoding: "gbk",
         selector: selectors.search
       };
-      let { data } = await http.post({ url: `${proxyBaseUrl}html2Json`, data: postData });
+      let { data } = await http.post({ url: `html2Json`, data: postData });
       let lastMonthSignInfo = {}
       let now = new Date()
       let month = now.getMonth()

@@ -1,5 +1,5 @@
 //app.js
-import { calculatGUID, getOpenId } from './utils/util.js'
+import { calculatGUID, initApp } from './utils/util.js'
 import zoro from './utils/zoro.weapp.js'
 import { setStore } from './utils/redux.weapp.js'
 import discuz from './models/discuz.js'
@@ -27,32 +27,29 @@ Date.prototype.Format = function (fmt) {
   return fmt;
 };
 
-if (!String.prototype.padStart) {
-  String.prototype.padStart = function padStart(targetLength, padString) {
-    targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
-    padString = String((typeof padString !== 'undefined' ? padString : ' '));
-    if (this.length > targetLength) {
-      return String(this);
-    }
-    else {
-      targetLength = targetLength - this.length;
-      if (targetLength > padString.length) {
-        padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
-      }
-      return padString.slice(0, targetLength) + String(this);
-    }
-  };
-}
+// if (!String.prototype.padStart) {
+//   String.prototype.padStart = function padStart(targetLength, padString) {
+//     targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
+//     padString = String((typeof padString !== 'undefined' ? padString : ' '));
+//     if (this.length > targetLength) {
+//       return String(this);
+//     }
+//     else {
+//       targetLength = targetLength - this.length;
+//       if (targetLength > padString.length) {
+//         padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
+//       }
+//       return padString.slice(0, targetLength) + String(this);
+//     }
+//   };
+// }
 
-getOpenId().then(openid => {
+initApp().then(openid => {
   wx.setStorageSync('openid', openid)
   App({
     onLaunch: function () {
-      let guid = wx.getStorageSync('guid')
-      if (!guid) {
-        guid = calculatGUID()
-        wx.setStorageSync('guid', guid)
-      }
+      let guid = wx.getStorageSync('guid') || calculatGUID()
+      wx.setStorageSync('guid', guid)
       this.globalData.guid = guid
       app.setup()
     },

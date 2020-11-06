@@ -8,7 +8,7 @@ page .user-info {
   display: flex;
   align-items: center;
   padding: 0 6vw;
-  margin-bottom: 48rpx;
+  margin-bottom: 36rpx;
 }
 
 page .user-info .avatar {
@@ -55,7 +55,7 @@ page .menu-section .item:last-child {
 .value_icon_extClass {
   position: absolute;
   top: 22rpx;
-  right: 0;
+  right: 6rpx;
 }
 
 .half_extClass .half-desc checkbox-group {
@@ -73,4 +73,15 @@ page .menu-section .item:last-child {
 
 .half_extClass .weui-half-screen-dialog__ft button {
   background-color: #2b91fd;
+}
+
+.key {
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.key + .key {
+  margin-top: 20rpx;
 }

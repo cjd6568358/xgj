@@ -31,10 +31,6 @@
         "text": "帐号"
       },
       {
-        "pagePath": "pages/discuz/index",
-        "text": "使用须知"
-      },
-      {
         "pagePath": "pages/setting/index",
         "text": "设置"
       }

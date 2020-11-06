@@ -20,7 +20,7 @@
 			<text>查看定位</text>
 		</view>
 		<view class="value">
-			<mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon>
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
 	<view class="item" bindtap="getSystemInfo">
@@ -29,7 +29,7 @@
 			<text>系统信息</text>
 		</view>
 		<view class="value">
-			<mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon>
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
 	<view class="item" bindtap='openWifi'>
@@ -38,7 +38,7 @@
 			<text>查看WIFI</text>
 		</view>
 		<view class="value">
-			<mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon>
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
 	<view class="item" bindtap='openStorage'>
@@ -47,7 +47,7 @@
 			<text>设置缓存</text>
 		</view>
 		<view class="value">
-			<mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon>
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
 	<view class="item" bindtap='clearAllStorage'>
@@ -56,7 +56,7 @@
 			<text>清除数据</text>
 		</view>
 		<view class="value">
-			<mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon>
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
 	<view class="item" bindtap='backupStore'>
@@ -65,22 +65,22 @@
 			<text>备份/还原</text>
 		</view>
 		<view class="value">
-			<!-- <mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon> -->
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
-	<view class="item">
+	<view class="item" bindtap='routerToReadMe'>
 		<view class="label">
 			<mp-icon extClass="label_icon_extClass" size="18" color="#999" icon="info"></mp-icon>
-			<text>网络状态({{networkType}})</text>
+			<text>使用须知</text>
 		</view>
 		<view class="value">
-			<!-- <mp-icon extClass="value_icon_extClass" size="16" color="#999" icon="arrow"></mp-icon> -->
+			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
 </view>
 <mp-halfScreenDialog extClass="half_extClass" close="bindHalfDialogClose" bindbuttontap="bindHalfDialogClick" show="{{halfDialog.show}}" buttons="{{halfDialog.buttons}}">
 	<view slot="title">
-		{{halfDialog.title}}
+		{{halfDialog.type == 'export'? '数据备份':'数据还原'}}
 	</view>
 	<view slot="desc" class="half-desc">
 		<checkbox-group bindchange="bindCheckboxChange">
@@ -89,6 +89,7 @@
 		</checkbox-group>
 	</view>
 </mp-halfScreenDialog>
-<mp-dialog title="{{dialogTitle}}" show="{{dialogVisible}}" bindbuttontap="onDialogConfirm" buttons="{{[{text: '确定'}]}}">
-	<input model:value="{{verifyCode}}" placeholder="请输入至少6位" />
+<mp-dialog title="" show="{{keyDialog.show}}" bindbuttontap="onDialogConfirm" bindclose="bindDialogClose" buttons="{{[{text: '确定'}]}}">
+	<input class="key" model:value="{{key}}" placeholder="请至少输入6位密钥" />
+	<input wx:if="{{halfDialog.type == 'export'}}" class="key" model:value="{{email}}" placeholder="请输入邮箱" />
 </mp-dialog>

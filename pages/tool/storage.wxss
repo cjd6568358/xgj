@@ -13,3 +13,7 @@ input {
   line-height: 80rpx;
   background-color: #fff;
 }
+
+button[type='primary'] {
+  background-color: #2b91fd !important;
+}
