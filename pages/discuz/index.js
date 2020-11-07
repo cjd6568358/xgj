@@ -1,8 +1,7 @@
 // pages/discuz/index.js
-import selectors from "../../utils/html2JsonSelector";
 import { dispatcher } from "../../utils/zoro.weapp.js";
 import { connect } from "../../utils/redux.weapp.js";
-import { pageCache, querystring } from "../../utils/util.js";
+import { selectors, pageCache, querystring } from "../../utils/util.js";
 import http from "../../utils/http.js";
 let {
   discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn },

@@ -1,8 +1,7 @@
 // pages/discuz/forum.js
-import selectors from "../../utils/html2JsonSelector";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { pageCache } from '../../utils/util.js'
+import { selectors, pageCache } from '../../utils/util.js'
 let { discuz: { getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 

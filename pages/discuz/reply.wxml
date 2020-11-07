@@ -2,7 +2,7 @@
 <view class="page_section">
   <view class="title">标题</view>
   <view class="input_wrap">
-    <input model:value="{{subject}}" auto-focus placeholder="选填,请输入标题" />
+    <input model:value="{{subject}}" placeholder="选填,请输入标题" />
   </view>
 </view>
 <view class="page_section">

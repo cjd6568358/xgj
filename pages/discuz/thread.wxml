@@ -1,6 +1,6 @@
 <!--pages/discuz/thread.wxml-->
 <view class="thread" wx:if="{{postList.length > 0}}">
-	<view class="post" wx:for="{{postList}}" wx:key="index">
+	<view class="post" wx:for="{{postList}}" wx:key="pid">
 		<view class="post-info">
 			<view class="name-floor">
 				<label class="name">{{item.authorName}}</label>

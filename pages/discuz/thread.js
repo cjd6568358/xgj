@@ -1,8 +1,7 @@
 // pages/discuz/thread.js
-import selectors from "../../utils/html2JsonSelector";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { pageCache } from '../../utils/util.js'
+import { selectors, pageCache, toast } from '../../utils/util.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 
@@ -85,15 +84,24 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     }
     UPDATE_DISCUZ({ formhash })
     this.setData({
-      postList,
       documentTitle,
       tid,
       fid,
       pageInfo
     }, () => {
-      wx.hideLoading()
-      wx.pageScrollTo({
-        scrollTop,
+      Promise.all(postList.map((item, i) => {
+        return new Promise((resolve) => {
+          this.setData({
+            [`postList[${i}]`]: item
+          }, () => {
+            resolve()
+          })
+        })
+      })).then(() => {
+        wx.hideLoading()
+        wx.pageScrollTo({
+          scrollTop,
+        })
       })
     })
   },
@@ -165,9 +173,10 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       return item.tid == tid;
     })[0]
     if (favoritesHit) {
-      itemList.push('删除')
+      itemList.push('删除阅读进度')
+      itemList.push('更新阅读进度')
     } else {
-      itemList.push('收藏')
+      itemList.push('收藏阅读进度')
     }
     wx.showActionSheet({
       itemList,
@@ -186,10 +195,16 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
               res.eventChannel.emit('content', { fid, tid, title: documentTitle })
             }
           })
-        } else if (itemText.includes('收藏')) {
+        } else if (itemText.includes('收藏阅读进度')) {
           this.addFavorites()
-        } else if (itemText.includes('删除')) {
+          toast('收藏成功!')
+        } else if (itemText.includes('删除阅读进度')) {
           this.removeFavorites()
+          toast('删除成功!')
+        } else if (itemText.includes('更新阅读进度')) {
+          this.removeFavorites()
+          this.addFavorites()
+          toast('更新成功!')
         } else {
 
         }

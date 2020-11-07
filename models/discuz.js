@@ -1,5 +1,4 @@
-import { querystring, toast, confirm, pageCache } from "../utils/util";
-import selectors from "../utils/html2JsonSelector";
+import { querystring, toast, confirm, selectors, pageCache } from "../utils/util";
 import http from "../utils/http";
 
 let isLogin = !!wx.getStorageSync("cdb3_auth")
@@ -51,10 +50,12 @@ export default {
    * 用于定义异步action，支持async，await
    */
   effects: {
-    logout(action, { put, select, selectAll }) {
-      wx.removeStorageSync("cdb3_auth")
-      pageCache.clear()
-      put({ type: 'UPDATE_DISCUZ', payload: { isLogin: false } })
+    async logout(action, { put, select, selectAll }) {
+      if (await confirm("确认退出登录吗?")) {
+        wx.removeStorageSync("cdb3_auth")
+        pageCache.clear()
+        put({ type: 'UPDATE_DISCUZ', payload: { isLogin: false } })
+      }
     },
     async submitPost({ payload: httpConfig }, { put, select, selectAll }) {
       let postData = {

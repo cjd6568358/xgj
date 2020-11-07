@@ -1,8 +1,7 @@
 // pages/discuz/user.js
-import selectors from "../../utils/html2JsonSelector";
+import { selectors } from "../../utils/util.js";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import http from '../../utils/http.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
 const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) => ({ isLogin, signInfo, userInfo, webSite }))({
 

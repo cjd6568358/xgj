@@ -1,18 +1,18 @@
 {
   "pages": [
     "pages/discuz/index",
-    "pages/tool/sign",
     "pages/discuz/user",
     "pages/discuz/thread",
     "pages/discuz/forum",
+    "pages/discuz/reply",
     "pages/setting/index",
+    "pages/tool/sign",
     "pages/tool/location",
     "pages/tool/systemInfo",
     "pages/tool/wifi",
     "pages/tool/storage",
     "pages/account/list",
-    "pages/account/index",
-    "pages/discuz/reply"
+    "pages/account/index"
   ],
   "permission": {
     "scope.userLocation": {
