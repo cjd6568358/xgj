@@ -16,5 +16,5 @@
 <move-menu x="{{-30}}" y="{{-30}}" key="discuz_forum">
 	<mp-icon bindtap="onReload" size="40" color="#2b91fd" icon="refresh"></mp-icon>
 </move-menu>
-<pagination wx:if="{{threadList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}"
+<pagination wx:if="{{threadList.length}}" curr="{{pageInfo.pageNum}}" total="{{pageInfo.pageCount}}"
   bindpageChange="pageChange"></pagination>

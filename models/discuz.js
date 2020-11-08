@@ -77,12 +77,11 @@ export default {
     },
     async submitReply({ payload: { fid, tid, message = "", subject = "" } }, { put, select, selectAll }) {
       let { formhash, webSite } = select();
-      let targetBaseUrl = `http://${webSite}/bbs/`
       if (isLoading || !message) {
         return;
       }
       let httpConfig = {
-        url: `${targetBaseUrl}post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+        url: `http://${webSite}/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
         data: querystring.stringify({
           formhash,
           message,
@@ -93,7 +92,6 @@ export default {
     },
     async dailySignIn({ payload }, { put, select, selectAll }) {
       let { userInfo: { username }, formhash, webSite, signInfo } = select();
-      let targetBaseUrl = `http://${webSite}/bbs/`
       if (isLoading) {
         return;
       }
@@ -102,7 +100,7 @@ export default {
       if (!signInfo.tid) {
         // 主题帖签到
         Object.assign(httpConfig, {
-          url: `${targetBaseUrl}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+          url: `http://${webSite}/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -116,7 +114,7 @@ export default {
       } else {
         // 回复帖签到
         Object.assign(httpConfig, {
-          url: `${targetBaseUrl}post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+          url: `http://${webSite}/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -141,10 +139,9 @@ export default {
             userInfo: { username },
             webSite
           } = select();
-          let targetBaseUrl = `http://${webSite}/bbs/`
           let lastMonthSignInfo = await put({ type: 'getLastMonthSignInfo' })
           let httpConfig = {
-            url: `${targetBaseUrl}post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+            url: `http://${webSite}/bbs/post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",
@@ -179,13 +176,12 @@ export default {
       isLoading = false
       return data
     },
-    async getLastMonthSignInfo({ payload }, { put, select, selectAll }) {
-      let { userInfo: { username }, formhash, webSite } = select();
-      let targetBaseUrl = `http://${webSite}/bbs/`
+    async searchData({ payload: { srchtxt = "", srchuname = "" } }, { put, select, selectAll }) {
+      let { formhash, webSite } = select();
       let postData = {
         httpConfig: {
-          url: `${targetBaseUrl}search.php`,
-          data: `formhash=${formhash}&srchtxt=${username}&srchuname=&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=lastpost&ascdesc=desc&srchfid%5B%5D=all`,
+          url: `http://${webSite}/bbs/search.php`,
+          data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=lastpost&ascdesc=desc&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer"
         },
@@ -193,16 +189,21 @@ export default {
         selector: selectors.search
       };
       let { data } = await http.post({ url: `html2Json`, data: postData });
+      return data
+    },
+    async getLastMonthSignInfo({ payload }, { put, select, selectAll }) {
+      let { userInfo: { username } } = select();
+      let { data } = await put({ type: 'searchData', payload: { srchtxt: username } })
       let lastMonthSignInfo = {}
       let now = new Date()
       let month = now.getMonth()
       for (let index = 0; index < data.length; index++) {
-        const { title, count, tid } = data[index];
+        const { title, replyCount, tid } = data[index];
         if (title == `${username}/${month || 12}月份/打卡签到帖`) {
           lastMonthSignInfo = {
             title,
             tid,
-            count: count + 1
+            count: replyCount + 1
           }
           break
         }

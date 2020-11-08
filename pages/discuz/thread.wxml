@@ -18,5 +18,5 @@
 <move-menu wx:if="{{url && tid}}" x="{{-30}}" y="{{-30}}" key="discuz_thread">
 	<mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="setting"></mp-icon>
 </move-menu>
-<pagination wx:if="{{postList.length}}" curr="{{pageInfo.currPageNum}}" total="{{pageInfo.totalPageNum}}"
+<pagination wx:if="{{postList.length}}" curr="{{pageInfo.pageNum}}" total="{{pageInfo.pageCount}}"
 	bindpageChange="pageChange"></pagination>

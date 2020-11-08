@@ -6,10 +6,16 @@ page {
   font-size: 28rpx;
   line-height: 40rpx;
   width: initial;
-  background-color: #f5f5f5;
   background: linear-gradient(#2b91fd, #f5f5f5 50%);
+  background-color: #f5f5f5;
+  background-repeat: no-repeat;
 }
 
-view, input, picker, cover-view, scroll-view, textarea {
+view,
+input,
+picker,
+cover-view,
+scroll-view,
+textarea {
   box-sizing: border-box;
 }

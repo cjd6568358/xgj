@@ -41,7 +41,6 @@ const config = connect(
       webSite,
       userInfo: { username, password, QA },
     } = this.data;
-    let targetBaseUrl = `http://${webSite}/bbs/`;
     if (username && password) {
       let QAarr = QA.split(",");
       let questionid = (QAarr.length > 1 && QAarr[0]) || null;
@@ -62,7 +61,7 @@ const config = connect(
       }
       let postData = {
         httpConfig: {
-          url: `${targetBaseUrl}logging.php?action=login&loginsubmit=true`,
+          url: `http://${webSite}/bbs/logging.php?action=login&loginsubmit=true`,
           method: "post",
           responseType: "arraybuffer",
           data: querystring.stringify(formData),
@@ -100,11 +99,11 @@ const config = connect(
     UPDATE_DISCUZ({ userInfo: newUserInfo });
   },
   async checkSigned() {
-    let { webSite, signInfo } = this.data;
+    let { webSite, signInfo, areaList } = this.data;
     let url = `http://${webSite}/bbs/my.php`;
     let selector = selectors.my;
     let pageData = await getPageData({ url, selector });
-    let { formhash, username, recentReply, recentTopics } = pageData;
+    let { formhash, username, recentTopics } = pageData;
     recentTopics &&
       recentTopics.forEach((item) => {
         if (
@@ -120,14 +119,13 @@ const config = connect(
         }
       });
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash });
-    if (this.data.areaList.length) {
+    if (areaList.length) {
       wx.hideLoading();
     }
   },
   async getIndexPageData() {
     let { webSite } = this.data;
-    let targetBaseUrl = `http://${webSite}/bbs/`;
-    let url = `${targetBaseUrl}index.php`;
+    let url = `http://${webSite}/bbs/index.php`;
     let selector = selectors.index;
     let pageData = {};
     if (pageCache.has(url)) {

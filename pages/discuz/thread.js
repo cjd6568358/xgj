@@ -16,10 +16,8 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     documentTitle: '',
     scrollTop: 0,
     pageInfo: {
-      currPageNum: 1,
-      totalPageNum: 1,
-      nextPageNum: null,
-      nextUrl: null
+      pageNum: 1,
+      pageCount: 1
     }
   },
 
@@ -45,10 +43,13 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       pageCache.set(url, pageData);
     }
     let { tid, fid, webSite } = this.data
-    let targetBaseUrl = `http://${webSite}/bbs/`
+    let targetBase = `http://${webSite}/bbs/`
     let {
       documentTitle,
-      pageInfo,
+      pageInfo = {
+        pageNum: 1,
+        pageCount: 1
+      },
       formhash,
       replyUrl,
       postList = []
@@ -65,22 +66,26 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     postList.forEach(item => {
       item.content = item.content
         .replace(/\t/g, ``)
-        .replace(/="attachment/g, `="${targetBaseUrl}attachment`)
-        .replace(/="images/g, `="${targetBaseUrl}images`)
+        .replace(/="attachment/g, `="${targetBase}attachment`)
+        .replace(/="images/g, `="${targetBase}images`)
         .replace(/\<img/gi, '<img style="max-width:100%;"')
-        .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetBaseUrl}`)
+        .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetBase}`)
         .replace(/" margin-right: 850px;>/g, `;margin-right: 850px;">`)
         // .replace(/="(viewthread|thread.*)" target/g, ($0, $1) => {
         //   return `="${
         //     process.env.BASE_URL
         //     }discuz/thread/${encodeURIComponent(
-        //       targetBaseUrl + $1
+        //       targetBase + $1
         //     )}" target`;
         // })
         .replace(/:14pt/g, ":5vw");
     });
-    if (pageInfo && pageInfo.currPageNum != 1) {
-      pageInfo.prevUrl = `thread-${tid}-${pageInfo.currPageNum - 1}-1.html`;
+    let { pageNum, pageCount } = pageInfo
+    if (pageInfo && pageNum != 1) {
+      pageInfo.prevUrl = url.replace(/(^.*thread-\d.*-)(\d.*)(-\d.html)/g, `$1${pageNum - 1}$3`)
+    }
+    if (pageInfo && pageNum < pageCount && url) {
+      pageInfo.nextUrl = url.replace(/(^.*thread-\d.*-)(\d.*)(-\d.html)/g, `$1${pageNum + 1}$3`)
     }
     UPDATE_DISCUZ({ formhash })
     this.setData({
@@ -106,16 +111,15 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     })
   },
   pageChange({ detail }) {
-    let { webSite, pageInfo: { prevUrl, nextUrl } } = this.data
-    let targetBaseUrl = `http://${webSite}/bbs/`
+    let { pageInfo: { prevUrl, nextUrl } } = this.data
     if (detail == 'prev') {
-      let url = targetBaseUrl + prevUrl
+      let url = prevUrl
       this.setData({
         url
       }, this.getThreadPageJson(url))
     } else {
       if (nextUrl) {
-        let url = targetBaseUrl + nextUrl
+        let url = nextUrl
         this.setData({
           url
         }, this.getThreadPageJson(url))

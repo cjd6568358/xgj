@@ -13,10 +13,8 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     forumList: [],
     threadList: [],
     pageInfo: {
-      currPageNum: 1,
-      totalPageNum: 1,
-      nextPageNum: null,
-      nextUrl: null
+      pageNum: 1,
+      pageCount: 1
     }
   },
 
@@ -29,7 +27,8 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       url = decodeURIComponent(options.url)
     }
     this.setData({
-      url
+      url,
+      fid: +url.replace(/(^.*-)(\d.*)(-.*$)/g, '$2')
     }, this.getForumPageData(url))
   },
   routerToForum({ currentTarget: { dataset: { path }, }, }) {
@@ -53,19 +52,19 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       pageData = await getPageData({ url, selector });
       pageCache.set(url, pageData);
     }
-    let { forumList, threadList, pageInfo, documentTitle } = pageData
+    let { forumList, threadList, pageInfo = {
+      pageNum: 1,
+      pageCount: 1
+    }, documentTitle } = pageData
     wx.setNavigationBarTitle({
       title: documentTitle,
     })
-    let { currPageNum } = pageInfo
-    if (pageInfo && currPageNum != 1 && this.data.url) {
-      pageInfo.prevUrl = this.data.url
-        .replace(/.*bbs\//g, "")
-        .replace(
-          /(\d*)\.html/,
-          `${currPageNum - 1}.html`
-        );
-    } else {
+    let { pageNum, pageCount } = pageInfo
+    if (pageInfo && pageNum != 1 && url) {
+      pageInfo.prevUrl = url.replace(/(^.*-)(\d.*)(.html$)/g, `$1${pageNum - 1}$3`)
+    }
+    if (pageInfo && pageNum < pageCount && url) {
+      pageInfo.nextUrl = url.replace(/(^.*-)(\d.*)(.html$)/g, `$1${pageNum + 1}$3`)
     }
     this.setData({
       forumList,
@@ -76,16 +75,15 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     })
   },
   pageChange({ detail }) {
-    let { webSite, pageInfo: { prevUrl, nextUrl } } = this.data
-    let targetBaseUrl = `http://${webSite}/bbs/`
+    let { pageInfo: { prevUrl, nextUrl } } = this.data
     if (detail == 'prev') {
-      let url = targetBaseUrl + prevUrl
+      let url = prevUrl
       this.setData({
         url
       }, this.getForumPageData(url))
     } else {
       if (nextUrl) {
-        let url = targetBaseUrl + nextUrl
+        let url = nextUrl
         this.setData({
           url
         }, this.getForumPageData(url))

@@ -16,9 +16,7 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
   },
   async getMyPageData() {
     let { webSite, signInfo } = this.data;
-    let url = `http://${webSite}/bbs/my.php`;
-    let selector = selectors.my;
-    let pageData = await getPageData({ url, selector });
+    let pageData = await getPageData({ url: `http://${webSite}/bbs/my.php`, selector: selectors.my });
     let { formhash, username, creditList, recentReply, recentTopics } = pageData;
     recentTopics &&
       recentTopics.forEach(item => {

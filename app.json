@@ -5,6 +5,7 @@
     "pages/discuz/thread",
     "pages/discuz/forum",
     "pages/discuz/reply",
+    "pages/discuz/search",
     "pages/setting/index",
     "pages/tool/sign",
     "pages/tool/location",

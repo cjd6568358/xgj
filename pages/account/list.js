@@ -24,11 +24,6 @@ Page({
       onSearch: this.onSearch.bind(this)
     })
   },
-  onDialogConfirm() {
-    this.setData({
-      dialogVisible: false,
-    })
-  },
   onSearch(value) {
     let resultList = this.accountData.map(item => {
       if (JSON.stringify(item).includes(value)) {
