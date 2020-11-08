@@ -1,27 +1,22 @@
 <template>
-    <div class="pagination">
-        <a v-if="prevUrl" class="btn prev-btn" @click="gotoPage(prevUrl)">上一页</a>
-        <a class="btn currPageInfo">{{`${currPageNum}/${totalPageNum}`}}</a>
-        <a v-if="nextUrl" class="btn next-btn" @click="gotoPage(nextUrl)">下一页</a>
-    </div>
+  <div class="pagination">
+    <a v-if="prevUrl" class="btn prev-btn" @click="gotoPage(prevUrl)">上一页</a>
+    <a class="btn currPageInfo">{{ `${pageNum}/${pageCount}` }}</a>
+    <a v-if="nextUrl" class="btn next-btn" @click="gotoPage(nextUrl)">下一页</a>
+  </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props: ["prevUrl", "nextUrl", "currPageNum", "totalPageNum"],
+  props: ["prevUrl", "nextUrl", "pageNum", "pageCount"],
   computed: {
-    ...mapGetters([
-      "targetHost"
-    ])
+    ...mapGetters(["targetHost"]),
   },
   methods: {
     gotoPage(url) {
-      console.log(`${this.targetHost}${url}`)
-      this.$router.push(
-        encodeURIComponent(`${this.targetHost}${url}`)
-      );
-    }
-  }
+      this.$router.push(encodeURIComponent(url));
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -34,8 +29,8 @@ export default {
     background: #fff;
     border: 2px solid #ddd;
     border-radius: 10px;
-    &.currPageInfo{
-        margin: 0 20px;
+    &.currPageInfo {
+      margin: 0 20px;
     }
     &.prev-btn {
     }

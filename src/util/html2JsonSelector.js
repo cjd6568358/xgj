@@ -18,7 +18,7 @@ export default {
     `,
     forum: `
     filter MathCeil() {
-        return Math.ceil(this/10)
+      return Math.ceil(this/38)
     };
     head title{$documentTitle};
     .mainbox.forumlist tbody:has(.lastpost a)@forumList{
@@ -36,13 +36,10 @@ export default {
         }
     };
     .mainbox.threadlist+.pages_btns .pages@pageInfo|pack{
-        $currPageNum = 1;
-        $totalPageNum = 1;
-        $nextPageNum = null;
-        $nextUrl = null;
-        strong{$currPageNum|Number};
-        strong+a[href=$nextUrl]{$nextPageNum|Number};
-        em{$totalPageNum|Number|MathCeil};
+        $pageNum = 1;
+        $pageCount = 1;
+        strong{$pageNum|Number};
+        em{$pageCount|Number|MathCeil};
     }
     `,
     thread: `
@@ -55,7 +52,6 @@ export default {
     form .mainbox.viewthread@postList{
         .postauthor cite a[id^=userinfo]{$authorName};
         .postauthor p:nth-of-type(1){$authorLevel};
-        // .postauthor .profile{$authorProfile}
         .postcontent .postinfo strong[id=$pid|replace(/postnum_/g,'')][onclick=$absPostUrl|replace(/',.*/g,'')|match(/viewth.*/g)|first]{$postFloor}
         .postcontent .postinfo{find('小',$postTime|replace(/^.*发表于 /g,''), '只看该作者')}
         .postcontent .postmessage>h2{html($postTitle)}
@@ -63,13 +59,10 @@ export default {
         .postcontent .postmessage .t_msgfont{html($content|replace(/border(.*)alt=""/g,""))}
     };
     form+.pages_btns .pages@pageInfo|pack{
-        $currPageNum = 1;
-        $totalPageNum = 1;
-        $nextPageNum = null;
-        $nextUrl = null;
-        strong{$currPageNum|Number};
-        strong+a[href=$nextUrl]{$nextPageNum|Number};
-        em{$totalPageNum|Number|MathCeil};
+        $pageNum = 1;
+        $pageCount = 1;
+        strong{$pageNum|Number};
+        em{$pageCount|Number|MathCeil};
     }
     `,
     my: `
@@ -93,11 +86,17 @@ export default {
         td:nth-child(4){$status}
     }
     `,
-    search:`
-    .mainbox.threadlist tbody@{
+    search: `
+    filter MathCeil() {
+      return Math.ceil(this/38)
+    };
+    .mainbox.threadlist tbody@threadList{
         th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
-        // td.author em{$createDate}
-        td.nums strong{$count};
-    }
+        td.author em{$date};
+        td.nums{$nums};
+        td.nums strong{$replyCount};
+    };
+    .mainbox.threadlist+.pages_btns .pages em{$pageCount|Number|MathCeil};
+    .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];
     `
 }
