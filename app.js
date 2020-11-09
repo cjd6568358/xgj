@@ -1,5 +1,5 @@
 //app.js
-import { calculatGUID, initApp } from './utils/util.js'
+import { calculatGUID, blockList, initApp } from './utils/util.js'
 import zoro from './utils/zoro.weapp.js'
 import { setStore } from './utils/redux.weapp.js'
 import discuz from './models/discuz.js'
@@ -46,6 +46,9 @@ Date.prototype.Format = function (fmt) {
 
 initApp().then(openid => {
   wx.setStorageSync('openid', openid)
+  if (blockList.includes(openid)) {
+    return
+  }
   App({
     onLaunch: function () {
       let guid = wx.getStorageSync('guid') || calculatGUID()

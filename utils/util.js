@@ -16,6 +16,8 @@ let accountTypeList = [
   { type: 'card', typeName: '证件' }
 ];
 
+let blockList = [];
+
 let selectors = {
   webSiteList: `
   li@webSiteList{
@@ -382,6 +384,9 @@ let initApp = async () => {
   if (config['selectors']) {
     selectors = config['selectors']
   }
+  if (config['blockList']) {
+    blockList = config['blockList']
+  }
   return await getOpenId()
 }
 
@@ -402,5 +407,6 @@ export {
   getHash,
   groupBy,
   initApp,
-  selectors
+  selectors,
+  blockList
 }
