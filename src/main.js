@@ -7,6 +7,12 @@ import Toast from './components/Toast/index'
 import { initApp } from './util'
 import './registerServiceWorker'
 
+Vue.config.errorHandler = function (err, vm, info) {
+    // handle error
+    // `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
+    // 只在 2.2.0+ 可用
+    console.log(err)
+}
 Vue.config.productionTip = false
 Vue.prototype.$openModal = openModal
 Vue.prototype.$Toast = Toast
@@ -34,3 +40,8 @@ initApp().then(() => {
         render: h => h(App)
     }).$mount('#app')
 })
+
+window.onerror = (err) => {
+    console.log(err)
+}
+window.attachimg = window.attachimginfo = window.fetchOffset = window.copycode = window.signature = window.fastreply = window.tagshow = window.zoom = window.zoomdrag = window.zoomST = window.zoomimgresize = window.zoomimgadjust = window.zoomclose = window.videoPlay = () => { }

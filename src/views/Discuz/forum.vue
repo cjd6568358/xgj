@@ -2,13 +2,27 @@
   <div class="discuzForum-page">
     <Menus :url="url"></Menus>
     <div class="overflow-container" @touchmove="onScroll">
+      <template v-if="forumList.length">
+        <ul class="area" data-title="子版块">
+          <router-link
+            v-for="(form, ii) of forumList"
+            :key="ii"
+            :to="{
+              name: 'DiscuzForumView',
+              params: { url: targetHost + form.href },
+            }"
+            tag="li"
+            >{{ form.name }}</router-link
+          >
+        </ul>
+      </template>
       <ul
         class="area"
-        v-for="(forum, i) of forumList"
+        v-for="(area, i) of threadList"
         :key="i"
-        :data-title="forum.name"
+        :data-title="area.name"
       >
-        <template v-for="(thread, ii) of forum.value">
+        <template v-for="(thread, ii) of area.value">
           <router-link
             v-if="thread.type != '投票'"
             :key="ii"
@@ -48,6 +62,7 @@ export default {
   data() {
     return {
       forumList: [],
+      threadList: [],
       pageInfo: {
         pageNum: 1,
         pageCount: 1,
@@ -108,6 +123,7 @@ export default {
         sessionStorage.setItem(url, JSON.stringify(pageData));
       }
       this.forumList = pageData.forumList;
+      this.threadList = pageData.threadList;
       this.pageInfo = pageData.pageInfo || {
         pageNum: 1,
         pageCount: 1,

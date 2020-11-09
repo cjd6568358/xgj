@@ -1,7 +1,6 @@
 # xgj
 
 ## TODO:
-子版块显示异常需要修复，threadList formList变量值需要更新 
 搜索支持
 
 ###考勤模块 

@@ -320,7 +320,7 @@ let loadScript = function (src) {
 
 let getGlobalConfig = () => {
     return new Promise((reslove, reject) => {
-        http.get('https://cjd6568358.gitee.io/static/xgj/config.json', {
+        http.get('https://cjd6568358.3322.org:6706/gitee/static/xgj/config.json', {
             dataType: "json",
             crossDomain: true,
         }).then(res => {
