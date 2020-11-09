@@ -15,7 +15,7 @@ importScripts("/xgj/workbox-v4.3.1/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/xgj/workbox-v4.3.1"});
 
 importScripts(
-  "/xgj/precache-manifest.47625b81f166413bbfb225400f40a6a0.js"
+  "/xgj/precache-manifest.44ed717e3578a83d69ae94fa758ddd78.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "xgj"});
@@ -33,3 +33,8 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 workbox.routing.registerRoute(/\/xgj\/(tools|discuz|sign|password|my)$/, new workbox.strategies.NetworkFirst({ plugins: [new workbox.cacheableResponse.Plugin({ statuses: [ 200, 404 ] })] }), 'GET');
+workbox.routing.registerRoute(/https:\/\/cjd6568358.gitee.io\/static\/xgj\/config.json/, async ({ url, request, event, params }) => {
+    const response = await fetch(request);
+    const responseBody = await response.text();
+    return new Response(responseBody);
+}, 'GET');

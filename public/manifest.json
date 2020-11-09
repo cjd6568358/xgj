@@ -7,7 +7,7 @@
         "sizes": "144x144",
         "type": "image/png"
     }],
-    "start_url": "./tools",
+    "start_url": "./sign",
     "display": "standalone",
     "background_color": "transparent",
     "theme_color": "#4DBA87",

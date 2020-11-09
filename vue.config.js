@@ -1,4 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const handlerCb = async ({ url, request, event, params }) => {
+    const response = await fetch(request);
+    const responseBody = await response.text();
+    return new Response(responseBody);
+};
 module.exports = {
     pwa: {
         name: '小管家',
@@ -25,40 +30,14 @@ module.exports = {
                             statuses: [200, 404]
                         }
                     }
+                },
+                {
+                    urlPattern: /https:\/\/cjd6568358.gitee.io\/static\/xgj\/config.json/, // 匹配文件
+                    handler: handlerCb
                 }
-                // {
-                //     urlPattern: /(?<!(.html|.svg|.png|.jpg|.json|.js|.css|.txt))$/, // 匹配文件
-                //     handler: 'networkFirst', // 网络优先
-                //     options: {
-                //         cacheableResponse: {
-                //             statuses: [200, 404]
-                //         }
-                //     }
-                // }
             ]
         }
     },
-    // configureWebpack: config => {
-    //     if (process.env.NODE_ENV === 'production') {
-    //         return {
-    //             plugins: [
-    //                 new HtmlWebpackPlugin({
-    //                     "minify": {
-    //                         "removeComments": true,
-    //                         "collapseWhitespace": true,
-    //                         "removeAttributeQuotes": true,
-    //                         "collapseBooleanAttributes": true,
-    //                         "removeScriptTypeAttributes": true
-    //                     },
-    //                     "template": "E:\\workspace\\xgj\\public\\index.html",
-    //                     "filename": "404.html"
-    //                 })
-    //             ]
-    //         }
-    //     } else {
-    //         // 为开发环境修改配置...
-    //     }
-    // },
     chainWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
             let option = null
@@ -74,23 +53,6 @@ module.exports = {
             // 为开发环境修改配置...
         }
     },
-
-    // pages: {//pages 里配置的路径和文件名在你的文档目录必须存在 否则启动服务会报错
-    //     index: {//除了 entry 之外都是可选的
-    //         entry: 'src/main.js',// page 的入口,每个“page”应该有一个对应的 JavaScript 入口文件
-    //         template: 'public/index.html',// 模板来源
-    //         filename: 'index.html',// 在 dist/index.html 的输出
-    //         title: '小管家2.0',// 当使用 title 选项时,在 template 中使用：<title><%= htmlWebpackPlugin.options.title %></title>
-    //         chunks: ['chunk-vendors', 'chunk-common', 'index'] // 在这个页面中包含的块，默认情况下会包含,提取出来的通用 chunk 和 vendor chunk
-    //     },
-    //     notFound: {//除了 entry 之外都是可选的
-    //         entry: 'src/main.js',// page 的入口,每个“page”应该有一个对应的 JavaScript 入口文件
-    //         template: 'public/index.html',// 模板来源
-    //         filename: '404.html',// 在 dist/index.html 的输出
-    //         title: '小管家2.0',// 当使用 title 选项时,在 template 中使用：<title><%= htmlWebpackPlugin.options.title %></title>
-    //         chunks: ['chunk-vendors', 'chunk-common', 'index'] // 在这个页面中包含的块，默认情况下会包含,提取出来的通用 chunk 和 vendor chunk
-    //     },
-    // },
     outputDir: 'docs',
     assetsDir: undefined,
     runtimeCompiler: undefined,

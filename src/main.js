@@ -4,12 +4,13 @@ import router from './router'
 import store from './store'
 import openModal from './components/Modal/index'
 import Toast from './components/Toast/index'
+import { initApp } from './util'
 import './registerServiceWorker'
 
 Vue.config.productionTip = false
 Vue.prototype.$openModal = openModal
 Vue.prototype.$Toast = Toast
-Date.prototype.Format = function(fmt) {
+Date.prototype.Format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份
         "d+": this.getDate(), //日
@@ -26,8 +27,10 @@ Date.prototype.Format = function(fmt) {
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+initApp().then(() => {
+    new Vue({
+        router,
+        store,
+        render: h => h(App)
+    }).$mount('#app')
+})

@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import querystring from "querystring";
-import { getCookie, delCookie, setCookie, loadScript } from "./util";
-import selectors from "./util/html2JsonSelector";
-import { proxyServers } from "./config";
+import { getCookie, delCookie, setCookie, loadScript, selectors, proxyServers } from "./util";
 import http from "./util/http";
 
 Vue.use(Vuex)

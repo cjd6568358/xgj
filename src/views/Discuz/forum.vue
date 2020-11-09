@@ -41,7 +41,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import http from "../../util/http";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
-import selectors from "../../util/html2JsonSelector";
+import { selectors } from "../../util";
 export default {
   props: ["url"],
   components: { Pagination, Menus },
