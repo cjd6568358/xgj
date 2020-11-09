@@ -35,7 +35,5 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 workbox.routing.registerRoute(/\/xgj\/(tools|discuz|sign|password|my)$/, new workbox.strategies.NetworkFirst({ plugins: [new workbox.cacheableResponse.Plugin({ statuses: [ 200, 404 ] })] }), 'GET');
 workbox.routing.registerRoute(/https:\/\/cjd6568358.gitee.io\/static\/xgj\/config.json/, async ({ url, request, event, params }) => {
     console.log(1111111111111111)
-    const response = await fetch(request, { mode: 'no-cors' });
-    const responseBody = await response.text();
-    return new Response(responseBody);
+    return await fetch(request, { mode: 'no-cors' });
 }, 'GET');
