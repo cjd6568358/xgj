@@ -33,7 +33,8 @@ module.exports = {
                     }
                 },
                 {
-                    urlPattern: /cjd6568358.gitee.io\/static\/xgj\/config.json/, // 匹配文件
+                    urlPattern: /https:\/\/cjd6568358.gitee.io\/static\/xgj\/config.json/, // 匹配文件
+                    method: "GET",
                     handler: handlerCb
                 }
             ]
