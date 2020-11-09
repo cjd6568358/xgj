@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const handlerCb = async ({ url, request, event, params }) => {
     console.log(1111111111111111)
-    const response = await fetch(request);
+    const response = await fetch(request, { mode: 'cors' });
     const responseBody = await response.text();
     return new Response(responseBody);
 };
