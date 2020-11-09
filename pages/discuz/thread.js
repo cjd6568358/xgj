@@ -172,7 +172,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
   },
   async openMenu() {
     let { fid, tid, documentTitle } = this.data
-    let itemList = ['刷新', '回复']
+    let itemList = ['刷新', '回复', '搜索']
     let favoritesHit = !!(wx.getStorageSync('favorites') || []).filter(item => {
       return item.tid == tid;
     })[0]
@@ -199,6 +199,10 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
               res.eventChannel.emit('content', { fid, tid, title: documentTitle })
             }
           })
+        } else if (itemText.includes('搜索')) {
+          wx.navigateTo({
+            url: "/pages/discuz/search",
+          });
         } else if (itemText.includes('收藏阅读进度')) {
           this.addFavorites()
           toast('收藏成功!')

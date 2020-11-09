@@ -184,7 +184,7 @@ const config = connect(
   },
   async openMenu() {
     let { signInfo, userInfo } = this.data
-    let itemList = ['每日一签', '每月一签', `个人中心(${userInfo.username})`, '退出登录']
+    let itemList = ['每日一签', '每月一签', `个人中心(${userInfo.username})`, '搜索', '退出登录']
     if (signInfo.isSigned) {
       itemList.shift()
     }
@@ -198,6 +198,10 @@ const config = connect(
           this.monthSignIn()
         } else if (itemText.includes('个人中心')) {
           this.routerToUser()
+        } else if (itemText.includes('搜索')) {
+          wx.navigateTo({
+            url: "/pages/discuz/search",
+          });
         } else if (itemText.includes('退出登录')) {
           this.logout()
         } else {
