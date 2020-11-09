@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const handlerCb = async ({ url, request, event, params }) => {
+    console.log(1111111111111111)
     const response = await fetch(request);
     const responseBody = await response.text();
     return new Response(responseBody);
@@ -32,7 +33,7 @@ module.exports = {
                     }
                 },
                 {
-                    urlPattern: /https:\/\/cjd6568358.gitee.io\/static\/xgj\/config.json/, // 匹配文件
+                    urlPattern: /cjd6568358.gitee.io\/static\/xgj\/config.json/, // 匹配文件
                     handler: handlerCb
                 }
             ]
