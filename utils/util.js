@@ -374,7 +374,7 @@ let getGlobalConfig = () => {
 }
 
 let initApp = async () => {
-  let config = getGlobalConfig()
+  let config = await getGlobalConfig()
   if (config['baseUrl']) {
     baseUrl = config['baseUrl']
   }
