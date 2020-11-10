@@ -320,7 +320,7 @@ let loadScript = function (src) {
 
 let getGlobalConfig = () => {
     return new Promise((reslove, reject) => {
-        loadScript('https://cjd6568358.3322.org:6706/gitee/static/xgj/config.js').then(() => {
+        loadScript('https://cjd6568358.gitee.io/static/xgj/config.js').then(() => {
             if (window.globalConfig) {
                 localStorage.setItem('globalConfig', JSON.stringify(window.globalConfig))
                 reslove(window.globalConfig)
