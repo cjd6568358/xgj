@@ -56,6 +56,9 @@ initApp().then(openid => {
       this.globalData.guid = guid
       app.setup()
     },
+    onError: (error) => { 
+      console.log(error)
+    },
     globalData: {
       version: '0.0.1',
       guid: "",

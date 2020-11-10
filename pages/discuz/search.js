@@ -28,9 +28,7 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
           title: '正在查询...',
         })
         let { threadList, pageCount, searchHref } = await searchData({ srchtxt, srchuname })
-        wx.hideLoading({
-          success: (res) => { },
-        })
+        wx.hideLoading()
         this.setData({
           threadList,
           searchHref: searchHref.replace(/page=(.*)$/g, ''),
@@ -45,14 +43,8 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
         toast("没有更多啦!")
         return
       } else {
-        wx.showLoading({
-          title: '正在加载...',
-        })
         let { webSite, searchHref } = this.data
         let { threadList, threadTotal } = await getPageData({ url: `http://${webSite}/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
-        wx.hideLoading({
-          success: (res) => { },
-        })
         if (threadList.length > 0) {
           this.setData({
             threadList: this.data.threadList.concat(threadList),

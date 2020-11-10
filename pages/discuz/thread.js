@@ -103,7 +103,6 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
           })
         })
       })).then(() => {
-        wx.hideLoading()
         wx.pageScrollTo({
           scrollTop,
         })

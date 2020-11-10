@@ -70,8 +70,6 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       forumList,
       threadList,
       pageInfo
-    }, () => {
-      wx.hideLoading()
     })
   },
   pageChange({ detail }) {

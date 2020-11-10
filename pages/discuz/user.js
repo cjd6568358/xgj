@@ -41,8 +41,6 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
       creditList,
       recentReply,
       recentTopics
-    }, () => {
-      wx.hideLoading()
     })
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash })
   },

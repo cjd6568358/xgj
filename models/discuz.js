@@ -71,8 +71,8 @@ export default {
       })
       isLoading = true
       let res = await http.post({ url: `advancedProxy`, data: postData });
-      wx.hideLoading()
       isLoading = false
+      wx.hideLoading()
       return res
     },
     async submitReply({ payload: { fid, tid, message = "", subject = "" } }, { put, select, selectAll }) {
@@ -172,8 +172,8 @@ export default {
       })
       isLoading = true
       let { data } = await http.post({ url: `html2Json`, data: postData });
-      // wx.hideLoading()
       isLoading = false
+      wx.hideLoading()
       return data
     },
     async searchData({ payload: { srchtxt = "", srchuname = "" } }, { put, select, selectAll }) {

@@ -38,7 +38,7 @@
       <button class="btn-login" type="default" bindtap="login">登录</button>
     </view>
   </block>
-  <move-menu x="{{-30}}" y="{{-30}}" key="discuz_index">
+  <move-menu wx:if="{{isLogin}}" x="{{-30}}" y="{{-30}}" key="discuz_index">
     <mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="home"></mp-icon>
   </move-menu>
 </block>

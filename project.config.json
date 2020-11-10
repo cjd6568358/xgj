@@ -26,6 +26,8 @@
     "checkSiteMap": false,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
+    "useMultiFrameRuntime": false,
+    "useApiHook": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -35,13 +37,11 @@
     "useIsolateContext": true,
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": true,
-    "useMultiFrameRuntime": false,
-    "useApiHook": true,
     "packNpmManually": false,
     "packNpmRelationList": []
   },
   "compileType": "miniprogram",
-  "libVersion": "2.12.2",
+  "libVersion": "2.14.0",
   "appid": "wxac884d9f8dfbc9b6",
   "projectname": "xgj",
   "isGameTourist": false,

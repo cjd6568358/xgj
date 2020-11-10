@@ -69,7 +69,7 @@ const config = connect(
         encoding: "gbk",
       };
       wx.showLoading({
-        title: "加载中...",
+        title: "正在登录...",
       });
       await http.post({ url: `advancedProxy`, data: postData });
       wx.hideLoading();
@@ -79,8 +79,8 @@ const config = connect(
           title: '首页',
         })
         UPDATE_DISCUZ({ isLogin, webSite });
-        this.checkSigned();
-        this.getIndexPageData();
+        await this.getIndexPageData();
+        await this.checkSigned();
       }
     }
   },
@@ -99,7 +99,7 @@ const config = connect(
     UPDATE_DISCUZ({ userInfo: newUserInfo });
   },
   async checkSigned() {
-    let { webSite, signInfo, areaList } = this.data;
+    let { webSite, signInfo } = this.data;
     let url = `http://${webSite}/bbs/my.php`;
     let selector = selectors.my;
     let pageData = await getPageData({ url, selector });
@@ -119,9 +119,6 @@ const config = connect(
         }
       });
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash });
-    if (areaList.length) {
-      wx.hideLoading();
-    }
   },
   async getIndexPageData() {
     let { webSite } = this.data;
@@ -137,21 +134,15 @@ const config = connect(
     let { creditList, username, areaList } = pageData;
     if (!username) {
       logout();
-      wx.hideLoading();
     } else {
       let userInfo = Object.assign({}, this.data.userInfo, {
         creditList,
         username,
       });
       UPDATE_DISCUZ({ userInfo });
-      this.setData(
-        {
-          areaList,
-        },
-        () => {
-          wx.hideLoading();
-        }
-      );
+      this.setData({
+        areaList,
+      });
     }
   },
   routerToForum({
@@ -174,7 +165,6 @@ const config = connect(
     let url = `http://www.oznewspaper.com/`;
     let selector = selectors.webSiteList;
     let pageData = await getPageData({ url, selector });
-    wx.hideLoading();
     let webSiteList = [];
     pageData.webSiteList.forEach((webSite) => {
       webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
@@ -213,7 +203,7 @@ const config = connect(
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: async function () {
     let { signInfo, isLogin, webSiteList, webSite } = this.data;
     if (webSiteList.length && webSite) {
       this.setData({
@@ -221,10 +211,10 @@ const config = connect(
       });
     }
     if (isLogin) {
+      await this.getIndexPageData();
       if (!signInfo.isSigned) {
-        this.checkSigned();
+        await this.checkSigned();
       }
-      this.getIndexPageData();
     }
   },
 
