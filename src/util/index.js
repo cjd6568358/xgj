@@ -320,13 +320,21 @@ let loadScript = function (src) {
 
 let getGlobalConfig = () => {
     return new Promise((reslove, reject) => {
-        http.get('https://cjd6568358.3322.org:6706/gitee/static/xgj/config.json', {
-            dataType: "json",
-            crossDomain: true,
-        }).then(res => {
-            localStorage.setItem('globalConfig', JSON.stringify(res))
-            reslove(res)
-        }).catch(e => {
+        loadScript('https://cjd6568358.3322.org:6706/gitee/static/xgj/config.js').then(() => {
+            if (window.globalConfig) {
+                localStorage.setItem('globalConfig', JSON.stringify(window.globalConfig))
+                reslove(window.globalConfig)
+            } else {
+                let globalConfig = localStorage.getItem('globalConfig')
+                if (globalConfig) {
+                    console.log('globalConfig is cache')
+                    reslove(JSON.parse(globalConfig))
+                } else {
+                    console.warn('globalConfig初始化异常')
+                    reslove({})
+                }
+            }
+        }, () => {
             let globalConfig = localStorage.getItem('globalConfig')
             if (globalConfig) {
                 console.log('globalConfig is cache')

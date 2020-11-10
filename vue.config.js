@@ -1,7 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // const handlerCb = async ({ url, request, event, params }) => {
-//     console.log(1111111111111111)
-//     return await fetch(request, { mode: 'no-cors' });
+//     return await fetch(request, { mode: 'cors' });
 // };
 module.exports = {
     pwa: {
