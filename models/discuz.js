@@ -173,7 +173,11 @@ export default {
       isLoading = true
       let { data } = await http.post({ url: `html2Json`, data: postData });
       isLoading = false
-      wx.hideLoading()
+      wx.hideLoading({
+        fail(error) {
+          console.log('getPageData => hideLoading:', error)
+        }
+      })
       return data
     },
     async searchData({ payload: { srchtxt = "", srchuname = "" } }, { put, select, selectAll }) {
