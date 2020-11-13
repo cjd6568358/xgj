@@ -38,6 +38,12 @@ Component({
         y += windowHeight - 40
       }
       let local = wx.getStorageSync(`move_menu_position_${key || 0}`) || { x, y }
+      console.log(`moveMenu attached==============>`)
+      console.log(`properties key:${key}, x:${x}, y:${y}`)
+      console.log(`windowWidth:${windowWidth}, windowHeight:${windowHeight}`)
+      console.log(`move_menu_position_${key || 0}:`, wx.getStorageSync(`move_menu_position_${key || 0}`))
+      console.log(`local:`, local)
+      console.log(`moveMenu attached==============>`)
       this.setData({
         local
       })
