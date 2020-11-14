@@ -12,6 +12,8 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
     data: {
       srchtxt: '',
       srchuname: '',
+      orderBy: 'lastpost',
+      sortType: 'desc',
       threadList: []
     },
 
@@ -22,12 +24,12 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
 
     },
     async onSearch() {
-      let { srchtxt, srchuname } = this.data
+      let { srchtxt, srchuname, orderBy, sortType } = this.data
       if (srchtxt || srchuname) {
         wx.showLoading({
           title: '正在查询...',
         })
-        let { threadList, pageCount, searchHref } = await searchData({ srchtxt, srchuname })
+        let { threadList, pageCount, searchHref } = await searchData({ srchtxt, srchuname, orderBy, sortType })
         wx.hideLoading()
         this.setData({
           threadList,
@@ -36,6 +38,16 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
           pageCount
         })
       }
+    },
+    orderByChange({ detail: { value } }) {
+      this.setData({
+        orderBy: value
+      })
+    },
+    sortTypeChange({ detail: { value } }) {
+      this.setData({
+        sortType: value ? 'asc' : 'desc'
+      })
     },
     async loadMore() {
       let { pageNum, pageCount } = this.data

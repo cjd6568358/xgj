@@ -180,12 +180,12 @@ export default {
       })
       return data
     },
-    async searchData({ payload: { srchtxt = "", srchuname = "" } }, { put, select, selectAll }) {
+    async searchData({ payload: { srchtxt = "", srchuname = "", orderBy = "lastpost", sortType = "desc" } }, { put, select, selectAll }) {
       let { formhash, webSite } = select();
       let postData = {
         httpConfig: {
           url: `http://${webSite}/bbs/search.php`,
-          data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=lastpost&ascdesc=desc&srchfid%5B%5D=all`,
+          data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=${orderBy}&ascdesc=${sortType}&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer"
         },

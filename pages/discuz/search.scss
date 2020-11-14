@@ -19,6 +19,32 @@ page {
     margin-bottom: 20rpx;
   }
 
+  .search_params {
+    margin-bottom: 10rpx;
+    display: flex;
+    align-items: center;
+    font-size: 26rpx;
+
+    .title {
+      margin-right: 20rpx;
+    }
+
+    .sort_switch {
+      scale: 0.8;
+    }
+
+    .radio-group {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+
+      .radio {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+  }
+
   .search_btn {
     width: 100%;
     text-align: center;
