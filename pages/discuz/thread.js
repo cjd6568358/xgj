@@ -15,6 +15,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     fid: "",
     documentTitle: '',
     scrollTop: 0,
+    renderType: "parser",
     pageInfo: {
       pageNum: 1,
       pageCount: 1
@@ -52,6 +53,10 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       },
       formhash,
       replyUrl,
+      prevTopicUrl,
+      nextTopicUrl,
+      favoriteUrl,
+      newThreadUrl,
       postList = []
     } = pageData;
     wx.setNavigationBarTitle({
@@ -62,10 +67,21 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
         /(^post.*tid=)(\d.*)(&extra=.*$)/g, "$2");
       fid = replyUrl.replace(
         /(^post.*fid=)(\d.*)(&tid=.*$)/g, "$2");
+    } else if (prevTopicUrl || nextTopicUrl) {
+      tid = (prevTopicUrl || nextTopicUrl).replace(
+        /(^redirect.*tid=)(\d.*)(&goto=.*$)/g, "$2");
+      fid = (prevTopicUrl || nextTopicUrl).replace(
+        /(^redirect.*fid=)(\d.*)(&tid=.*$)/g, "$2");
+    } else if (favoriteUrl && newThreadUrl) {
+      tid = favoriteUrl.replace(
+        /(^my.*tid=)(\d.*)(.*$)/g, "$2");
+      fid = newThreadUrl.replace(
+        /(^post.*fid=)(\d.*)(&extra=.*$)/g, "$2");
     }
     postList.forEach(item => {
       item.content = item.content
         .replace(/[\t|\n]/g, ``)
+        .replace(/(\S)(<br>)(\S)/g, '$1$3')
         .replace(/="attachment/g, `="${targetBase}attachment`)
         .replace(/="images/g, `="${targetBase}images`)
         .replace(/\<img/gi, '<img style="max-width:100%;"')
@@ -84,6 +100,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       documentTitle,
       tid,
       fid,
+      replyUrl,
       pageInfo
     }, () => {
       Promise.all(postList.map((item, i) => {
@@ -176,8 +193,16 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     wx.setStorageSync('favorites', favorites)
   },
   async openMenu() {
-    let { fid, tid, documentTitle } = this.data
-    let itemList = ['刷新', '回复', '搜索']
+    let { fid, tid, documentTitle, replyUrl, renderType } = this.data
+    let itemList = ['刷新', '搜索']
+    if (replyUrl) {
+      itemList.push('回复')
+    }
+    if (renderType === 'parser') {
+      itemList.push('切换为性能模式')
+    } else {
+      itemList.push('切换为正常模式')
+    }
     let favoritesHit = !!(wx.getStorageSync('favorites') || []).filter(item => {
       return item.tid == tid;
     })[0]
@@ -208,6 +233,14 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
           wx.navigateTo({
             url: "/pages/discuz/search",
           });
+        } else if (itemText.includes('切换为性能模式')) {
+          this.setData({
+            renderType: "rich"
+          })
+        } else if (itemText.includes('切换为正常模式')) {
+          this.setData({
+            renderType: "parser"
+          })
         } else if (itemText.includes('收藏阅读进度')) {
           this.addFavorites()
           toast('收藏成功!')

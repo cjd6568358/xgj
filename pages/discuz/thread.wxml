@@ -12,8 +12,9 @@
 			</view>
 		</view>
 		<view>{{item.postTitle}}</view>
-		<parser bindlinkpress="bindLinkPress" compress="{{3}}" selectable class="post-content" html="{{item.content}}" />
-		<!-- <rich-text class="post-content" nodes="{{item.content}}"></rich-text> -->
+		<parser wx:if="{{renderType === 'parser'}}" bindlinkpress="bindLinkPress" compress="{{3}}" selectable
+			class="post-content" html="{{item.content}}" />
+		<rich-text wx:else class="post-content" nodes="{{item.content}}"></rich-text>
 	</view>
 </view>
 <move-menu wx:if="{{url && tid}}" x="{{-30}}" y="{{-30}}" key="discuz_thread">

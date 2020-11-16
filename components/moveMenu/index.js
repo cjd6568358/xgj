@@ -41,7 +41,7 @@ Component({
         y += windowHeight - 40
       }
       let cachedPosition = wx.getStorageSync(`move_menu_position_${key}`)
-      if (typeof cachedPosition === 'string') {
+      if (cachedPosition && typeof cachedPosition === 'string') {
         cachedPosition = JSON.parse(cachedPosition)
       }
       console.log(`move_menu_position_${key}:`, cachedPosition)

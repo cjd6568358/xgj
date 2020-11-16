@@ -18,13 +18,17 @@ const http = ((config) => {
           enableQuic: true,
           success: (res) => {
             let { data, statusCode, header } = res;
-            if (header.corscookies) {
-              header.corscookies.split("|$$|").forEach(cookie => {
-                let [key, value] = cookie.split(';')[0].split('=')
-                wx.setStorageSync(key, value)
-              });
+            if (statusCode >= 200 && statusCode < 300) {
+              if (header.corscookies) {
+                header.corscookies.split("|$$|").forEach(cookie => {
+                  let [key, value] = cookie.split(';')[0].split('=')
+                  wx.setStorageSync(key, value)
+                });
+              }
+              resolve(data)
+            } else {
+              reject(statusCode)
             }
-            resolve(data)
           },
           fail: (res) => {
             reject(res)

@@ -3,6 +3,8 @@ import http from './http.js'
 
 const pageCache = new Map()
 
+let configUrl = 'https://cjd6568358.gitee.io/static/xgj/config.json';
+
 let baseUrl = 'https://cjd6568358.3322.org:6706/api/';
 
 let accountTypeList = [
@@ -356,14 +358,19 @@ const getOpenId = () => {
 let getGlobalConfig = () => {
   return new Promise((reslove, reject) => {
     http.get({
-      url: 'https://cjd6568358.gitee.io/static/xgj/config.json'
+      url: configUrl
     }).then(res => {
       wx.setStorageSync('globalConfig', res)
       reslove(res)
     }).catch(e => {
+      console.log(e)
       let globalConfig = wx.getStorageSync('globalConfig')
+      if (globalConfig.configUrl) {
+        configUrl = globalConfig.configUrl
+        getGlobalConfig()
+      }
       if (globalConfig) {
-        console.log('globalConfig is cache')
+        console.log('globalConfig use cache data')
         reslove(globalConfig)
       } else {
         console.warn('globalConfig初始化异常')
