@@ -84,7 +84,6 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
         .replace(/(\S)(<br>)(\S)/g, '$1$3')
         .replace(/="attachment/g, `="${targetBase}attachment`)
         .replace(/="images/g, `="${targetBase}images`)
-        .replace(/\<img/gi, '<img style="max-width:100%;"')
         .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetBase}`)
         .replace(/:14pt/g, ":5vw");
     });
