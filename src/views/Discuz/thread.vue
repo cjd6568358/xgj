@@ -94,7 +94,10 @@ export default {
         pageData = JSON.parse(sessionStorage.getItem(url));
       } else {
         let selector = selectors.thread;
-        pageData = await this.getPageData({ url, selector });
+        pageData = await this.getPageData({
+          url: this.targetHost + url,
+          selector,
+        });
         sessionStorage.setItem(url, JSON.stringify(pageData));
       }
 
@@ -103,6 +106,10 @@ export default {
         pageInfo,
         formhash,
         replyUrl,
+        prevTopicUrl,
+        nextTopicUrl,
+        favoriteUrl,
+        newThreadUrl,
         postList = [],
       } = pageData;
 
@@ -114,19 +121,34 @@ export default {
       if (replyUrl) {
         this.tid = replyUrl.replace(/(^post.*tid=)(\d.*)(&extra=.*$)/g, "$2");
         this.fid = replyUrl.replace(/(^post.*fid=)(\d.*)(&tid=.*$)/g, "$2");
+      } else if (prevTopicUrl || nextTopicUrl) {
+        this.tid = (prevTopicUrl || nextTopicUrl).replace(
+          /(^redirect.*tid=)(\d.*)(&goto=.*$)/g,
+          "$2"
+        );
+        this.fid = (prevTopicUrl || nextTopicUrl).replace(
+          /(^redirect.*fid=)(\d.*)(&tid=.*$)/g,
+          "$2"
+        );
+      } else if (favoriteUrl && newThreadUrl) {
+        this.tid = favoriteUrl.replace(/(^my.*tid=)(\d.*)(.*$)/g, "$2");
+        this.fid = newThreadUrl.replace(
+          /(^post.*fid=)(\d.*)(&extra=.*$)/g,
+          "$2"
+        );
       }
       this.postList = postList;
       this.postList.forEach((item) => {
         item.content = item.content
+          .replace(/[\t|\n]/g, ``)
+          .replace(/(\S)(<br>)(\S)/g, "$1$3")
           .replace(/="attachment/g, `="${this.targetHost}attachment`)
           .replace(/="images/g, `="${this.targetHost}images`)
           .replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
-          .replace(/="(viewthread|thread.*)" target/g, ($0, $1) => {
-            return `="${process.env.BASE_URL}discuz/thread/${encodeURIComponent(
-              this.targetHost + $1
-            )}" target`;
-          })
+          // .replace(/(href="viewthread.*tid=)(\d.*)(&page=)(\d.*)(#pid\d.*")/g,'href="thread-$2-$4-1.html$5"')
+          // .replace(/<a.*? (href="viewthread.*tid=)(\d.*)(&page=)(\d.*)(#pid\d.*")>(.*?)<\/a>/g,'href="thread-$2-$4-1.html$5"')
           .replace(/:14pt/g, ":5vw");
+          console.log(item.content)
       });
     },
   },

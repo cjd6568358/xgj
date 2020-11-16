@@ -61,7 +61,7 @@
             :key="ii"
             :to="{
               name: 'DiscuzForumView',
-              params: { url: targetHost + form.value },
+              params: { url: form.value },
             }"
             tag="li"
             >{{ form.name }}</router-link

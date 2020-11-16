@@ -29,7 +29,7 @@
             :key="i"
             :to="{
               name: 'DiscuzThreadView',
-              params: { url: targetHost + thread.href },
+              params: { url: thread.href },
             }"
             tag="li"
             >{{ thread.title }}</router-link
@@ -43,7 +43,7 @@
             :key="i"
             :to="{
               name: 'DiscuzThreadView',
-              params: { url: targetHost + thread.href },
+              params: { url: thread.href },
             }"
             tag="li"
             >{{ thread.title }}</router-link

@@ -9,7 +9,7 @@
             :key="ii"
             :to="{
               name: 'DiscuzForumView',
-              params: { url: targetHost + form.href },
+              params: { url: form.href },
             }"
             tag="li"
             >{{ form.name }}</router-link
@@ -28,7 +28,7 @@
             :key="ii"
             :to="{
               name: 'DiscuzThreadView',
-              params: { url: targetHost + thread.href },
+              params: { url: thread.href },
             }"
             tag="li"
           >
@@ -119,7 +119,10 @@ export default {
         pageData = JSON.parse(sessionStorage.getItem(url));
       } else {
         let selector = selectors.forum;
-        pageData = await this.getPageData({ url, selector });
+        pageData = await this.getPageData({
+          url: this.targetHost + url,
+          selector,
+        });
         sessionStorage.setItem(url, JSON.stringify(pageData));
       }
       this.forumList = pageData.forumList;

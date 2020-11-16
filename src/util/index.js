@@ -51,6 +51,10 @@ let selectors = {
     };
     form input[name=formhash][value=$formhash];
     #postform[action=$replyUrl];
+    form+.pages_btns .threadflow a:nth-of-type(1)[href=$prevTopicUrl];
+    form+.pages_btns .threadflow a:nth-of-type(2)[href=$nextTopicUrl];
+    #ajax_favorite[href=$favoriteUrl];
+    #newspecial_menu li:nth-of-type(1) a[href=$newThreadUrl];
     head title{$documentTitle};
     form .mainbox.viewthread@postList{
         .postauthor cite a[id^=userinfo]{$authorName};
@@ -327,7 +331,7 @@ let getGlobalConfig = () => {
             } else {
                 let globalConfig = localStorage.getItem('globalConfig')
                 if (globalConfig) {
-                    console.log('globalConfig is cache')
+                    console.log('globalConfig use cache data')
                     reslove(JSON.parse(globalConfig))
                 } else {
                     console.warn('globalConfig初始化异常')
@@ -337,7 +341,7 @@ let getGlobalConfig = () => {
         }, () => {
             let globalConfig = localStorage.getItem('globalConfig')
             if (globalConfig) {
-                console.log('globalConfig is cache')
+                console.log('globalConfig use cache data')
                 reslove(JSON.parse(globalConfig))
             } else {
                 console.warn('globalConfig初始化异常')
