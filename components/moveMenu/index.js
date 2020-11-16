@@ -9,11 +9,11 @@ Component({
     },
     x: {
       type: Number,
-      value: 20
+      value: -30
     },
     y: {
       type: Number,
-      value: 20
+      value: -30
     }
   },
 
@@ -41,6 +41,9 @@ Component({
         y += windowHeight - 40
       }
       let cachedPosition = wx.getStorageSync(`move_menu_position_${key}`)
+      if (typeof cachedPosition === 'string') {
+        cachedPosition = JSON.parse(cachedPosition)
+      }
       console.log(`move_menu_position_${key}:`, cachedPosition)
       this.setData({
         local: cachedPosition || { x, y }
@@ -56,7 +59,7 @@ Component({
    */
   methods: {
     onMoveChange({ detail: { x, y } }) {
-      wx.setStorageSync(`move_menu_position_${this.properties.key}`, { x, y })
+      wx.setStorageSync(`move_menu_position_${this.properties.key}`, JSON.stringify({ x, y }))
     }
   }
 })

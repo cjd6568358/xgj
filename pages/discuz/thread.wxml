@@ -12,7 +12,8 @@
 			</view>
 		</view>
 		<view>{{item.postTitle}}</view>
-		<parser selectable use-cache compress="1" class="post-content" html="{{item.content}}" />
+		<parser bindlinkpress="bindLinkPress" compress="{{3}}" selectable class="post-content" html="{{item.content}}" />
+		<!-- <rich-text class="post-content" nodes="{{item.content}}"></rich-text> -->
 	</view>
 </view>
 <move-menu wx:if="{{url && tid}}" x="{{-30}}" y="{{-30}}" key="discuz_thread">

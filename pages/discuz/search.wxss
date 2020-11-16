@@ -47,6 +47,7 @@ page {
 }
 
 .search_wrap .search_btn {
+  margin-top: 20rpx;
   width: 100%;
   text-align: center;
   color: #fff;

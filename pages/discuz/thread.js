@@ -65,19 +65,11 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     }
     postList.forEach(item => {
       item.content = item.content
-        .replace(/\t/g, ``)
+        .replace(/[\t|\n]/g, ``)
         .replace(/="attachment/g, `="${targetBase}attachment`)
         .replace(/="images/g, `="${targetBase}images`)
         .replace(/\<img/gi, '<img style="max-width:100%;"')
         .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetBase}`)
-        .replace(/" margin-right: 850px;>/g, `;margin-right: 850px;">`)
-        // .replace(/="(viewthread|thread.*)" target/g, ($0, $1) => {
-        //   return `="${
-        //     process.env.BASE_URL
-        //     }discuz/thread/${encodeURIComponent(
-        //       targetBase + $1
-        //     )}" target`;
-        // })
         .replace(/:14pt/g, ":5vw");
     });
     let { pageNum, pageCount } = pageInfo
@@ -108,6 +100,20 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
         })
       })
     })
+  },
+  bindLinkPress({ detail: { href, ignore } }) {
+    console.log('bindLinkPress:', href)
+    if (/viewthread\.php|thread\-.*\.html$/g.test(href)) {
+      if (/viewthread\.php/g.test(href)) {
+        href = href.replace(/(^.*tid=)(\d.*)&page=(\d.*)(#pid\d.*)/g, `thread-$2-$3-1.html`)
+      }
+      console.log('navigateTo=====>', href)
+      let { webSite } = this.data;
+      wx.navigateTo({
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(`http://${webSite}/bbs/` + href),
+      })
+      ignore()
+    }
   },
   pageChange({ detail }) {
     let { pageInfo: { prevUrl, nextUrl } } = this.data

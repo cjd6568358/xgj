@@ -31,16 +31,16 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       fid: +url.replace(/(^.*-)(\d.*)(-.*$)/g, '$2')
     }, this.getForumPageData(url))
   },
-  routerToForum({ currentTarget: { dataset: { path }, }, }) {
+  routerToForum({ currentTarget: { dataset: { href }, }, }) {
     let { webSite } = this.data;
-    let url = `http://${webSite}/bbs/` + path;
     wx.navigateTo({
-      url: "/pages/discuz/forum?url=" + encodeURIComponent(url),
+      url: "/pages/discuz/forum?url=" + encodeURIComponent(`http://${webSite}/bbs/` + href),
     });
   },
-  routerToThread({ currentTarget: { dataset: { path } } }) {
+  routerToThread({ currentTarget: { dataset: { href } } }) {
+    let { webSite } = this.data;
     wx.navigateTo({
-      url: '/pages/discuz/thread?url=' + encodeURIComponent(path),
+      url: '/pages/discuz/thread?url=' + encodeURIComponent(`http://${webSite}/bbs/` + href),
     })
   },
   async getForumPageData(url) {
