@@ -363,7 +363,6 @@ let getGlobalConfig = () => {
       wx.setStorageSync('globalConfig', res)
       reslove(res)
     }).catch(e => {
-      console.log(e)
       let globalConfig = wx.getStorageSync('globalConfig')
       if (globalConfig.configUrl) {
         configUrl = globalConfig.configUrl
