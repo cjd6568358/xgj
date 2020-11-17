@@ -6,13 +6,13 @@ import http from "./util/http";
 
 Vue.use(Vuex)
 
-let HOST = localStorage.getItem("proxy_host") || proxyServers[0].host
-let temmeConvert = 'client'
-if (localStorage.getItem("temmeConvert")) {
-    temmeConvert = localStorage.getItem("temmeConvert")
-} else {
-    localStorage.setItem("temmeConvert", temmeConvert);
-}
+let HOST = localStorage.getItem("proxy_host") || proxyServers[1].host
+// let temmeConvert = 'client'
+// if (localStorage.getItem("temmeConvert")) {
+//     temmeConvert = localStorage.getItem("temmeConvert")
+// } else {
+//     localStorage.setItem("temmeConvert", temmeConvert);
+// }
 let isLogin = !!getCookie("cdb3_auth")
 let webSiteList = JSON.parse(localStorage.getItem("webSiteList") || '[]')
 let webSite = getCookie("webSite") || webSiteList[0]
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     state: {
         isLoading: false,
         debug,
-        temmeConvert,
+        // temmeConvert,
         discuz: {
             formhash: "",
             HOST,
@@ -50,9 +50,9 @@ export default new Vuex.Store({
         SET_HOST(state, HOST) {
             state.discuz.HOST = HOST
         },
-        SET_TEMMECONVERT(state, STATUS) {
-            state.temmeConvert = STATUS
-        },
+        // SET_TEMMECONVERT(state, STATUS) {
+        //     state.temmeConvert = STATUS
+        // },
         SET_LOADING_STATUS(state, STATUS) {
             state.isLoading = STATUS
         },
@@ -78,11 +78,11 @@ export default new Vuex.Store({
             localStorage.setItem("proxy_host", HOST);
             commit('SET_HOST', HOST)
         },
-        switchTemmeConvert({ commit, state }) {
-            let STATUS = state.temmeConvert === "client" ? 'server' : "client";
-            localStorage.setItem("temmeConvert", STATUS);
-            commit('SET_TEMMECONVERT', STATUS)
-        },
+        // switchTemmeConvert({ commit, state }) {
+        //     let STATUS = state.temmeConvert === "client" ? 'server' : "client";
+        //     localStorage.setItem("temmeConvert", STATUS);
+        //     commit('SET_TEMMECONVERT', STATUS)
+        // },
         async submitPost({ commit, state }, httpConfig) {
             let { discuz: { HOST } } = state;
             let postData = {

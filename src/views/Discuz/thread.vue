@@ -11,7 +11,11 @@
             <div class="post-time">{{ post.postTime }}</div>
           </div>
           <h2>{{ post.postTitle }}</h2>
-          <div class="post-content" v-html="post.content"></div>
+          <div
+            class="post-content"
+            v-html="post.content"
+            @click.capture="routerTo"
+          ></div>
         </li>
       </ul>
       <Pagination
@@ -71,12 +75,14 @@ export default {
   },
   async mounted() {
     await this.getThreadPageJson(this.url);
+    let scrollElement = document.querySelector(".overflow-container");
     if (this.$route.query.scrollTop) {
       this.$nextTick(() => {
-        document.querySelector(
-          ".overflow-container"
-        ).scrollTop = this.$route.query.scrollTop;
+        scrollElement.scrollTop = this.$route.query.scrollTop;
       });
+    } else if (this.$route.hash) {
+      scrollElement = document.querySelector(this.$route.hash);
+      scrollElement && scrollElement.scrollIntoView();
     }
   },
   beforeMount() {},
@@ -84,7 +90,13 @@ export default {
   async beforeRouteUpdate(to, from, next) {
     next();
     await this.getThreadPageJson(to.params.url);
-    document.querySelector(".overflow-container").scrollTop = 0;
+    let scrollElement = document.querySelector(".overflow-container");
+    if (to.hash) {
+      scrollElement = document.querySelector(this.$route.hash);
+      scrollElement && scrollElement.scrollIntoView();
+    } else {
+      scrollElement.scrollTop = 0;
+    }
   },
   methods: {
     ...mapActions(["getPageData"]),
@@ -145,11 +157,26 @@ export default {
           .replace(/="attachment/g, `="${this.targetHost}attachment`)
           .replace(/="images/g, `="${this.targetHost}images`)
           .replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
-          // .replace(/(href="viewthread.*tid=)(\d.*)(&page=)(\d.*)(#pid\d.*")/g,'href="thread-$2-$4-1.html$5"')
-          // .replace(/<a.*? (href="viewthread.*tid=)(\d.*)(&page=)(\d.*)(#pid\d.*")>(.*?)<\/a>/g,'href="thread-$2-$4-1.html$5"')
+          // .replace(/(href="viewthread.*tid=)(\d.*)(&page=)(\d.*)(#pid\d.*)"?/g,'href="thread-$2-$4-1.html$5"')
           .replace(/:14pt/g, ":5vw");
-          console.log(item.content)
       });
+    },
+    async routerTo(event) {
+      let {
+        target: { href, nodeName },
+      } = event;
+      if (nodeName === "A" && href.includes("viewthread.php?tid=")) {
+        href = href.replace(
+          /(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g,
+          `thread-$2-$3-1.html#postmessage_$4`
+        );
+        let { params, hash } = this.$route;
+        if (params.url + hash != href) {
+          this.$router.push(href);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+      }
     },
   },
 };
