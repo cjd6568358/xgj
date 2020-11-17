@@ -66,13 +66,15 @@ Page({
     let { halfDialog } = this.data
     if (halfDialog.type === 'export') {
       let backup = {};
+      // 帐号数据备份
       if (this.checkedValues.includes('1')) {
         backup.accountData = wx.getStorageSync('accountData');
       }
+      // 签到数据备份
       if (this.checkedValues.includes('2')) {
         let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
-        let signData = {}
-        signKeys.forEach(key => signData[key] = wx.getStorageSync(key))
+        let signData = []
+        signKeys.forEach(key => signData = signData.concat(wx.getStorageSync(key)))
         backup.signData = signData;
       }
       backup.hash = getHash(JSON.stringify(backup));
@@ -144,10 +146,7 @@ Page({
           // 清除本地签到数据
           let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
           signKeys.forEach(key => wx.removeStorageSync(key))
-          // 如果是indexedDb导出的数据结构
-          if (Array.isArray(signData)) {
-            signData = groupBy(signData, ({ year, month }) => `signData${year}${month}`)
-          }
+          signData = groupBy(signData, ({ year, month }) => `signData${year}${month}`)
           // 恢复备份数据
           Object.keys(signData).forEach(key => wx.setStorageSync(key, signData[key]))
         }
@@ -217,7 +216,7 @@ Page({
       url: `/pages/tool/wifi`,
     })
   },
-  routerToReadMe(){
+  routerToReadMe() {
     wx.navigateTo({
       url: `/pages/discuz/index`,
     })
