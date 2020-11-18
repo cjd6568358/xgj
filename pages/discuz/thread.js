@@ -80,7 +80,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     }
     postList.forEach(item => {
       item.content = item.content
-        .replace(/[\t|\n]/g, ``)
+        .replace(/[\t]/g, ``)
         .replace(/(\S)(<br>)(\S)/g, '$1$3')
         .replace(/="attachment/g, `="${targetBase}attachment`)
         .replace(/="images/g, `="${targetBase}images`)
