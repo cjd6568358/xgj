@@ -33,7 +33,6 @@ Component({
       let { key, x, y } = this.properties
       console.log(`properties:`, this.properties)
       let { windowWidth, windowHeight } = wx.getSystemInfoSync()
-      console.log(`windowWidth:${windowWidth}, windowHeight:${windowHeight}`)
       if (x < 0) {
         x += windowWidth - 40
       }
@@ -41,10 +40,10 @@ Component({
         y += windowHeight - 40
       }
       let cachedPosition = wx.getStorageSync(`move_menu_position_${key}`)
+      console.log(`move_menu_position_${key}:`, cachedPosition)
       if (cachedPosition && typeof cachedPosition === 'string') {
         cachedPosition = JSON.parse(cachedPosition)
       }
-      console.log(`move_menu_position_${key}:`, cachedPosition)
       this.setData({
         local: cachedPosition || { x, y }
       })
