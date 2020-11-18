@@ -86,6 +86,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
         .replace(/="images/g, `="${targetBase}images`)
         .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetBase}`)
         .replace(/:14pt/g, ":5vw");
+      item.postTime = item.postTime.replace(/[\t]/g, ``)
     });
     let { pageNum, pageCount } = pageInfo
     if (pageInfo && pageNum != 1) {
