@@ -12,8 +12,8 @@
 			</view>
 		</view>
 		<view>{{item.postTitle}}</view>
-		<parser wx:if="{{renderType === 'parser'}}" bindlinkpress="bindLinkPress" compress="{{3}}" selectable
-			class="post-content" html="{{item.content}}" />
+		<parser wx:if="{{renderType === 'parser'}}" bindlongpress="bindLongPress" data-context="{{item.content}}"
+			bindlinkpress="bindLinkPress" compress="{{3}}" selectable class="post-content" html="{{item.content}}" />
 		<rich-text wx:else class="post-content" nodes="{{item.content}}"></rich-text>
 	</view>
 </view>

@@ -192,9 +192,18 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     favorites.splice(i, 1);
     wx.setStorageSync('favorites', favorites)
   },
+  bindLongPress({ currentTarget: { dataset: { context } } }) {
+    // wx.navigateTo({
+    //   url: '/pages/discuz/reader',
+    //   success: function (res) {
+    //     // 通过eventChannel向被打开页面传送数据
+    //     res.eventChannel.emit('context', context)
+    //   }
+    // })
+  },
   async openMenu() {
-    let { fid, tid, documentTitle, replyUrl, renderType } = this.data
-    let itemList = ['刷新', '搜索']
+    let { url, fid, tid, documentTitle, replyUrl, renderType } = this.data
+    let itemList = ['刷新', '搜索', '复制URL']
     if (replyUrl) {
       itemList.push('回复')
     }
@@ -233,6 +242,13 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
           wx.navigateTo({
             url: "/pages/discuz/search",
           });
+        } else if (itemText.includes('复制URL')) {
+          wx.setClipboardData({
+            data: url.replace(/(^.*bbs\/)(.*$)/g, `https://cjd6568358.github.io/xgj/discuz/thread/$2`),
+            success(res) {
+
+            }
+          })
         } else if (itemText.includes('切换为性能模式')) {
           this.setData({
             renderType: "rich"

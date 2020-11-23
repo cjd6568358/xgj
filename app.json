@@ -13,7 +13,8 @@
     "pages/tool/wifi",
     "pages/tool/storage",
     "pages/account/list",
-    "pages/account/index"
+    "pages/account/index",
+    "pages/discuz/reader"
   ],
   "permission": {
     "scope.userLocation": {
