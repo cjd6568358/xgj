@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "70528399cc4efce97f61a26fab6af28e",
+    "revision": "3a3c8f15da4a9a8e7698f9f0091f66d5",
     "url": "/xgj/404.html"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/DiscuzMyView.70cb1ae6.css"
   },
   {
-    "revision": "8ec0120f751eeef63f80",
+    "revision": "43d37e97be310e1966f7",
     "url": "/xgj/css/DiscuzThreadView.2acfc7c9.css"
   },
   {
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "ee47cb332f5c02640378",
+    "revision": "4e089344bc836c05549d",
     "url": "/xgj/css/app.93d68706.css"
   },
   {
@@ -56,7 +56,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "70528399cc4efce97f61a26fab6af28e",
+    "revision": "3a3c8f15da4a9a8e7698f9f0091f66d5",
     "url": "/xgj/index.html"
   },
   {
@@ -68,8 +68,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/DiscuzMyView.a767252b.js"
   },
   {
-    "revision": "8ec0120f751eeef63f80",
-    "url": "/xgj/js/DiscuzThreadView.2c89891c.js"
+    "revision": "43d37e97be310e1966f7",
+    "url": "/xgj/js/DiscuzThreadView.1d4a605d.js"
   },
   {
     "revision": "0277a6da5e75abc75649",
@@ -96,8 +96,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/SignView.8b4278c1.js"
   },
   {
-    "revision": "ee47cb332f5c02640378",
-    "url": "/xgj/js/app.81a1cfe0.js"
+    "revision": "4e089344bc836c05549d",
+    "url": "/xgj/js/app.4bc278d6.js"
   },
   {
     "revision": "0172c903f3a7b63c1ecd",
