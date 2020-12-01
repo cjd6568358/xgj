@@ -15,7 +15,7 @@ importScripts("/xgj/workbox-v4.3.1/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/xgj/workbox-v4.3.1"});
 
 importScripts(
-  "/xgj/precache-manifest.6224c221100b81c2cf9b2f59be8150f6.js"
+  "/xgj/precache-manifest.8b299854d3fe3879ec03b1aa1d9ed811.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "xgj"});

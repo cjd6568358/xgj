@@ -54,7 +54,7 @@ export default {
       let prevUrl = "";
       let { pageNum } = this.pageInfo;
       if (this.pageInfo && pageNum != 1) {
-        prevUrl = this.url.url.replace(
+        prevUrl = this.url.replace(
           /(^.*thread-\d.*-)(\d.*)(-\d.html)/g,
           `$1${pageNum - 1}$3`
         );
