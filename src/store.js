@@ -202,17 +202,17 @@ export default new Vuex.Store({
                 encoding: "gbk",
                 selector: selectors.search
             };
-            let { data: { data } } = await http.post(`${state.discuz.HOST}/api/html2Json`, postData);
+            let { data: { data: { threadList } } } = await http.post(`${state.discuz.HOST}/api/html2Json`, postData);
             let lastMonthSignInfo = {}
             let now = new Date()
             let month = now.getMonth()
-            for (let index = 0; index < data.length; index++) {
-                const { title, replyCount, tid } = data[index];
+            for (let index = 0; index < threadList.length; index++) {
+                const { title, replyCount, tid } = threadList[index];
                 if (title == `${username}/${month || 12}月份/打卡签到帖`) {
                     lastMonthSignInfo = {
                         title,
                         tid,
-                        count: replyCount + 1
+                        count: +replyCount + 1
                     }
                     break
                 }
