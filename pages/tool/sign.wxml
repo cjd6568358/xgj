@@ -13,7 +13,7 @@
 					data: []
 				};
 				for (var ii = 0; ii < signData.length; ii++) {
-					if (date == signData[ii].date) {
+					if (date == signData[ii].day) {
 						tmp.data.push(signData[ii])
 					}
 				}

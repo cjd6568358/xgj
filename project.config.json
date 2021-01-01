@@ -42,7 +42,7 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.14.0",
+  "libVersion": "2.14.1",
   "appid": "wxac884d9f8dfbc9b6",
   "projectname": "xgj",
   "isGameTourist": false,

@@ -39,7 +39,7 @@ Page({
   },
   onClear() {
     this.setData({
-      resultList: this.accountData
+      resultList: [...this.accountData]
     })
   },
   slideButtonTap({ currentTarget: { dataset: { item } } }) {
@@ -52,6 +52,7 @@ Page({
       this.setData({
         resultList
       })
+      wx.setStorageSync('accountData', this.accountData)
     })
   },
   onItemClick({ currentTarget: { dataset: { item } } }) {
@@ -83,27 +84,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let accountData = wx.getStorageSync('accountData') || [
-      // { type: 0, remark: '百度', username: '111', password: '222' },
-      // { type: 1, remark: '百度', username: '111', password: '222' },
-      // { type: 2, remark: '百度', username: '111', password: '222' },
-      // { type: 3, remark: '百度', username: '111', password: '222' },
-      // { type: 4, remark: '百度', username: '111', password: '222' },
-      // { type: 5, remark: '百度', username: '111', password: '222' },
-      // { type: 6, remark: '百度', username: '111', password: '222' },
-      // { type: 7, remark: '百度', username: '111', password: '222' },
-      // { type: 0, remark: '百度', username: '111', password: '222' },
-      // { type: 1, remark: '百度', username: '111', password: '222' },
-      // { type: 2, remark: '百度', username: '111', password: '222' },
-      // { type: 3, remark: '百度', username: '111', password: '222' },
-      // { type: 4, remark: '百度', username: '111', password: '222' },
-      // { type: 5, remark: '百度', username: '111', password: '222' },
-      // { type: 6, remark: '百度', username: '111', password: '222' },
-      // { type: 7, remark: '百度', username: '111', password: '222' },
-    ]
+    let accountData = wx.getStorageSync('accountData') || []
     this.accountData = accountData
     this.setData({
-      resultList: this.accountData
+      resultList: [...this.accountData]
     })
   },
 

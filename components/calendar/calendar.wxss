@@ -94,4 +94,6 @@
 .calendar-body .active-class {
   background-color: #2b91fd;
   color: #fff;
+  padding: 8rpx;
+  background-clip: content-box;
 }

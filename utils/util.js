@@ -298,9 +298,9 @@ const getHash = (str) => {
 const groupBy = (list, fn) => {
   const groups = {};
   list.forEach((item) => {
-    const group = JSON.stringify(fn(item));
-    groups[group] = groups[group] || [];
-    groups[group].push(item);
+    const key = String(fn(item));
+    groups[key] = groups[key] || [];
+    groups[key].push(item);
   });
   return groups;
 }

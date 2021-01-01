@@ -8,7 +8,7 @@
 	</view>
 	<block wx:else>
 		<mp-slideview ext-class="slide-item" wx:for="{{resultList}}" wx:key="index" wx:for-item="item"
-			buttons="{{slideButtons}}" bindbuttontap="slideButtonTap">
+			buttons="{{slideButtons}}" bindbuttontap="slideButtonTap" data-item="{{item}}">
 			<view class="weui-slide" bindtap="onItemClick" data-item="{{item}}">
 				{{accountTypeList[item.type].typeName}} : {{item.remark}}
 			</view>

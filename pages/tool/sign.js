@@ -57,15 +57,13 @@ Page({
   getSignData(year, month) {
     let signData = []
     if (year && month) {
-      month = ('' + month).padStart(2, 0);
-      signData = wx.getStorageSync(`signData${year}${month}`) || [];
+      signData = wx.getStorageSync(`signData${year}${String(month).padStart(2, 0)}`) || [];
     }
     return signData
   },
   setSignData(year, month, data) {
     if (year && month) {
-      month = ('' + month).padStart(2, 0);
-      wx.setStorageSync(`signData${year}${month}`, data);
+      wx.setStorageSync(`signData${year}${String(month).padStart(2, 0)}`, data);
     }
   },
   slideButtonTap({ currentTarget: { dataset: { item } } }) {

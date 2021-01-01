@@ -1,4 +1,4 @@
-import { getHash, toast, groupBy } from '../../utils/util'
+import { getHash, toast, groupBy, calculatGUID } from '../../utils/util'
 import { encryptAES, decryptAES, string2File } from '../../utils/api'
 
 Page({
@@ -93,7 +93,9 @@ Page({
           this.setData({
             "keyDialog.show": true
           })
-
+        },
+        fail(err) {
+          console.log(err)
         }
       })
       this.setData({
@@ -112,7 +114,7 @@ Page({
         let fs = wx.getFileSystemManager()
         fs.writeFileSync(filePath, encryptText, "utf8")
         // 线上邮箱保存
-        await string2File(encryptText, "", email, fileName)
+        await string2File(this.fileData, key, email, fileName)
         toast('备份成功,文件已发送至您的邮箱')
         this.setData({
           "halfDialog.show": false,
@@ -138,17 +140,45 @@ Page({
           toast.info("文件hash校验失败:" + newHash + "-" + oldHash);
           return;
         }
-        let { accountData, signData } = backupData
+        let { accountData, website, signData, sign } = backupData
+        accountData = accountData || website;
+        signData = signData || sign
         if (this.checkedValues.includes('1') && accountData) {
-          wx.setStorageSync('accountData', accountData);
+          let results = []
+          if (website) {
+            accountData.forEach(({ id, title, keys, remark }) => {
+              if (keys.length > 0) {
+                for (var i = 0; i < keys.length; i++) {
+                  results.push({
+                    username: keys[i].key || '',
+                    password: keys[i].remark ? `${keys[i].value || ''}(备注:${keys[i].remark})` : keys[i].value || '',
+                    remark: title,
+                    type: 0,
+                    guid: calculatGUID()
+                  })
+                }
+              } else {
+                results.push({
+                  username: remark,
+                  password: '',
+                  remark: title,
+                  type: 0,
+                  guid: id
+                })
+              }
+            })
+          } else {
+            results = accountData
+          }
+          wx.setStorageSync('accountData', results);
         }
         if (this.checkedValues.includes('2') && signData) {
           // 清除本地签到数据
           let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
           signKeys.forEach(key => wx.removeStorageSync(key))
-          signData = groupBy(signData, ({ year, month }) => `signData${year}${month}`)
+          signData = groupBy(signData, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
           // 恢复备份数据
-          Object.keys(signData).forEach(key => wx.setStorageSync(key, signData[key]))
+          Object.keys(signData).sort().forEach(key => wx.setStorageSync(key, signData[key]))
         }
         this.setData({
           "keyDialog.show": false
