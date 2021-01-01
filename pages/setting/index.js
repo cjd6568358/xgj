@@ -66,16 +66,16 @@ Page({
     let { halfDialog } = this.data
     if (halfDialog.type === 'export') {
       let backup = {};
-      // 帐号数据备份
-      if (this.checkedValues.includes('1')) {
-        backup.accountData = wx.getStorageSync('accountData');
-      }
       // 签到数据备份
-      if (this.checkedValues.includes('2')) {
+      if (this.checkedValues.includes('1')) {
         let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
         let signData = []
         signKeys.forEach(key => signData = signData.concat(wx.getStorageSync(key)))
         backup.signData = signData;
+      }
+      // 帐号数据备份
+      if (this.checkedValues.includes('2')) {
+        backup.accountData = wx.getStorageSync('accountData');
       }
       backup.hash = getHash(JSON.stringify(backup));
       this.fileData = JSON.stringify(backup);
@@ -143,7 +143,15 @@ Page({
         let { accountData, website, signData, sign } = backupData
         accountData = accountData || website;
         signData = signData || sign
-        if (this.checkedValues.includes('1') && accountData) {
+        if (this.checkedValues.includes('1') && signData) {
+          // 清除本地签到数据
+          let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
+          signKeys.forEach(key => wx.removeStorageSync(key))
+          signData = groupBy(signData, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
+          // 恢复备份数据
+          Object.keys(signData).sort().forEach(key => wx.setStorageSync(key, signData[key]))
+        }
+        if (this.checkedValues.includes('2') && accountData) {
           let results = []
           if (website) {
             accountData.forEach(({ id, title, keys, remark }) => {
@@ -171,14 +179,6 @@ Page({
             results = accountData
           }
           wx.setStorageSync('accountData', results);
-        }
-        if (this.checkedValues.includes('2') && signData) {
-          // 清除本地签到数据
-          let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
-          signKeys.forEach(key => wx.removeStorageSync(key))
-          signData = groupBy(signData, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
-          // 恢复备份数据
-          Object.keys(signData).sort().forEach(key => wx.setStorageSync(key, signData[key]))
         }
         this.setData({
           "keyDialog.show": false
