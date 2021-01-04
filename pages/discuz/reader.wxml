@@ -1,2 +1,2 @@
 <!--pages/discuz/read.wxml-->
-<cover-view><rich-text class="post-content" nodes="{{context}}"></rich-text></cover-view>
+<web-view src="{{url}}"></web-view>

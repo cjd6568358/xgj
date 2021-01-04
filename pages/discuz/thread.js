@@ -90,10 +90,10 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     });
     let { pageNum, pageCount } = pageInfo
     if (pageInfo && pageNum != 1) {
-      pageInfo.prevUrl = url.replace(/(^.*thread-\d.*-)(\d.*)(-\d.html)/g, `$1${pageNum - 1}$3`)
+      pageInfo.prevUrl = url.replace(/(^.*\/bbs\/)(.*$)/g, `$1thread-${tid}-${pageNum - 1}-1.html`)
     }
     if (pageInfo && pageNum < pageCount && url) {
-      pageInfo.nextUrl = url.replace(/(^.*thread-\d.*-)(\d.*)(-\d.html)/g, `$1${pageNum + 1}$3`)
+      pageInfo.nextUrl = url.replace(/(^.*\/bbs\/)(.*$)/g, `$1thread-${tid}-${pageNum + 1}-1.html`)
     }
     UPDATE_DISCUZ({ formhash })
     this.setData({
@@ -192,25 +192,30 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     favorites.splice(i, 1);
     wx.setStorageSync('favorites', favorites)
   },
-  bindLongPress({ currentTarget: { dataset: { context } } }) {
-    // wx.navigateTo({
-    //   url: '/pages/discuz/reader',
-    //   success: function (res) {
-    //     // 通过eventChannel向被打开页面传送数据
-    //     res.eventChannel.emit('context', context)
-    //   }
-    // })
+  navigateToH5Reader() {
+    let { tid } = this.data
+    wx.navigateTo({
+      url: '/pages/discuz/reader',
+      success: function (res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('tid', tid)
+      }
+    })
   },
   async openMenu() {
-    let { url, fid, tid, documentTitle, replyUrl, renderType } = this.data
+    let { tid, replyUrl, renderType, pageInfo } = this.data
     let itemList = ['刷新', '搜索', '复制URL']
     if (replyUrl) {
       itemList.push('回复')
     }
+    if (pageInfo.prevUrl) {
+      itemList.push('上一页')
+    }
+    if (pageInfo.nextUrl) {
+      itemList.push('下一页')
+    }
     if (renderType === 'parser') {
       itemList.push('切换为性能模式')
-    } else {
-      itemList.push('切换为正常模式')
     }
     let favoritesHit = !!(wx.getStorageSync('favorites') || []).filter(item => {
       return item.tid == tid;
@@ -221,57 +226,76 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     } else {
       itemList.push('收藏阅读进度')
     }
+    if (itemList.length > 6) {
+      this.moreList = itemList.splice(5, itemList.length - 5, '更多')
+    }
     wx.showActionSheet({
       itemList,
       success: ({ tapIndex }) => {
         let itemText = itemList[tapIndex]
-        if (itemText.includes('刷新')) {
-          this.onReload()
-        } else if (itemText.includes('回复')) {
-          wx.navigateTo({
-            url: '/pages/discuz/reply',
-            events: {
-              reload: this.onReload
-            },
-            success: function (res) {
-              // 通过eventChannel向被打开页面传送数据
-              res.eventChannel.emit('content', { fid, tid, title: documentTitle })
-            }
-          })
-        } else if (itemText.includes('搜索')) {
-          wx.navigateTo({
-            url: "/pages/discuz/search",
-          });
-        } else if (itemText.includes('复制URL')) {
-          wx.setClipboardData({
-            data: url.replace(/(^.*bbs\/)(.*$)/g, `https://cjd6568358.github.io/xgj/discuz/thread/$2`),
-            success(res) {
-
-            }
-          })
-        } else if (itemText.includes('切换为性能模式')) {
-          this.setData({
-            renderType: "rich"
-          })
-        } else if (itemText.includes('切换为正常模式')) {
-          this.setData({
-            renderType: "parser"
-          })
-        } else if (itemText.includes('收藏阅读进度')) {
-          this.addFavorites()
-          toast('收藏成功!')
-        } else if (itemText.includes('删除阅读进度')) {
-          this.removeFavorites()
-          toast('删除成功!')
-        } else if (itemText.includes('更新阅读进度')) {
-          this.removeFavorites()
-          this.addFavorites()
-          toast('更新成功!')
-        } else {
-
-        }
+        this.actionSheetClick(itemText)
+      },
+      fail(res) {
+        console.log(res.errMsg)
       }
     })
+  },
+  actionSheetClick(itemText) {
+    let { url, fid, tid, documentTitle } = this.data
+    if (itemText.includes('刷新')) {
+      this.onReload()
+    } else if (itemText.includes('回复')) {
+      wx.navigateTo({
+        url: '/pages/discuz/reply',
+        events: {
+          reload: this.onReload
+        },
+        success: function (res) {
+          // 通过eventChannel向被打开页面传送数据
+          res.eventChannel.emit('content', { fid, tid, title: documentTitle })
+        }
+      })
+    } else if (itemText.includes('搜索')) {
+      wx.navigateTo({
+        url: "/pages/discuz/search",
+      });
+    } else if (itemText.includes('复制URL')) {
+      wx.setClipboardData({
+        data: url.replace(/(^.*bbs\/)(.*$)/g, `https://cjd6568358.github.io/xgj/discuz/thread/$2`),
+        success(res) {
+
+        }
+      })
+    } else if (itemText.includes('上一页')) {
+      this.pageChange({ detail: "prev" })
+    } else if (itemText.includes('下一页')) {
+      this.pageChange({ detail: "next" })
+    } else if (itemText.includes('切换为性能模式')) {
+      this.navigateToH5Reader()
+    } else if (itemText.includes('收藏阅读进度')) {
+      this.addFavorites()
+      toast('收藏成功!')
+    } else if (itemText.includes('删除阅读进度')) {
+      this.removeFavorites()
+      toast('删除成功!')
+    } else if (itemText.includes('更新阅读进度')) {
+      this.removeFavorites()
+      this.addFavorites()
+      toast('更新成功!')
+    } else if (itemText.includes('更多')) {
+      wx.showActionSheet({
+        itemList: this.moreList || [],
+        success: ({ tapIndex }) => {
+          let itemText = this.moreList[tapIndex]
+          this.actionSheetClick(itemText)
+        },
+        fail(res) {
+          console.log(res.errMsg)
+        }
+      })
+    } else {
+
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

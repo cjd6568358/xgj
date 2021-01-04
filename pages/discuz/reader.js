@@ -5,16 +5,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-    context: ''
+    url: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getOpenerEventChannel().on('context', (context) => {
+    let cdb3_sid = wx.getStorageSync('cdb3_sid')
+    let cdb3_cookietime = wx.getStorageSync('cdb3_cookietime')
+    let cdb3_auth = wx.getStorageSync('cdb3_auth')
+    this.getOpenerEventChannel().on('tid', (tid) => {
       this.setData({
-        context
+        url: `https://cjd6568358.github.io/xgj/discuz/autoLogin?cookies=${encodeURIComponent(JSON.stringify({ cdb3_sid, cdb3_cookietime, cdb3_auth }))}&redirectTo=thread-${tid}-1-1.html`
       })
     })
   },
