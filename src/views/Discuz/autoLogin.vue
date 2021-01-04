@@ -10,7 +10,7 @@ export default {
   async mounted() {
     let { cookies, redirectTo } = this.$route.query;
     if (cookies && redirectTo) {
-      cookies = JSON.parse(decodeURIComponent(cookies));
+      cookies = JSON.parse(cookies);
       Object.keys(cookies).forEach(
         (key) => (document.cookie = `${key}=${cookies[key]}`)
       );
