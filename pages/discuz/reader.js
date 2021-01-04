@@ -15,9 +15,10 @@ Page({
     let cdb3_sid = wx.getStorageSync('cdb3_sid')
     let cdb3_cookietime = wx.getStorageSync('cdb3_cookietime')
     let cdb3_auth = wx.getStorageSync('cdb3_auth')
+    let webSite = wx.getStorageSync('webSite')
     this.getOpenerEventChannel().on('tid', (tid) => {
       this.setData({
-        url: `https://cjd6568358.github.io/xgj/discuz/autoLogin?cookies=${encodeURIComponent(JSON.stringify({ cdb3_sid, cdb3_cookietime, cdb3_auth }))}&redirectTo=thread-${tid}-1-1.html`
+        url: `https://cjd6568358.github.io/xgj/discuz/autoLogin?cookies=${encodeURIComponent(JSON.stringify({ webSite, cdb3_sid, cdb3_cookietime, cdb3_auth }))}&redirectTo=thread-${tid}-1-1.html`
       })
     })
   },
