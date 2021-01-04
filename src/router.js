@@ -13,6 +13,8 @@ const DiscuzMyView = () =>
     import( /* webpackChunkName: "DiscuzMyView" */ './views/Discuz/my.vue')
 const DiscuzThreadView = () =>
     import( /* webpackChunkName: "DiscuzThreadView" */ './views/Discuz/thread.vue')
+const DiscuzAutoLoginView = () =>
+    import( /* webpackChunkName: "DiscuzAutoLoginView" */ './views/Discuz/autoLogin.vue')
 const MyView = () =>
     import( /* webpackChunkName: "MyView" */ './views/My/index.vue')
 const PasswordListView = () =>
@@ -57,6 +59,12 @@ export default new Router({
             path: '/discuz/thread/:url',
             name: 'DiscuzThreadView',
             component: DiscuzThreadView,
+            props: true
+        },
+        {
+            path: '/discuz/autoLogin',
+            name: 'DiscuzAutoLoginView',
+            component: DiscuzAutoLoginView,
             props: true
         },
         {
