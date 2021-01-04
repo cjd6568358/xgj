@@ -54,10 +54,7 @@ export default {
       let prevUrl = "";
       let { pageNum } = this.pageInfo;
       if (this.pageInfo && pageNum != 1) {
-        prevUrl = this.url.replace(
-          /(^.*\/bbs\/)(.*$)/g,
-          `$1thread-${this.tid}-${pageNum - 1}-1.html`
-        );
+        prevUrl = `thread-${this.tid}-${pageNum - 1}-1.html`;
       }
       return prevUrl;
     },
@@ -65,10 +62,7 @@ export default {
       let nextUrl = "";
       let { pageNum, pageCount } = this.pageInfo;
       if (this.pageInfo && pageNum < pageCount && this.url) {
-        nextUrl = this.url.replace(
-          /(^.*\/bbs\/)(.*$)/g,
-          `$1thread-${this.tid}-${pageNum + 1}-1.html`
-        );
+        nextUrl = `thread-${this.tid}-${pageNum + 1}-1.html`;
       }
       return nextUrl;
     },
