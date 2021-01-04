@@ -12,9 +12,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let cdb3_sid = wx.getStorageSync('cdb3_sid')
+    let cdb3_sid = encodeURIComponent(wx.getStorageSync('cdb3_sid'))
     let cdb3_cookietime = wx.getStorageSync('cdb3_cookietime')
-    let cdb3_auth = wx.getStorageSync('cdb3_auth')
+    let cdb3_auth = encodeURIComponent(wx.getStorageSync('cdb3_auth'))
     let webSite = wx.getStorageSync('webSite')
     this.getOpenerEventChannel().on('tid', (tid) => {
       this.setData({
