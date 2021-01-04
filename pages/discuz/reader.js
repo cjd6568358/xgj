@@ -18,7 +18,7 @@ Page({
     let webSite = wx.getStorageSync('webSite')
     this.getOpenerEventChannel().on('tid', (tid) => {
       this.setData({
-        url: `https://cjd6568358.github.io/xgj/discuz/autoLogin?cookies=${encodeURIComponent(JSON.stringify({ webSite, cdb3_sid, cdb3_cookietime, cdb3_auth }))}&redirectTo=thread-${tid}-1-1.html`
+        url: `https://cjd6568358.github.io/xgj/discuz/autoLogin?cookies=${JSON.stringify({ webSite, cdb3_sid, cdb3_cookietime, cdb3_auth })}&redirectTo=thread-${tid}-1-1.html`
       })
     })
   },
