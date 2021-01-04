@@ -56,7 +56,7 @@ export default {
       if (this.pageInfo && pageNum != 1) {
         prevUrl = this.url.replace(
           /(^.*\/bbs\/)(.*$)/g,
-          `$1thread-${tid}-${pageNum - 1}-1.html`
+          `$1thread-${this.tid}-${pageNum - 1}-1.html`
         );
       }
       return prevUrl;
@@ -67,7 +67,7 @@ export default {
       if (this.pageInfo && pageNum < pageCount && this.url) {
         nextUrl = this.url.replace(
           /(^.*\/bbs\/)(.*$)/g,
-          `$1thread-${tid}-${pageNum + 1}-1.html`
+          `$1thread-${this.tid}-${pageNum + 1}-1.html`
         );
       }
       return nextUrl;
