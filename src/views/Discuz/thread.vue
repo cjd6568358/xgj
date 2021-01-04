@@ -189,9 +189,6 @@ export default {
     .post {
       line-height: 1.8;
       margin-bottom: 10px;
-      &:not(:first-child) {
-        // border-top: 2px solid #ddd;
-      }
       .post-info {
         background: #fbfbff;
         span {
