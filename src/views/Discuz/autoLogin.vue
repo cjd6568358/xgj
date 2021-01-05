@@ -11,10 +11,10 @@ export default {
     ...mapState(["discuz"]),
   },
   async mounted() {
+    let { cookies, redirectTo } = this.$route.query;
     if (this.discuz.isLogin) {
       this.$router.push(`/discuz/thread/${redirectTo}`);
     } else {
-      let { cookies, redirectTo } = this.$route.query;
       if (cookies && redirectTo) {
         cookies = JSON.parse(cookies);
         Object.keys(cookies).forEach(
