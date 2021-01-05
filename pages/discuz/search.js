@@ -31,12 +31,21 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
         })
         let { threadList, pageCount, searchHref } = await searchData({ srchtxt, srchuname, orderBy, sortType })
         wx.hideLoading()
-        this.setData({
-          threadList,
-          searchHref: searchHref.replace(/page=(.*)$/g, ''),
-          pageNum: 1,
-          pageCount
-        })
+        if (pageCount) {
+          this.setData({
+            threadList,
+            searchHref: searchHref.replace(/page=(.*)$/g, ''),
+            pageNum: 1,
+            pageCount
+          })
+        } else {
+          this.setData({
+            threadList: [],
+            searchHref: '',
+            pageNum: 1,
+            pageCount: 0
+          })
+        }
       }
     },
     orderByChange({ detail: { value } }) {
