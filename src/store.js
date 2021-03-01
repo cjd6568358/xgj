@@ -13,12 +13,12 @@ import http from "./util/http";
 
 Vue.use(Vuex);
 
-if (
-  !proxyServers.some((item) => item.host === localStorage.getItem("proxy_host"))
-) {
+let HOST = localStorage.getItem("proxy_host");
+if (!proxyServers.some((item) => item.host === HOST)) {
   localStorage.removeItem("proxy_host");
+  HOST = proxyServers[1].host;
 }
-let HOST = localStorage.getItem("proxy_host") || proxyServers[1].host;
+
 // let temmeConvert = 'client'
 // if (localStorage.getItem("temmeConvert")) {
 //     temmeConvert = localStorage.getItem("temmeConvert")

@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8b0d20c5030c841a32e99800734229f9",
+    "revision": "7d3fda26bc42cdcfe8e1021980942d57",
     "url": "/xgj/404.html"
   },
   {
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "4fc0348d94a7eaf2198e",
+    "revision": "4ef11c05b29ae63cbea1",
     "url": "/xgj/css/app.93d68706.css"
   },
   {
@@ -56,7 +56,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "8b0d20c5030c841a32e99800734229f9",
+    "revision": "7d3fda26bc42cdcfe8e1021980942d57",
     "url": "/xgj/index.html"
   },
   {
@@ -100,8 +100,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/SignView.d95dc913.js"
   },
   {
-    "revision": "4fc0348d94a7eaf2198e",
-    "url": "/xgj/js/app.7a0a2793.js"
+    "revision": "4ef11c05b29ae63cbea1",
+    "url": "/xgj/js/app.2fb7e987.js"
   },
   {
     "revision": "e75b0f0b8320d9b06fb2",
