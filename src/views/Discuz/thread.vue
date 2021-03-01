@@ -68,6 +68,9 @@ export default {
     },
   },
   async mounted() {
+    if (this.$route.query.tid) {
+      this.tid = this.$route.query.tid;
+    }
     try {
       await this.getThreadPageJson(this.url);
     } catch (error) {

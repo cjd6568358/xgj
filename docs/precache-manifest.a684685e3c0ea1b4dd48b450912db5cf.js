@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8d4872bd4e53f6b5350c8e27f9819835",
+    "revision": "cd11444ddcd8fc7a3ec5a873aaf910b4",
     "url": "/xgj/404.html"
   },
   {
@@ -8,11 +8,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/DiscuzForumView.d9ee032c.css"
   },
   {
-    "revision": "0a870e1208bcba8da998",
-    "url": "/xgj/css/DiscuzMyView.e46b2ff6.css"
+    "revision": "5d5024ccd7d7ec723365",
+    "url": "/xgj/css/DiscuzMyView.b70f1f5a.css"
   },
   {
-    "revision": "ac9e0d54045bb52d09c2",
+    "revision": "fe3a165ef68b7126f3a0",
     "url": "/xgj/css/DiscuzThreadView.92deb30c.css"
   },
   {
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "870384e95e767310fcb4",
+    "revision": "832891218b89127a458a",
     "url": "/xgj/css/app.f824e864.css"
   },
   {
@@ -56,7 +56,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "8d4872bd4e53f6b5350c8e27f9819835",
+    "revision": "cd11444ddcd8fc7a3ec5a873aaf910b4",
     "url": "/xgj/index.html"
   },
   {
@@ -68,12 +68,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/DiscuzForumView.3dd74f6f.js"
   },
   {
-    "revision": "0a870e1208bcba8da998",
-    "url": "/xgj/js/DiscuzMyView.de6b727b.js"
+    "revision": "5d5024ccd7d7ec723365",
+    "url": "/xgj/js/DiscuzMyView.0ff793d3.js"
   },
   {
-    "revision": "ac9e0d54045bb52d09c2",
-    "url": "/xgj/js/DiscuzThreadView.9829f243.js"
+    "revision": "fe3a165ef68b7126f3a0",
+    "url": "/xgj/js/DiscuzThreadView.56253942.js"
   },
   {
     "revision": "ba0f975c55e676e58fd1",
@@ -100,8 +100,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/SignView.9ac49a56.js"
   },
   {
-    "revision": "870384e95e767310fcb4",
-    "url": "/xgj/js/app.9a81c5c0.js"
+    "revision": "832891218b89127a458a",
+    "url": "/xgj/js/app.d9d017f8.js"
   },
   {
     "revision": "58bc32b623b0203c8dbb",

@@ -15,7 +15,7 @@
               :to="{
                 name: 'DiscuzThreadView',
                 params: { url: thread.href },
-                query: { scrollTop: thread.scrollTop },
+                query: { scrollTop: thread.scrollTop, tid: thread.tid },
               }"
               >{{ thread.title }}</router-link
             >

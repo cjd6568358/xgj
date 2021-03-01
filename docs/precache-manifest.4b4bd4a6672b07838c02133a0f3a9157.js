@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f7ba5cb823b88a7b405de3680e6e4b2e",
+    "revision": "844c2c4d3c8445f906b1af4642182445",
     "url": "/xgj/404.html"
   },
   {
@@ -8,11 +8,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/DiscuzForumView.d9ee032c.css"
   },
   {
-    "revision": "4a6fb13825cdb0375900",
-    "url": "/xgj/css/DiscuzMyView.e46b2ff6.css"
+    "revision": "e98ac711c66f6811dede",
+    "url": "/xgj/css/DiscuzMyView.b70f1f5a.css"
   },
   {
-    "revision": "df43062daf74d9b4efbf",
+    "revision": "9e677f1c355f33e14b88",
     "url": "/xgj/css/DiscuzThreadView.92deb30c.css"
   },
   {
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "2c4718d9301dd9dc62df",
+    "revision": "13f6496a3746ae067269",
     "url": "/xgj/css/app.f824e864.css"
   },
   {
@@ -48,7 +48,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "f7ba5cb823b88a7b405de3680e6e4b2e",
+    "revision": "844c2c4d3c8445f906b1af4642182445",
     "url": "/xgj/index.html"
   },
   {
@@ -60,12 +60,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/DiscuzForumView-legacy.e5935063.js"
   },
   {
-    "revision": "4a6fb13825cdb0375900",
-    "url": "/xgj/js/DiscuzMyView-legacy.a7d53a79.js"
+    "revision": "e98ac711c66f6811dede",
+    "url": "/xgj/js/DiscuzMyView-legacy.f267bac6.js"
   },
   {
-    "revision": "df43062daf74d9b4efbf",
-    "url": "/xgj/js/DiscuzThreadView-legacy.8ba35565.js"
+    "revision": "9e677f1c355f33e14b88",
+    "url": "/xgj/js/DiscuzThreadView-legacy.e51e1a31.js"
   },
   {
     "revision": "f139706f9e74ca82d4c1",
@@ -92,8 +92,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/SignView-legacy.e5f7349c.js"
   },
   {
-    "revision": "2c4718d9301dd9dc62df",
-    "url": "/xgj/js/app-legacy.c4aed109.js"
+    "revision": "13f6496a3746ae067269",
+    "url": "/xgj/js/app-legacy.60d883fc.js"
   },
   {
     "revision": "60efeff6b4b683999c07",
