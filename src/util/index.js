@@ -126,7 +126,7 @@ let proxyServers = [{
     gfw: true
 }, {
     protocol: 'https',
-    host: 'https://common-server.cjd6568358.vercel.app',
+    host: 'https://common-server-cjd6568358.vercel.app',
     platom: 'NOW',
     gfw: true
 }, {
