@@ -6,6 +6,9 @@ import openModal from './components/Modal/index'
 import Toast from './components/Toast/index'
 import { initApp } from './util'
 import './registerServiceWorker'
+import longpress from 'vue-long-press-directive'
+
+Vue.use(longpress, { duration: 1000 })
 
 Vue.config.errorHandler = function (err, vm, info) {
     // handle error

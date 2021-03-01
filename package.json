@@ -14,6 +14,7 @@
     "register-service-worker": "^1.7.1",
     "temme": "^0.8.3",
     "vue": "^2.6.12",
+    "vue-long-press-directive": "^1.0.2",
     "vue-router": "^3.4.5",
     "vuex": "^3.5.1"
   },

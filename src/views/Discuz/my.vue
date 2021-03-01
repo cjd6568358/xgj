@@ -10,16 +10,18 @@
       </ul>
       <ul class="area" data-title="我的收藏">
         <template v-for="(thread, i) of collections">
-          <li :key="i" v-if="thread">
-            <router-link
-              :to="{
-                name: 'DiscuzThreadView',
-                params: { url: thread.href },
-                query: { scrollTop: thread.scrollTop },
-              }"
-              >{{ thread.title }}</router-link
-            >
-          </li>
+          <router-link
+            v-long-press="onlongpress(thread)"
+            tag="li"
+            :key="i"
+            v-if="thread"
+            :to="{
+              name: 'DiscuzThreadView',
+              params: { url: thread.href },
+              query: { scrollTop: thread.scrollTop },
+            }"
+            >{{ thread.title }}</router-link
+          >
         </template>
       </ul>
       <ul class="area" data-title="最近回复">
@@ -114,6 +116,15 @@ export default {
             }
           }
         });
+    },
+    onlongpress(thread) {
+      if (confirm("确定删除该收藏吗")) {
+        let i = this.collections.findIndex((item) => {
+          return item === thread;
+        });
+        this.collections.splice(i, 1);
+        localStorage.setItem("collections", JSON.stringify(this.collections));
+      }
     },
   },
 };
