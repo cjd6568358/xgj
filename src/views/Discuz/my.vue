@@ -11,7 +11,7 @@
       <ul class="area" data-title="我的收藏">
         <template v-for="(thread, i) of collections">
           <router-link
-            v-long-press="onlongpress(thread)"
+            v-long-press="() => this.onlongpress(thread)"
             tag="li"
             :key="i"
             v-if="thread"

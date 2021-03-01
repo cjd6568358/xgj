@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "03cdf31b5a8bc5cd4f11f417c313434f",
+    "revision": "30445311824a60ea3cccb3c86b983b79",
     "url": "/xgj/404.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/DiscuzForumView.8652a70a.css"
   },
   {
-    "revision": "e7c89ee04fb7e971f170",
-    "url": "/xgj/css/DiscuzMyView.f791e31a.css"
+    "revision": "c2a5c2d18ccd5558c3c8",
+    "url": "/xgj/css/DiscuzMyView.a6e0df05.css"
   },
   {
     "revision": "1ed07eb276b93776959e",
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "7b49311db9a994607713",
+    "revision": "b62594e72d13cdad9d56",
     "url": "/xgj/css/app.f824e864.css"
   },
   {
@@ -48,7 +48,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "03cdf31b5a8bc5cd4f11f417c313434f",
+    "revision": "30445311824a60ea3cccb3c86b983b79",
     "url": "/xgj/index.html"
   },
   {
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/DiscuzForumView-legacy.9b53dec1.js"
   },
   {
-    "revision": "e7c89ee04fb7e971f170",
-    "url": "/xgj/js/DiscuzMyView-legacy.9fd69508.js"
+    "revision": "c2a5c2d18ccd5558c3c8",
+    "url": "/xgj/js/DiscuzMyView-legacy.2fd0e4f9.js"
   },
   {
     "revision": "1ed07eb276b93776959e",
@@ -92,8 +92,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/SignView-legacy.e5f7349c.js"
   },
   {
-    "revision": "7b49311db9a994607713",
-    "url": "/xgj/js/app-legacy.bb9db993.js"
+    "revision": "b62594e72d13cdad9d56",
+    "url": "/xgj/js/app-legacy.86b81000.js"
   },
   {
     "revision": "c08887f55baf266bd16b",
