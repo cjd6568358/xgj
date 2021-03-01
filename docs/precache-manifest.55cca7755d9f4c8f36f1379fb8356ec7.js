@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8f994040e710c1047bfb423f1a9a6b71",
+    "revision": "8d4872bd4e53f6b5350c8e27f9819835",
     "url": "/xgj/404.html"
   },
   {
-    "revision": "1a706cabde0c06f6deec",
-    "url": "/xgj/css/DiscuzForumView.8652a70a.css"
+    "revision": "3d06bc8f986cd65e9903",
+    "url": "/xgj/css/DiscuzForumView.d9ee032c.css"
   },
   {
-    "revision": "0ae03dfbb7a7aa9f52f3",
-    "url": "/xgj/css/DiscuzMyView.a6e0df05.css"
+    "revision": "0a870e1208bcba8da998",
+    "url": "/xgj/css/DiscuzMyView.e46b2ff6.css"
   },
   {
-    "revision": "2bca901d63131b59bc9b",
-    "url": "/xgj/css/DiscuzThreadView.2acfc7c9.css"
+    "revision": "ac9e0d54045bb52d09c2",
+    "url": "/xgj/css/DiscuzThreadView.92deb30c.css"
   },
   {
     "revision": "ba0f975c55e676e58fd1",
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "698765354da3cb66678b",
+    "revision": "870384e95e767310fcb4",
     "url": "/xgj/css/app.f824e864.css"
   },
   {
@@ -56,7 +56,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "8f994040e710c1047bfb423f1a9a6b71",
+    "revision": "8d4872bd4e53f6b5350c8e27f9819835",
     "url": "/xgj/index.html"
   },
   {
@@ -64,16 +64,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/DiscuzAutoLoginView.88811e80.js"
   },
   {
-    "revision": "1a706cabde0c06f6deec",
-    "url": "/xgj/js/DiscuzForumView.aa0da184.js"
+    "revision": "3d06bc8f986cd65e9903",
+    "url": "/xgj/js/DiscuzForumView.3dd74f6f.js"
   },
   {
-    "revision": "0ae03dfbb7a7aa9f52f3",
-    "url": "/xgj/js/DiscuzMyView.3958cd6f.js"
+    "revision": "0a870e1208bcba8da998",
+    "url": "/xgj/js/DiscuzMyView.de6b727b.js"
   },
   {
-    "revision": "2bca901d63131b59bc9b",
-    "url": "/xgj/js/DiscuzThreadView.54ac5709.js"
+    "revision": "ac9e0d54045bb52d09c2",
+    "url": "/xgj/js/DiscuzThreadView.9829f243.js"
   },
   {
     "revision": "ba0f975c55e676e58fd1",
@@ -100,12 +100,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/js/SignView.9ac49a56.js"
   },
   {
-    "revision": "698765354da3cb66678b",
-    "url": "/xgj/js/app.be43aa60.js"
+    "revision": "870384e95e767310fcb4",
+    "url": "/xgj/js/app.9a81c5c0.js"
   },
   {
-    "revision": "e266a32ac363c291825c",
-    "url": "/xgj/js/chunk-vendors.fc016945.js"
+    "revision": "58bc32b623b0203c8dbb",
+    "url": "/xgj/js/chunk-vendors.7ac0c8e7.js"
   },
   {
     "revision": "29d0b7a18611311f7a12cd9b337b8cae",

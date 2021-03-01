@@ -10,18 +10,16 @@
       </ul>
       <ul class="area" data-title="我的收藏">
         <template v-for="(thread, i) of collections">
-          <router-link
-            v-long-press="() => this.onlongpress(thread)"
-            tag="li"
-            :key="i"
-            v-if="thread"
-            :to="{
-              name: 'DiscuzThreadView',
-              params: { url: thread.href },
-              query: { scrollTop: thread.scrollTop },
-            }"
-            >{{ thread.title }}</router-link
-          >
+          <li :key="i" v-if="thread">
+            <router-link
+              :to="{
+                name: 'DiscuzThreadView',
+                params: { url: thread.href },
+                query: { scrollTop: thread.scrollTop },
+              }"
+              >{{ thread.title }}</router-link
+            >
+          </li>
         </template>
       </ul>
       <ul class="area" data-title="最近回复">

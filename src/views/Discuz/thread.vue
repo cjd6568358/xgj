@@ -68,7 +68,11 @@ export default {
     },
   },
   async mounted() {
-    await this.getThreadPageJson(this.url);
+    try {
+      await this.getThreadPageJson(this.url);
+    } catch (error) {
+      console.log(error);
+    }
     let scrollElement = document.querySelector(".overflow-container");
     if (this.$route.query.scrollTop) {
       this.$nextTick(() => {

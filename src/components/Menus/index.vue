@@ -118,21 +118,27 @@ ul {
 				transition: all 0.1s;
 			}
 			&:nth-of-type(1) {
-				transform: rotate(10deg);
+				transform: rotate(0deg);
 				span {
-					transform: rotate(-10deg);
+					transform: rotate(0deg);
 				}
 			}
 			&:nth-of-type(2) {
-				transform: rotate(40deg);
+				transform: rotate(30deg);
 				span {
-					transform: rotate(-40deg);
+					transform: rotate(-30deg);
 				}
 			}
 			&:nth-of-type(3) {
-				transform: rotate(70deg);
+				transform: rotate(60deg);
 				span {
-					transform: rotate(-70deg);
+					transform: rotate(-60deg);
+				}
+			}
+			&:nth-of-type(4) {
+				transform: rotate(90deg);
+				span {
+					transform: rotate(-90deg);
 				}
 			}
 		}
