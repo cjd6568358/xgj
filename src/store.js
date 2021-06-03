@@ -235,7 +235,7 @@ export default new Vuex.Store({
       commit("SET_LOADING_STATUS", false);
       return data;
     },
-    async getLastMonthSignInfo({ state, getters }) {
+    async getLastMonthSignInfo({ dispatch, state, getters }) {
       let {
         discuz: {
           userInfo: { username },
@@ -258,21 +258,27 @@ export default new Vuex.Store({
           data: { threadList },
         },
       } = await http.post(`${state.discuz.HOST}/api/html2Json`, postData);
-      let lastMonthSignInfo = {};
       let now = new Date();
       let month = now.getMonth();
-      for (let index = 0; index < threadList.length; index++) {
-        const { title, replyCount, tid } = threadList[index];
-        if (title == `${username}/${month || 12}月份/打卡签到帖`) {
-          lastMonthSignInfo = {
-            title,
-            tid,
-            count: +replyCount + 1,
-          };
-          break;
+      return new Promise(async (resolve) => {
+        for (let index = 0; index < threadList.length; index++) {
+          const { title, tid, href, date } = threadList[index];
+          if (
+            title == `${username}/${month || 12}月份/打卡签到帖` &&
+            new Date(date).Format("yyyy") === new Date().Format("yyyy")
+          ) {
+            let pageData = await dispatch("getPageData", {
+              url: `${targetHost}${href}`,
+              selector: selectors.thread,
+            });
+            resolve({
+              title,
+              tid,
+              count: pageData.pageInfo.total,
+            });
+          }
         }
-      }
-      return lastMonthSignInfo;
+      });
     },
   },
   getters: {

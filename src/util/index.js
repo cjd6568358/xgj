@@ -68,8 +68,10 @@ let selectors = {
     form+.pages_btns .pages@pageInfo|pack{
         $pageNum = 1;
         $pageCount = 1;
+        $total = 1;
         strong{$pageNum|Number};
         em{$pageCount|Number|MathCeil};
+        em{$total|Number};
     }
     `,
     my: `
@@ -98,6 +100,7 @@ let selectors = {
       return Math.ceil(this/38)
     };
     .mainbox.threadlist tbody@threadList{
+        th a[href=$href]
         th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
         td.author em{$date};
         td.nums{$nums};
