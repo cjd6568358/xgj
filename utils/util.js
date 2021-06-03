@@ -85,11 +85,13 @@ let selectors = {
       .postcontent .postmessage .t_msgfont{html($content|replace(/border(.*)alt=""/g,""))}
   };
   form+.pages_btns .pages@pageInfo|pack{
-      $pageNum = 1;
-      $pageCount = 1;
-      strong{$pageNum|Number};
-      em{$pageCount|Number|MathCeil};
-  }
+    $pageNum = 1;
+    $pageCount = 1;
+    $total = 1;
+    strong{$pageNum|Number};
+    em{$pageCount|Number|MathCeil};
+    em{$total|Number};
+}
   `,
   my: `
   .credits_info ul>li@creditList{
@@ -117,10 +119,10 @@ let selectors = {
     return Math.ceil(this/38)
   };
   .mainbox.threadlist tbody@threadList{
+      th a[href=$href]
       th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
       td.author em{$date};
       td.nums{$nums};
-      td.nums strong{$replyCount};
   };
   .mainbox.threadlist+.pages_btns .pages em{$pageCount|Number|MathCeil};
   .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];

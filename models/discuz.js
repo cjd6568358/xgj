@@ -196,23 +196,29 @@ export default {
       return data
     },
     async getLastMonthSignInfo({ payload }, { put, select, selectAll }) {
-      let { userInfo: { username } } = select();
+      let { userInfo: { username }, webSite } = select();
       let { threadList } = await put({ type: 'searchData', payload: { srchtxt: username } })
-      let lastMonthSignInfo = {}
       let now = new Date()
       let month = now.getMonth()
-      for (let index = 0; index < threadList.length; index++) {
-        const { title, replyCount, tid } = threadList[index];
-        if (title == `${username}/${month || 12}月份/打卡签到帖`) {
-          lastMonthSignInfo = {
-            title,
-            tid,
-            count: +replyCount + 1
+      return new Promise(async (resolve) => {
+        for (let index = 0; index < threadList.length; index++) {
+          const { title, tid, href, date } = threadList[index];
+          if (title == `${username}/${month || 12}月份/打卡签到帖` &&
+            new Date(date).Format("yyyy") === new Date().Format("yyyy")) {
+            let pageData = await put({
+              type: 'getPageData', payload: {
+                url: `http://${webSite}/bbs/${href}`,
+                selector: selectors.thread,
+              }
+            });
+            resolve({
+              title,
+              tid,
+              count: pageData.pageInfo.total,
+            });
           }
-          break
         }
-      }
-      return lastMonthSignInfo
+      })
     }
   },
   /**
