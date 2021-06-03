@@ -104,7 +104,6 @@ let selectors = {
         th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
         td.author em{$date};
         td.nums{$nums};
-        td.nums strong{$replyCount};
     };
     .mainbox.threadlist+.pages_btns .pages em{$pageCount|Number|MathCeil};
     .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];
