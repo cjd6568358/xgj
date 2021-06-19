@@ -40,12 +40,17 @@ export default {
     return {
       backUpList: [
         {
-          name: "网站数据",
+          name: "密码",
           value: "website",
           selected: false,
         },
         {
-          name: "签到数据",
+          name: "签到",
+          value: "sign",
+          selected: false,
+        },
+        {
+          name: "收藏",
           value: "sign",
           selected: false,
         },
@@ -67,7 +72,9 @@ export default {
       if (this.backUpList[1].selected) {
         backup.sign = await DbHelper.signRecords.toArray();
       }
-      backup.collections = localStorage.getItem("collections");
+	  if (this.backUpList[2].selected) {
+        backup.collections = localStorage.getItem("collections");
+      }
       backup.hash = getHash(JSON.stringify(backup));
       let params = {
         fileName: fileName,
