@@ -10,7 +10,7 @@ Page({
     halfDialog: {
       show: false,
       type: 'export',
-      items: [{ value: 1, name: '签到数据' }, { value: 2, name: '帐号数据' }],
+      items: [{ value: 1, name: '签到' }, { value: 2, name: '帐号' }, { value: 3, name: '收藏' }],
       buttons: [{
         type: 'primary',
         text: '确定',
@@ -29,7 +29,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.checkedValues = ["1", "2"]
+    this.checkedValues = ["1", "2", "3"]
   },
 
   /**
@@ -71,11 +71,15 @@ Page({
         let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
         let signData = []
         signKeys.forEach(key => signData = signData.concat(wx.getStorageSync(key)))
-        backup.signData = signData;
+        backup.sign = signData;
       }
       // 帐号数据备份
       if (this.checkedValues.includes('2')) {
-        backup.accountData = wx.getStorageSync('accountData');
+        backup.account = wx.getStorageSync('accountData');
+      }
+      // 收藏数据备份
+      if (this.checkedValues.includes('3')) {
+        backup.favorites = wx.getStorageSync('favorites');
       }
       backup.hash = getHash(JSON.stringify(backup));
       this.fileData = JSON.stringify(backup);
@@ -140,45 +144,20 @@ Page({
           toast.info("文件hash校验失败:" + newHash + "-" + oldHash);
           return;
         }
-        let { accountData, website, signData, sign } = backupData
-        accountData = accountData || website;
-        signData = signData || sign
-        if (this.checkedValues.includes('1') && signData) {
+        let { account, sign, favorites } = backupData
+        if (this.checkedValues.includes('1') && sign) {
           // 清除本地签到数据
           let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
           signKeys.forEach(key => wx.removeStorageSync(key))
-          signData = groupBy(signData, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
           // 恢复备份数据
-          Object.keys(signData).sort().forEach(key => wx.setStorageSync(key, signData[key]))
+          let sign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
+          Object.keys(sign).sort().forEach(key => wx.setStorageSync(key, sign[key]))
         }
-        if (this.checkedValues.includes('2') && accountData) {
-          let results = []
-          if (website) {
-            accountData.forEach(({ id, title, keys, remark }) => {
-              if (keys.length > 0) {
-                for (var i = 0; i < keys.length; i++) {
-                  results.push({
-                    username: keys[i].key || '',
-                    password: keys[i].remark ? `${keys[i].value || ''}(备注:${keys[i].remark})` : keys[i].value || '',
-                    remark: title,
-                    type: 0,
-                    guid: calculatGUID()
-                  })
-                }
-              } else {
-                results.push({
-                  username: remark,
-                  password: '',
-                  remark: title,
-                  type: 0,
-                  guid: id
-                })
-              }
-            })
-          } else {
-            results = accountData
-          }
-          wx.setStorageSync('accountData', results);
+        if (this.checkedValues.includes('2') && account) {
+          wx.setStorageSync('accountData', account);
+        }
+        if (this.checkedValues.includes('3') && favorites) {
+          wx.setStorageSync('favorites', favorites);
         }
         this.setData({
           "keyDialog.show": false
