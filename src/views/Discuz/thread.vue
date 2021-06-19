@@ -11,20 +11,10 @@
             <div class="post-time">{{ post.postTime }}</div>
           </div>
           <h2>{{ post.postTitle }}</h2>
-          <div
-            class="post-content"
-            v-html="post.content"
-            @click.capture="routerTo"
-          ></div>
+          <div class="post-content" v-html="post.content" @click.capture="routerTo"></div>
         </li>
       </ul>
-      <Pagination
-        v-if="!isLoading"
-        :pageNum="pageInfo.pageNum"
-        :pageCount="pageInfo.pageCount"
-        :prevUrl="prevUrl"
-        :nextUrl="nextUrl"
-      ></Pagination>
+      <Pagination v-if="!isLoading" :pageNum="pageInfo.pageNum" :pageCount="pageInfo.pageCount" :prevUrl="prevUrl" :nextUrl="nextUrl"></Pagination>
     </div>
   </div>
 </template>
@@ -114,17 +104,7 @@ export default {
         sessionStorage.setItem(url, JSON.stringify(pageData));
       }
 
-      let {
-        documentTitle,
-        pageInfo,
-        formhash,
-        replyUrl,
-        prevTopicUrl,
-        nextTopicUrl,
-        favoriteUrl,
-        newThreadUrl,
-        postList = [],
-      } = pageData;
+      let { documentTitle, pageInfo, formhash, replyUrl, prevTopicUrl, nextTopicUrl, favoriteUrl, newThreadUrl, postList = [] } = pageData;
 
       document.title = documentTitle;
       this.discuz.formhash = formhash;
@@ -135,20 +115,11 @@ export default {
         this.tid = replyUrl.replace(/(^post.*tid=)(\d.*)(&extra=.*$)/g, "$2");
         this.fid = replyUrl.replace(/(^post.*fid=)(\d.*)(&tid=.*$)/g, "$2");
       } else if (prevTopicUrl || nextTopicUrl) {
-        this.tid = (prevTopicUrl || nextTopicUrl).replace(
-          /(^redirect.*tid=)(\d.*)(&goto=.*$)/g,
-          "$2"
-        );
-        this.fid = (prevTopicUrl || nextTopicUrl).replace(
-          /(^redirect.*fid=)(\d.*)(&tid=.*$)/g,
-          "$2"
-        );
+        this.tid = (prevTopicUrl || nextTopicUrl).replace(/(^redirect.*tid=)(\d.*)(&goto=.*$)/g, "$2");
+        this.fid = (prevTopicUrl || nextTopicUrl).replace(/(^redirect.*fid=)(\d.*)(&tid=.*$)/g, "$2");
       } else if (favoriteUrl && newThreadUrl) {
         this.tid = favoriteUrl.replace(/(^my.*tid=)(\d.*)(.*$)/g, "$2");
-        this.fid = newThreadUrl.replace(
-          /(^post.*fid=)(\d.*)(&extra=.*$)/g,
-          "$2"
-        );
+        this.fid = newThreadUrl.replace(/(^post.*fid=)(\d.*)(&extra=.*$)/g, "$2");
       }
       this.postList = postList;
       this.postList.forEach((item) => {
@@ -167,10 +138,7 @@ export default {
         target: { href, nodeName },
       } = event;
       if (nodeName === "A" && href.includes("viewthread.php?tid=")) {
-        href = href.replace(
-          /(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g,
-          `thread-$2-$3-1.html#postmessage_$4`
-        );
+        href = href.replace(/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g, `thread-$2-$3-1.html#postmessage_$4`);
         let { params, hash } = this.$route;
         if (params.url + hash != href) {
           this.$router.push(href);

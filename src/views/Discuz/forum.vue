@@ -16,12 +16,7 @@
           >
         </ul>
       </template>
-      <ul
-        class="area"
-        v-for="(area, i) of threadList"
-        :key="i"
-        :data-title="area.name"
-      >
+      <ul class="area" v-for="(area, i) of threadList" :key="i" :data-title="area.name">
         <template v-for="(thread, ii) of area.value">
           <router-link
             v-if="thread.type != '投票'"
@@ -33,20 +28,12 @@
             tag="li"
           >
             [{{ thread.date }}] {{ thread.title }}
-            <template v-if="thread.permission"
-              >[阅读权限{{ thread.permission }}]</template
-            >
+            <template v-if="thread.permission">[阅读权限{{ thread.permission }}]</template>
             ♥{{ thread.thanks }} ({{ thread.nums }})
           </router-link>
         </template>
       </ul>
-      <Pagination
-        v-if="!isLoading"
-        :pageNum="pageInfo.pageNum"
-        :pageCount="pageInfo.pageCount"
-        :prevUrl="prevUrl"
-        :nextUrl="nextUrl"
-      ></Pagination>
+      <Pagination v-if="!isLoading" :pageNum="pageInfo.pageNum" :pageCount="pageInfo.pageCount" :prevUrl="prevUrl" :nextUrl="nextUrl"></Pagination>
     </div>
   </div>
 </template>
@@ -75,24 +62,14 @@ export default {
     prevUrl() {
       let prevUrl = "";
       if (this.pageInfo && this.pageInfo.pageNum != 1 && this.url) {
-        prevUrl = this.url.replace(
-          /(^.*-)(\d.*)(.html$)/g,
-          `$1${this.pageInfo.pageNum - 1}$3`
-        );
+        prevUrl = this.url.replace(/(^.*-)(\d.*)(.html$)/g, `$1${this.pageInfo.pageNum - 1}$3`);
       }
       return prevUrl;
     },
     nextUrl() {
       let nextUrl = "";
-      if (
-        this.pageInfo &&
-        this.pageInfo.pageNum < this.pageInfo.pageCount &&
-        this.url
-      ) {
-        nextUrl = this.url.replace(
-          /(^.*-)(\d.*)(.html$)/g,
-          `$1${this.pageInfo.pageNum + 1}$3`
-        );
+      if (this.pageInfo && this.pageInfo.pageNum < this.pageInfo.pageCount && this.url) {
+        nextUrl = this.url.replace(/(^.*-)(\d.*)(.html$)/g, `$1${this.pageInfo.pageNum + 1}$3`);
       }
       return nextUrl;
     },
@@ -101,13 +78,11 @@ export default {
   async beforeRouteUpdate(to, from, next) {
     next();
     await this.getForumPageData(to.params.url);
-    document.querySelector(".overflow-container").scrollTop =
-      sessionStorage.getItem(to.params.url + "_scrollTop") || 0;
+    document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem(to.params.url + "_scrollTop") || 0;
   },
   async activated() {
     await this.getForumPageData(this.url);
-    document.querySelector(".overflow-container").scrollTop =
-      sessionStorage.getItem(this.url + "_scrollTop") || 0;
+    document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem(this.url + "_scrollTop") || 0;
   },
   beforeMount() {},
   destroyed() {},
@@ -138,10 +113,7 @@ export default {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
-        sessionStorage.setItem(
-          this.url + "_scrollTop",
-          document.querySelector(".overflow-container").scrollTop
-        );
+        sessionStorage.setItem(this.url + "_scrollTop", document.querySelector(".overflow-container").scrollTop);
       }, 500);
     },
   },

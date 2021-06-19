@@ -3,9 +3,7 @@
     <div class="overflow-container">
       <ul class="user-info">
         <li>用户名:{{ discuz.userInfo.username }}</li>
-        <li v-if="discuz.signInfo.isSigned">
-          签到状态:{{ discuz.signInfo.isSigned ? "已签到" : "未签到" }}
-        </li>
+        <li v-if="discuz.signInfo.isSigned">签到状态:{{ discuz.signInfo.isSigned ? "已签到" : "未签到" }}</li>
         <li v-for="item of creditList" :key="item">{{ item }}</li>
       </ul>
       <ul class="area" data-title="我的收藏">
@@ -55,7 +53,6 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
-import http from "../../util/http";
 import { selectors } from "../../util";
 export default {
   name: "discuz-page",
@@ -82,8 +79,7 @@ export default {
     async init() {
       if (this.discuz.isLogin) {
         await this.getMyPageData();
-        this.collections =
-          JSON.parse(localStorage.getItem("collections")) || [];
+        this.collections = JSON.parse(localStorage.getItem("collections")) || [];
       } else {
         this.$router.replace("/index");
       }
@@ -102,11 +98,7 @@ export default {
       this.recentTopics = pageData.recentTopics;
       this.recentTopics &&
         this.recentTopics.forEach((item) => {
-          if (
-            item &&
-            item.title ==
-              `${pageData.username}/${new Date().getMonth() + 1}月份/打卡签到帖`
-          ) {
+          if (item && item.title == `${pageData.username}/${new Date().getMonth() + 1}月份/打卡签到帖`) {
             if (item.lastPost.includes(new Date().Format("yyyy-M-d"))) {
               signInfo.isSigned = true;
             } else {
