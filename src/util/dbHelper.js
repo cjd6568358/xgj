@@ -63,8 +63,8 @@ class DbHelper {
     initDB(dbName) {
         this.db = new Dexie(dbName);
         this.db.version(this.version).stores({
-            signRecords: "id,timestamp,[year+month],day,hour,minute,second",
-            website: 'id,title,remark,keys,status'
+            sign: "id,timestamp,[year+month],day,hour,minute,second",
+            account: 'guid,username,password,remark,type'
         });
         this.db.open().catch(function(e) {
             // eslint-disable-next-line

@@ -49,12 +49,12 @@ export default {
           return;
         }
         Object.keys(records).forEach((item) => {
-          if (item == "website") {
-            DbHelper.website.bulkPut(records[item]);
+          if (item == "account") {
+            DbHelper.account.bulkPut(records[item]);
           } else if (item == "sign") {
-            DbHelper.signRecords.bulkPut(records[item]);
-          } else if (item == "collections") {
-            localStorage.setItem("collections", records[item]);
+            DbHelper.sign.bulkPut(records[item]);
+          } else if (item == "favorites") {
+            localStorage.setItem("favorites", JSON.stringify(records[item]));
           }
         });
         this.$Toast.info("数据恢复成功!");

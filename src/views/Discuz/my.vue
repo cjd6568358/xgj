@@ -7,7 +7,7 @@
         <li v-for="item of creditList" :key="item">{{ item }}</li>
       </ul>
       <ul class="area" data-title="我的收藏">
-        <template v-for="(thread, i) of collections">
+        <template v-for="(thread, i) of favorites">
           <li :key="i" v-if="thread">
             <router-link
               :to="{
@@ -59,7 +59,7 @@ export default {
   components: {},
   data() {
     return {
-      collections: [],
+      favorites: [],
       creditList: [],
       recentReply: [],
       recentTopics: [],
@@ -79,7 +79,7 @@ export default {
     async init() {
       if (this.discuz.isLogin) {
         await this.getMyPageData();
-        this.collections = JSON.parse(localStorage.getItem("collections")) || [];
+        this.favorites = JSON.parse(localStorage.getItem("favorites")) || [];
       } else {
         this.$router.replace("/index");
       }
@@ -109,11 +109,11 @@ export default {
     },
     onlongpress(thread) {
       if (confirm("确定删除该收藏吗")) {
-        let i = this.collections.findIndex((item) => {
+        let i = this.favorites.findIndex((item) => {
           return item === thread;
         });
-        this.collections.splice(i, 1);
-        localStorage.setItem("collections", JSON.stringify(this.collections));
+        this.favorites.splice(i, 1);
+        localStorage.setItem("favorites", JSON.stringify(this.favorites));
       }
     },
   },

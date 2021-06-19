@@ -92,7 +92,7 @@ export default {
         window.confirm("确认操作2") &&
         window.confirm("确认操作3")
       ) {
-        DbHelper.signRecords.clear();
+        DbHelper.sign.clear();
         this.$Toast.info("清除考勤记录完成!");
       }
     },

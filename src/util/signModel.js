@@ -1,7 +1,7 @@
 import DbHelper from './dbHelper'
 import { calculatGUID, getHash } from './index'
 
-class SignRecord {
+class Sign {
     id
     timestamp
     year
@@ -23,18 +23,18 @@ class SignRecord {
 
     save() {
         this.id = calculatGUID() + "_" + getHash(Date.now().toString());
-        DbHelper.signRecords.add(this)
+        DbHelper.sign.add(this)
     }
 
     static async getRecordsByTimestamp(timestamp = 0) {
-        return await DbHelper.signRecords.where('timestamp').above(timestamp).sortBy('timestamp');
+        return await DbHelper.sign.where('timestamp').above(timestamp).sortBy('timestamp');
     }
     static async getRecordsByYMD(YMD) {
-        return await DbHelper.signRecords.where({ year: YMD.year, month: YMD.month,day:YMD.day }).sortBy('timestamp');
+        return await DbHelper.sign.where({ year: YMD.year, month: YMD.month,day:YMD.day }).sortBy('timestamp');
     }
     static async getRecordsByYM(YMD) {
-        return await DbHelper.signRecords.where({ year: YMD.year, month: YMD.month }).sortBy('timestamp');
+        return await DbHelper.sign.where({ year: YMD.year, month: YMD.month }).sortBy('timestamp');
     }
 }
 
-export default SignRecord
+export default Sign

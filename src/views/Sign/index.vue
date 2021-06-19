@@ -16,7 +16,7 @@
 import Calendar from "../../components/Calendar/index.vue";
 import TabBar from "../../components/TabBar/index.vue";
 import { getYMD } from "../../util";
-import signRecordModel from "../../util/signRecordModel";
+import signModel from "../../util/signModel";
 export default {
     name: "sign-page",
     components: { TabBar, Calendar },
@@ -59,10 +59,10 @@ export default {
             this.currMonthRecords = await this.getHighlightedDates(ym);
         },
         async getHighlightedDates(YMD) {
-            return await signRecordModel.getRecordsByYM(YMD);
+            return await signModel.getRecordsByYM(YMD);
         },
         signIn() {
-            new signRecordModel({
+            new signModel({
                 timestamp: Date.now()
             }).save();
             this.changedMonth(this.today);

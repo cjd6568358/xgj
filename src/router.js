@@ -17,10 +17,10 @@ const DiscuzAutoLoginView = () =>
     import( /* webpackChunkName: "DiscuzAutoLoginView" */ './views/Discuz/autoLogin.vue')
 const MyView = () =>
     import( /* webpackChunkName: "MyView" */ './views/My/index.vue')
-const PasswordListView = () =>
-    import( /* webpackChunkName: "PasswordListView" */ './views/Password/list.vue')
-const PasswordView = () =>
-    import( /* webpackChunkName: "PasswordView" */ './views/Password/index.vue')
+const AccountListView = () =>
+    import( /* webpackChunkName: "AccountListView" */ './views/Account/list.vue')
+const AccountView = () =>
+    import( /* webpackChunkName: "AccountView" */ './views/Account/index.vue')
 
 Vue.use(Router)
 
@@ -73,14 +73,14 @@ export default new Router({
             component: SignView
         },
         {
-            path: '/password',
-            name: 'PasswordListView',
-            component: PasswordListView
+            path: '/account',
+            name: 'AccountListView',
+            component: AccountListView
         },
         {
-            path: '/password/:type/:id?',
-            name: 'PasswordView',
-            component: PasswordView,
+            path: '/account/:type/:id?',
+            name: 'AccountView',
+            component: AccountView,
             props: true
         },
         {

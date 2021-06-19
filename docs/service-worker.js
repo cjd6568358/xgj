@@ -15,7 +15,7 @@ importScripts("/xgj/workbox-v4.3.1/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/xgj/workbox-v4.3.1"});
 
 importScripts(
-  "/xgj/precache-manifest.6df771fba3573b4656c348dc44578eba.js"
+  "/xgj/precache-manifest.a273a6f3f6e7d4ba732322d47e503fe6.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "xgj"});
@@ -32,4 +32,4 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/\/xgj\/(tools|discuz|sign|password|my)$/, new workbox.strategies.NetworkFirst({ plugins: [new workbox.cacheableResponse.Plugin({ statuses: [ 200, 404 ] })] }), 'GET');
+workbox.routing.registerRoute(/\/xgj\/(tools|discuz|sign|account|my)$/, new workbox.strategies.NetworkFirst({ plugins: [new workbox.cacheableResponse.Plugin({ statuses: [ 200, 404 ] })] }), 'GET');

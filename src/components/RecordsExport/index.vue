@@ -40,18 +40,18 @@ export default {
     return {
       backUpList: [
         {
-          name: "密码",
-          value: "website",
-          selected: false,
-        },
-        {
           name: "签到",
           value: "sign",
           selected: false,
         },
         {
+          name: "账号",
+          value: "account",
+          selected: false,
+        },
+        {
           name: "收藏",
-          value: "sign",
+          value: "favorites",
           selected: false,
         },
       ],
@@ -65,16 +65,20 @@ export default {
         return;
       }
       let backup = {};
-      let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
+      let fileName = `xgj_web`;
       if (this.backUpList[0].selected) {
-        backup.website = await DbHelper.website.toArray();
+        backup.sign = await DbHelper.sign.toArray();
+        fileName += `_sign`;
       }
       if (this.backUpList[1].selected) {
-        backup.sign = await DbHelper.signRecords.toArray();
+        backup.account = await DbHelper.account.toArray();
+        fileName += `_account`;
       }
-	  if (this.backUpList[2].selected) {
-        backup.collections = localStorage.getItem("collections");
+      if (this.backUpList[2].selected) {
+        backup.favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+        fileName += `_favorites`;
       }
+      fileName += `_${new Date().Format("yyyyMMddhhmmss")}.bak`;
       backup.hash = getHash(JSON.stringify(backup));
       let params = {
         fileName: fileName,
