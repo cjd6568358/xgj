@@ -16,7 +16,7 @@ Vue.use(Vuex);
 let HOST = localStorage.getItem("proxy_host");
 if (!proxyServers.some((item) => item.host === HOST)) {
   localStorage.removeItem("proxy_host");
-  HOST = proxyServers[1].host;
+  HOST = proxyServers[0].host;
 }
 
 // let temmeConvert = 'client'
