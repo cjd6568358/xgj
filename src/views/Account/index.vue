@@ -56,7 +56,7 @@ export default {
       this.$router.go(-1);
     },
     save() {
-      if (this.info.title) {
+      if (this.info.remark) {
         new accountModel(this.info).save();
         this.$router.go(-1);
       } else {
