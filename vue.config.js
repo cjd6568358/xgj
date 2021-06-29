@@ -1,7 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const handlerCb = async ({ url, request, event, params }) => {
-//     return await fetch(request, { mode: 'cors' });
-// };
+
 module.exports = {
     pwa: {
         name: '小管家',
@@ -29,11 +27,6 @@ module.exports = {
                         }
                     }
                 },
-                // {
-                //     urlPattern: /https:\/\/cjd6568358.gitee.io\/static\/xgj\/config.json/, // 匹配文件
-                //     method: "GET",
-                //     handler: handlerCb
-                // }
             ]
         }
     },
