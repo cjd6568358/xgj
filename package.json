@@ -10,6 +10,7 @@
     "agentkeepalive": "^4.1.3",
     "axios": "^0.21.1",
     "dexie": "^3.0.2",
+    "hammerjs": "^2.0.8",
     "js-cookie": "^2.2.1",
     "register-service-worker": "^1.7.1",
     "temme": "^0.8.3",
