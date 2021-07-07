@@ -45,7 +45,7 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.14.1",
+  "libVersion": "2.18.0",
   "appid": "wxac884d9f8dfbc9b6",
   "projectname": "xgj",
   "isGameTourist": false,
@@ -56,6 +56,8 @@
     "beforePreview": "",
     "beforeUpload": ""
   },
+  "cloudfunctionRoot": "./cloudfunction/",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
   "condition": {
     "search": {
       "list": []
