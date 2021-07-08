@@ -30,7 +30,7 @@ async function getOptions() {
     // args: chrome.args,
     // headless: chrome.headless,
     // executablePath: path.join(__dirname, './chrome-linux/'),
-    
+
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: true,
   };
