@@ -1,15 +1,19 @@
 // pages/discuz/index.js
 import { dispatcher } from "../../utils/zoro.weapp.js";
 import { connect } from "../../utils/redux.weapp.js";
-import { selectors, pageCache, querystring } from "../../utils/util.js";
+import { selectors, pageCache, querystring, toast } from "../../utils/util.js";
 import http from "../../utils/http.js";
 let {
   discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn },
 } = dispatcher;
 const config = connect(
-  ({
-    discuz: { isLogin, signInfo, userInfo, webSite, webSiteList },
-  }) => ({ isLogin, signInfo, userInfo, webSite, webSiteList })
+  ({ discuz: { isLogin, signInfo, userInfo, webSite, webSiteList } }) => ({
+    isLogin,
+    signInfo,
+    userInfo,
+    webSite,
+    webSiteList,
+  })
 )({
   /**
    * 页面的初始数据
@@ -17,13 +21,13 @@ const config = connect(
   data: {
     areaList: [],
     isOwner: false,
-    webSiteIndex: 0
+    webSiteIndex: 0,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     if (
       wx.getStorageSync("openid") === "oZ_Zn5KcVjk5CyWfgHLm4T8MQ_3s" ||
       wx.getStorageSync("openkey") === "openkey"
@@ -76,8 +80,8 @@ const config = connect(
       let isLogin = !!wx.getStorageSync("cdb3_auth");
       if (isLogin) {
         wx.setNavigationBarTitle({
-          title: '首页',
-        })
+          title: "首页",
+        });
         UPDATE_DISCUZ({ isLogin, webSite });
         await this.getIndexPageData();
         await this.checkSigned();
@@ -109,7 +113,7 @@ const config = connect(
         if (
           item &&
           item.title ==
-          `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
+            `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
         ) {
           if (item.lastPost.includes(new Date().Format("yyyy-M-d"))) {
             signInfo.isSigned = true;
@@ -133,7 +137,7 @@ const config = connect(
     }
     let { creditList, username, areaList } = pageData;
     if (!username) {
-      logout();
+      this.logout("获取首页数据失败,确认退出登录吗?");
     } else {
       let userInfo = Object.assign({}, this.data.userInfo, {
         creditList,
@@ -173,37 +177,42 @@ const config = connect(
     UPDATE_DISCUZ({ webSiteList });
   },
   async openMenu() {
-    let { signInfo, userInfo } = this.data
-    let itemList = ['每日一签', '每月一签', `个人中心(${userInfo.username})`, '搜索', '退出登录']
+    let { signInfo, userInfo } = this.data;
+    let itemList = [
+      "每日一签",
+      "每月一签",
+      `个人中心(${userInfo.username})`,
+      "搜索",
+      "退出登录",
+    ];
     if (signInfo.isSigned) {
-      itemList.shift()
+      itemList.shift();
     }
     wx.showActionSheet({
       itemList,
       success: ({ tapIndex }) => {
-        let itemText = itemList[tapIndex]
-        if (itemText.includes('每日一签')) {
-          this.dailySignIn()
-        } else if (itemText.includes('每月一签')) {
-          this.monthSignIn()
-        } else if (itemText.includes('个人中心')) {
-          this.routerToUser()
-        } else if (itemText.includes('搜索')) {
+        let itemText = itemList[tapIndex];
+        if (itemText.includes("每日一签")) {
+          this.dailySignIn();
+        } else if (itemText.includes("每月一签")) {
+          this.monthSignIn();
+        } else if (itemText.includes("个人中心")) {
+          this.routerToUser();
+        } else if (itemText.includes("搜索")) {
           wx.navigateTo({
             url: "/pages/discuz/search",
           });
-        } else if (itemText.includes('退出登录')) {
-          this.logout()
+        } else if (itemText.includes("退出登录")) {
+          this.logout();
         } else {
-
         }
-      }
-    })
+      },
+    });
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: async function () {
+  onReady: async function() {
     let { signInfo, isLogin, webSiteList, webSite } = this.data;
     if (webSiteList.length && webSite) {
       this.setData({
@@ -221,38 +230,38 @@ const config = connect(
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
     let isLogin = !!wx.getStorageSync("cdb3_auth");
     if (isLogin) {
       wx.setNavigationBarTitle({
-        title: '首页',
-      })
+        title: "首页",
+      });
     }
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () { },
+  onHide: function() {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () { },
+  onUnload: function() {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function() {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () { },
+  onReachBottom: function() {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () { },
+  onShareAppMessage: function() {},
 });
 Page(config);
