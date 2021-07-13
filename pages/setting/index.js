@@ -9,7 +9,7 @@ Page({
   data: {
     halfDialog: {
       show: false,
-      type: 'export',
+      type: 'backup',
       items: [{ value: 1, name: '签到' }, { value: 2, name: '帐号' }, { value: 3, name: '收藏' }],
       buttons: [{
         type: 'primary',
@@ -17,6 +17,7 @@ Page({
         value: 1
       }]
     },
+    cloud_backup: wx.getStorageSync("cloud_backup"),
     keyDialog: {
       show: false,
       title: "输入密钥",
@@ -36,25 +37,45 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+  },
+  switchChange({ detail: { value } }) {
+    if (value) {
+      // 开启云备份
+      let { halfDialog } = this.data
+      halfDialog.show = true
+      halfDialog.type = 'cloud_backup'
+      this.setData({
+        halfDialog
+      })
+    } else {
+      // 关闭云备份
+      wx.setStorageSync('cloud_backup', { checkedValues: [], key: "" })
+    }
   },
   backupStore() {
     wx.showActionSheet({
-      itemList: ['备份', '还原'],
+      itemList: ['备份至文件', '从文件还原', '从云数据还原'],
       success: ({ tapIndex }) => {
         if (tapIndex === 0) {
           // 备份
           let { halfDialog } = this.data
           halfDialog.show = true
-          halfDialog.type = 'export'
+          halfDialog.type = 'backup'
           this.setData({
             halfDialog
           })
-        } else {
+        } else if (tapIndex === 1) {
           // 还原
           let { halfDialog } = this.data
           halfDialog.show = true
-          halfDialog.type = 'import'
+          halfDialog.type = 'restore'
+          this.setData({
+            halfDialog
+          })
+        } else if (tapIndex === 2) {
+          let { halfDialog } = this.data
+          halfDialog.show = true
+          halfDialog.type = 'cloud_restore'
           this.setData({
             halfDialog
           })
@@ -64,7 +85,7 @@ Page({
   },
   bindHalfDialogClick() {
     let { halfDialog } = this.data
-    if (halfDialog.type === 'export') {
+    if (halfDialog.type === 'backup') {
       let backup = {};
       // 签到数据备份
       if (this.checkedValues.includes('1')) {
@@ -87,7 +108,12 @@ Page({
         "halfDialog.show": false,
         "keyDialog.show": true
       })
-    } else {
+    } else if (halfDialog.type === 'cloud_backup') {
+      this.setData({
+        "halfDialog.show": false,
+        "keyDialog.show": true
+      })
+    } else if (halfDialog.type === 'restore') {
       wx.chooseMessageFile({
         count: 1,
         type: 'all',
@@ -105,11 +131,16 @@ Page({
       this.setData({
         "halfDialog.show": false,
       })
+    } else if (halfDialog.type === 'cloud_restore') {
+      this.setData({
+        "halfDialog.show": false,
+        "keyDialog.show": true
+      })
     }
   },
   async onDialogConfirm() {
     let { halfDialog, key, email } = this.data
-    if (halfDialog.type === 'export') {
+    if (halfDialog.type === 'backup') {
       let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
       if (key && email) {
         // 小程序本地存储
@@ -128,7 +159,12 @@ Page({
       } else {
         toast('密钥&&邮箱必填')
       }
-    } else {
+    } else if (halfDialog.type === 'cloud_backup') {
+      wx.setStorageSync('cloud_backup', { checkedValues: this.checkedValues, key })
+      this.setData({
+        "keyDialog.show": false
+      })
+    } else if (halfDialog.type === 'restore') {
       let backupData = await decryptAES(this.encryptText, key)
       if (backupData) {
         try {
@@ -167,25 +203,26 @@ Page({
       } else {
         toast('解析失败,请更换文件或密钥!')
       }
+    } else if (halfDialog.type === 'cloud_restore') {
+      // 从云备份还原
     }
   },
   bindCheckboxChange({ detail: { value } }) {
     this.checkedValues = value
   },
   bindDialogClose() {
-    this.checkedValues = ["1", "2"]
+    this.checkedValues = ["1", "2", "3"]
     this.encryptText = ""
     this.setData({
       key: '',
       email: ''
     })
+    if (this.data.halfDialog.type === 'cloud_backup') {
+      this.setData({
+        cloud_backup: wx.getStorageSync("cloud_backup")
+      })
+    }
   },
-  // onGotUserInfo({ detail: { userInfo } }) {
-  //   this.setData({
-  //     userInfo
-  //   })
-  //   wx.setStorageSync('userInfo', userInfo)
-  // },
   clearAllStorage() {
     wx.showModal({
       title: '提示',

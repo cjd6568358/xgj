@@ -34,7 +34,7 @@
 	</view>
 	<view class="item" bindtap='openWifi'>
 		<view class="label">
-			<mp-icon extClass="label_icon_extClass" size="18" color="#999" icon="info"></mp-icon>
+			<mp-icon extClass="label_icon_extClass rotate90" size="18" color="#999" icon="voice"></mp-icon>
 			<text>查看WIFI</text>
 		</view>
 		<view class="value">
@@ -68,6 +68,15 @@
 			<mp-icon extClass="value_icon_extClass" size="15" color="#999" icon="arrow"></mp-icon>
 		</view>
 	</view>
+	<view class="item">
+		<view class="label">
+			<mp-icon extClass="label_icon_extClass" size="18" color="#999" icon="download"></mp-icon>
+			<text>实时云备份</text>
+		</view>
+		<view class="value">
+			<switch checked="{{cloud_backup.checkedValues.length}}" bindchange="switchChange" />
+		</view>
+	</view>
 	<view class="item" bindtap='routerToReadMe'>
 		<view class="label">
 			<mp-icon extClass="label_icon_extClass" size="18" color="#999" icon="info"></mp-icon>
@@ -78,18 +87,21 @@
 		</view>
 	</view>
 </view>
-<mp-halfScreenDialog extClass="half_extClass" close="bindHalfDialogClose" bindbuttontap="bindHalfDialogClick" show="{{halfDialog.show}}" buttons="{{halfDialog.buttons}}">
+<mp-halfScreenDialog extClass="half_extClass" bindclose="bindDialogClose" bindbuttontap="bindHalfDialogClick"
+	show="{{halfDialog.show}}" buttons="{{halfDialog.buttons}}">
 	<view slot="title">
-		{{halfDialog.type == 'export'? '数据备份':'数据还原'}}
+		{{(halfDialog.type == 'backup'||halfDialog.type == 'cloud_backup')? '数据备份':'数据还原'}}
 	</view>
 	<view slot="desc" class="half-desc">
 		<checkbox-group bindchange="bindCheckboxChange">
 			<view wx:for="{{halfDialog.items}}" wx:key="name" class="item">
-				<checkbox value="{{item.value}}" checked="true" />{{item.name}}</view>
+				<checkbox value="{{item.value}}" checked="true" />{{item.name}}
+			</view>
 		</checkbox-group>
 	</view>
 </mp-halfScreenDialog>
-<mp-dialog title="" show="{{keyDialog.show}}" bindbuttontap="onDialogConfirm" bindclose="bindDialogClose" buttons="{{[{text: '确定'}]}}">
+<mp-dialog title="" show="{{keyDialog.show}}" bindbuttontap="onDialogConfirm" bindclose="bindDialogClose"
+	buttons="{{[{text: '确定'}]}}">
 	<input class="key" model:value="{{key}}" placeholder="请至少输入6位密钥" />
-	<input wx:if="{{halfDialog.type == 'export'}}" class="key" model:value="{{email}}" placeholder="请输入邮箱" />
+	<input wx:if="{{halfDialog.type == 'backup'}}" class="key" model:value="{{email}}" placeholder="请输入邮箱" />
 </mp-dialog>
