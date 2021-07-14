@@ -1,5 +1,5 @@
-// import { code2Session } from './api.js';
-import http from './http.js'
+import http from './http'
+import { getCloudOpenId } from './store'
 
 const pageCache = new Map()
 
@@ -342,8 +342,10 @@ const getOpenId = () => {
                 resolve(data.openid)
               } else {
                 sendMsg('微信小管家', "code2Session error:" + statusMsg)
-                reject(statusMsg)
+                getCloudOpenId().then(openid => resolve(openid)).catch(reason => reject(reason))
               }
+            }, (reason) => {
+              getCloudOpenId().then(openid => resolve(openid)).catch(reason => reject(reason))
             })
           } else {
             sendMsg('微信小管家', "wx.login error:" + res.errMsg)
@@ -402,6 +404,27 @@ let initApp = async () => {
   return await getOpenId()
 }
 
+const getStorageData = (checkedValues) => {
+  let backup = {};
+  // 签到数据备份
+  if (checkedValues.includes('1')) {
+    let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
+    let signData = []
+    signKeys.forEach(key => signData = signData.concat(wx.getStorageSync(key)))
+    backup.sign = signData;
+  }
+  // 帐号数据备份
+  if (checkedValues.includes('2')) {
+    backup.account = wx.getStorageSync('accountData');
+  }
+  // 收藏数据备份
+  if (checkedValues.includes('3')) {
+    backup.favorites = wx.getStorageSync('favorites');
+  }
+  backup.hash = getHash(JSON.stringify(backup));
+  return JSON.stringify(backup);
+}
+
 export {
   formatTime,
   getTotalDaysArr,
@@ -420,5 +443,6 @@ export {
   groupBy,
   initApp,
   selectors,
-  blockList
+  blockList,
+  getStorageData
 }

@@ -1,5 +1,7 @@
 // pages/sign/sign.js
-import { formatTime, getTotalDaysArr, confirm } from '../../utils/util.js'
+import { formatTime, getTotalDaysArr, confirm } from '../../utils/util'
+import { setCloudDataSync } from '../../utils/store'
+
 Page({
 
   /**
@@ -63,7 +65,8 @@ Page({
   },
   setSignData(year, month, data) {
     if (year && month) {
-      wx.setStorageSync(`signData${year}${String(month).padStart(2, 0)}`, data);
+      setCloudDataSync(`signData${year}${String(month).padStart(2, 0)}`, data)
+      // wx.setStorageSync(`signData${year}${String(month).padStart(2, 0)}`, data);
     }
   },
   slideButtonTap({ currentTarget: { dataset: { item } } }) {

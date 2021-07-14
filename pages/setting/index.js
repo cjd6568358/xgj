@@ -1,6 +1,6 @@
-import { getHash, toast, groupBy, calculatGUID } from '../../utils/util'
+import { getHash, toast, groupBy, getStorageData } from '../../utils/util'
 import { encryptAES, decryptAES, string2File } from '../../utils/api'
-
+import { setCloudDataSync, getCloudDataSync } from '../../utils/store'
 Page({
 
   /**
@@ -37,6 +37,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+
   },
   switchChange({ detail: { value } }) {
     if (value) {
@@ -86,24 +87,7 @@ Page({
   bindHalfDialogClick() {
     let { halfDialog } = this.data
     if (halfDialog.type === 'backup') {
-      let backup = {};
-      // 签到数据备份
-      if (this.checkedValues.includes('1')) {
-        let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
-        let signData = []
-        signKeys.forEach(key => signData = signData.concat(wx.getStorageSync(key)))
-        backup.sign = signData;
-      }
-      // 帐号数据备份
-      if (this.checkedValues.includes('2')) {
-        backup.account = wx.getStorageSync('accountData');
-      }
-      // 收藏数据备份
-      if (this.checkedValues.includes('3')) {
-        backup.favorites = wx.getStorageSync('favorites');
-      }
-      backup.hash = getHash(JSON.stringify(backup));
-      this.fileData = JSON.stringify(backup);
+      this.fileData = getStorageData(this.checkedValues);
       this.setData({
         "halfDialog.show": false,
         "keyDialog.show": true
@@ -160,8 +144,10 @@ Page({
         toast('密钥&&邮箱必填')
       }
     } else if (halfDialog.type === 'cloud_backup') {
-      wx.setStorageSync('cloud_backup', { checkedValues: this.checkedValues, key })
+      setCloudDataSync('cloud_backup', { checkedValues: this.checkedValues, key })
+      // wx.setStorageSync('cloud_backup', { checkedValues: this.checkedValues, key })
       this.setData({
+        key: "",
         "keyDialog.show": false
       })
     } else if (halfDialog.type === 'restore') {
@@ -186,8 +172,8 @@ Page({
           let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
           signKeys.forEach(key => wx.removeStorageSync(key))
           // 恢复备份数据
-          let sign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
-          Object.keys(sign).sort().forEach(key => wx.setStorageSync(key, sign[key]))
+          let newSign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
+          Object.keys(newSign).sort().forEach(key => wx.setStorageSync(key, newSign[key]))
         }
         if (this.checkedValues.includes('2') && account) {
           wx.setStorageSync('accountData', account);
@@ -205,6 +191,49 @@ Page({
       }
     } else if (halfDialog.type === 'cloud_restore') {
       // 从云备份还原
+      let cloudData = await getCloudDataSync()
+      if (cloudData) {
+        let backupData = await decryptAES(cloudData.encryptText, key)
+        if (backupData) {
+          try {
+            backupData = JSON.parse(backupData)
+          } catch (error) {
+            toast.info("文件序列化校验失败");
+            return;
+          }
+          let oldHash = backupData.hash;
+          delete backupData.hash;
+          let newHash = getHash(JSON.stringify(backupData));
+          if (oldHash != newHash) {
+            toast.info("文件hash校验失败:" + newHash + "-" + oldHash);
+            return;
+          }
+          let { account, sign, favorites } = backupData
+          if (this.checkedValues.includes('1') && sign) {
+            // 清除本地签到数据
+            let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
+            signKeys.forEach(key => wx.removeStorageSync(key))
+            // 恢复备份数据
+            let newSign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
+            Object.keys(newSign).sort().forEach(key => wx.setStorageSync(key, newSign[key]))
+          }
+          if (this.checkedValues.includes('2') && account) {
+            wx.setStorageSync('accountData', account);
+          }
+          if (this.checkedValues.includes('3') && favorites) {
+            wx.setStorageSync('favorites', favorites);
+          }
+          this.setData({
+            "keyDialog.show": false
+          })
+          toast('数据还原成功')
+          this.bindDialogClose()
+        } else {
+          toast('解析失败,请更换文件或密钥!')
+        }
+      } else {
+        toast.info("找不到对应账号云备份数据");
+      }
     }
   },
   bindCheckboxChange({ detail: { value } }) {

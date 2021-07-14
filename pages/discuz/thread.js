@@ -1,7 +1,8 @@
 // pages/discuz/thread.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache, toast } from '../../utils/util.js'
+import { selectors, pageCache, toast } from '../../utils/util'
+import { setCloudDataSync } from '../../utils/store'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 
@@ -181,7 +182,8 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     } else {
       favorites.push(scrollObj);
     }
-    wx.setStorageSync('favorites', favorites)
+    setCloudDataSync('favorites', favorites)
+    // wx.setStorageSync('favorites', favorites)
   },
   removeFavorites() {
     let { tid } = this.data
@@ -190,7 +192,8 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       return item.tid == tid;
     });
     favorites.splice(i, 1);
-    wx.setStorageSync('favorites', favorites)
+    setCloudDataSync('favorites', favorites)
+    // wx.setStorageSync('favorites', favorites)
   },
   navigateToH5Reader() {
     let { tid } = this.data
