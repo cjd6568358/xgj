@@ -28,16 +28,25 @@ scroll-view {
 }
 
 .data-log {
-  margin: 20rpx auto;
-  width: 90vw;
-  border-radius: 20rpx;
+  margin: 20rpx 0;
+  width: 100vw;
   overflow: hidden;
   background-color: #fff;
+  padding-left: 40rpx;
+
+  sub-title {
+    text-align: center;
+  }
 
   .weui-slide {
-    padding: 10rpx 30rpx;
+    padding: 10rpx 0;
     height: 80rpx;
     display: flex;
     align-items: center;
+    border-bottom: 1rpx solid #eee;
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 }

@@ -1,4 +1,14 @@
 /* pages/discuz/index.wxss */
+.note {
+  padding: 40rpx;
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.note .item {
+  margin-bottom: 20rpx;
+}
+
 .login-form {
   margin: 32rpx;
   background-color: #fff;
@@ -31,12 +41,14 @@
 }
 
 .login-form .input-warp .btn-update {
+  opacity: 0;
   display: flex;
   align-items: center;
   border: 1rpx solid #ddd;
   height: 60rpx;
   padding: 0 30rpx;
   border-radius: 40rpx;
+  width: 20rpx;
 }
 
 .login-form .input-warp .btn-update mp-icon {

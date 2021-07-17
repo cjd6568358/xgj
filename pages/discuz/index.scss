@@ -1,4 +1,13 @@
 /* pages/discuz/index.wxss */
+.note {
+  padding: 40rpx;
+  font-size: 30rpx;
+  color: #fff;
+  .item {
+    margin-bottom: 20rpx;
+  }
+}
+
 .login-form {
   margin: 32rpx;
   background-color: #fff;
@@ -29,12 +38,14 @@
     border-bottom: 1rpx solid #eee;
 
     .btn-update {
+      opacity: 0;
       display: flex;
       align-items: center;
       border: 1rpx solid #ddd;
       height: 60rpx;
       padding: 0 30rpx;
       border-radius: 40rpx;
+      width: 20rpx;
 
       mp-icon {
         display: flex;

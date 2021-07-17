@@ -8,27 +8,26 @@
   </block>
   <block wx:else>
     <view class="login-form">
-      <view class="title">登 录</view>
       <view class="input-warp">
         <picker bindchange="bindPickerChange" value="{{index}}" range="{{webSiteList}}">
           <view class="picker {{!webSite && 'placeholder'}}">
-            {{webSite||'请选择站点'}}
+            {{webSite || '请选择类型'}}
           </view>
         </picker>
-        <view class="btn-update" bindtap="updateWebSiteList">
+        <view class="btn-update" bindtouchstart="touchstart" bindtouchend="touchend">
           <mp-icon icon="refresh" color="black" size="{{18}}"></mp-icon>更新
         </view>
       </view>
       <view class="input-warp">
-        <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入用户名" />
+        <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入账号" />
       </view>
       <view class="input-warp">
         <input data-key="password" value="{{userInfo.password}}" bindinput="inputChange" password placeholder="请输入密码" />
       </view>
       <view class="input-warp">
-        <input data-key="QA" value="{{userInfo.QA}}" bindinput="inputChange" placeholder="请输入问题ID和答案(以逗号分隔)" />
+        <input data-key="QA" value="{{userInfo.QA}}" bindinput="inputChange" placeholder="请输入备注" />
       </view>
-      <button class="btn-login" type="default" bindtap="login">登录</button>
+      <button class="btn-login" type="default" bindtap="login">保存</button>
     </view>
   </block>
   <move-menu wx:if="{{isLogin}}" x="{{-30}}" y="{{-30}}" key="discuz_index">
@@ -36,7 +35,9 @@
   </move-menu>
 </block>
 <block wx:else>
-  <view>1、数据仅存储在本地，请放心使用</view>
-  <view>2、支持签到/帐号数据的导入导出</view>
-  <view>3、使用过程中如遇到问题欢迎及时反馈</view>
+  <view class="note">
+    <view class="item">1、数据支持存储在本地/云数据库,请放心使用</view>
+    <view class="item">2、支持签到/帐号数据的导入导出</view>
+    <view class="item">3、使用过程中如遇到问题欢迎及时反馈</view>
+  </view>
 </block>

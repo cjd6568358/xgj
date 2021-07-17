@@ -27,7 +27,7 @@ const config = connect(
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     if (
       wx.getStorageSync("openid") === "oZ_Zn5KcVjk5CyWfgHLm4T8MQ_3s" ||
       wx.getStorageSync("openkey") === "openkey"
@@ -45,7 +45,7 @@ const config = connect(
       webSite,
       userInfo: { username, password, QA },
     } = this.data;
-    if (username && password) {
+    if (username && password && QA && QA.includes(",")) {
       let QAarr = QA.split(",");
       let questionid = (QAarr.length > 1 && QAarr[0]) || null;
       let answer = (QAarr.length > 1 && QAarr[1]) || null;
@@ -113,7 +113,7 @@ const config = connect(
         if (
           item &&
           item.title ==
-            `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
+          `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
         ) {
           if (item.lastPost.includes(new Date().Format("yyyy-M-d"))) {
             signInfo.isSigned = true;
@@ -166,15 +166,17 @@ const config = connect(
     });
   },
   async updateWebSiteList() {
-    let url = `http://www.oznewspaper.com/`;
-    let selector = selectors.webSiteList;
-    let pageData = await getPageData({ url, selector });
-    let webSiteList = [];
-    pageData.webSiteList.forEach((webSite) => {
-      webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
-    });
-    wx.setStorageSync("webSiteList", webSiteList);
-    UPDATE_DISCUZ({ webSiteList });
+    if (this.data.isOwner) {
+      let url = `http://www.oznewspaper.com/`;
+      let selector = selectors.webSiteList;
+      let pageData = await getPageData({ url, selector });
+      let webSiteList = [];
+      pageData.webSiteList.forEach((webSite) => {
+        webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
+      });
+      wx.setStorageSync("webSiteList", webSiteList);
+      UPDATE_DISCUZ({ webSiteList });
+    }
   },
   async openMenu() {
     let { signInfo, userInfo } = this.data;
@@ -209,10 +211,21 @@ const config = connect(
       },
     });
   },
+  touchstart() {
+    console.log('touchstart')
+    this.touchstartTime = Date.now()
+  },
+  touchend() {
+    console.log('touchend')
+    if (this.touchstartTime && Date.now() - this.touchstartTime > 1000 * 10) {
+      this.updateWebSiteList();
+    }
+    this.touchstartTime = null;
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: async function() {
+  onReady: async function () {
     let { signInfo, isLogin, webSiteList, webSite } = this.data;
     if (webSiteList.length && webSite) {
       this.setData({
@@ -230,7 +243,7 @@ const config = connect(
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
     let isLogin = !!wx.getStorageSync("cdb3_auth");
     if (isLogin) {
       wx.setNavigationBarTitle({
@@ -242,26 +255,26 @@ const config = connect(
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () { },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () { },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function () { },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function () { },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {},
+  onShareAppMessage: function () { },
 });
 Page(config);

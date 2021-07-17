@@ -26,7 +26,7 @@ const getCloudOpenId = () => {
 const setCloudDataSync = async (key, data) => {
   wx.setStorageSync(key, data)
   let backupConfig = wx.getStorageSync('cloud_backup') || {}
-  if (key) {
+  if (backupConfig.key) {
     let openid = await getOpenId()
     let storageData = getStorageData(backupConfig.checkedValues)
     let encryptText = await encryptAES(storageData, backupConfig.key)

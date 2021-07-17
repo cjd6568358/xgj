@@ -46,14 +46,14 @@ Date.prototype.Format = function (fmt) {
 
 initApp().then(openid => {
   wx.setStorageSync('openid', openid)
-  if (blockList.includes(openid)) {
-    return
-  }
   App({
     onLaunch: function () {
       let guid = wx.getStorageSync('guid') || calculatGUID()
       wx.setStorageSync('guid', guid)
       this.globalData.guid = guid
+      if (blockList.includes(openid)) {
+        return
+      }
       app.setup()
     },
     onError: (error) => { 
