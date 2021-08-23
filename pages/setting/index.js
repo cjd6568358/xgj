@@ -1,6 +1,6 @@
-import { getHash, toast, groupBy, getStorageData } from '../../utils/util'
-import { encryptAES, decryptAES, string2File } from '../../utils/api'
-import { setCloudDataSync, getCloudDataSync } from '../../utils/store'
+import { toast, getStorageData, onAppReady, restoreData } from '../../utils/index'
+import { encryptAES, string2File } from '../../utils/api'
+import { getCloudDataSync, getCloudConfig, setCloudConfig } from '../../utils/store'
 Page({
 
   /**
@@ -17,7 +17,6 @@ Page({
         value: 1
       }]
     },
-    cloud_backup: wx.getStorageSync("cloud_backup"),
     keyDialog: {
       show: false,
       title: "输入密钥",
@@ -37,11 +36,17 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    onAppReady().then(() => {
+      getCloudConfig().then(cloudConfig => {
+        this.setData({
+          cloudConfig
+        })
+      })
+    })
   },
   switchChange({ detail: { value } }) {
     if (value) {
-      // 开启云备份
+      // 开启云备份(1.选择需要备份的数据类型)
       let { halfDialog } = this.data
       halfDialog.show = true
       halfDialog.type = 'cloud_backup'
@@ -50,15 +55,20 @@ Page({
       })
     } else {
       // 关闭云备份
-      wx.setStorageSync('cloud_backup', { checkedValues: [], key: "" })
+      let { cloudConfig } = this.data
+      cloudConfig.enable = 0;
+      setCloudConfig(cloudConfig)
+      this.setData({
+        cloudConfig
+      })
     }
   },
   backupStore() {
     wx.showActionSheet({
-      itemList: ['备份至文件', '从文件还原', '从云数据还原'],
+      itemList: ['备份至文件', '从文件还原', '从云备份还原'],
       success: ({ tapIndex }) => {
         if (tapIndex === 0) {
-          // 备份
+          // 备份至文件
           let { halfDialog } = this.data
           halfDialog.show = true
           halfDialog.type = 'backup'
@@ -66,7 +76,7 @@ Page({
             halfDialog
           })
         } else if (tapIndex === 1) {
-          // 还原
+          // 从文件还原
           let { halfDialog } = this.data
           halfDialog.show = true
           halfDialog.type = 'restore'
@@ -74,6 +84,7 @@ Page({
             halfDialog
           })
         } else if (tapIndex === 2) {
+          // 从云备份还原
           let { halfDialog } = this.data
           halfDialog.show = true
           halfDialog.type = 'cloud_restore'
@@ -93,6 +104,7 @@ Page({
         "keyDialog.show": true
       })
     } else if (halfDialog.type === 'cloud_backup') {
+      // 开启云备份(2.输入云备份秘钥)
       this.setData({
         "halfDialog.show": false,
         "keyDialog.show": true
@@ -123,12 +135,18 @@ Page({
     }
   },
   async onDialogConfirm() {
-    let { halfDialog, key, email } = this.data
+    let { halfDialog, key, email, cloudConfig } = this.data
     if (halfDialog.type === 'backup') {
       let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
       if (key && email) {
+        wx.showLoading({
+          title: '',
+        })
         // 小程序本地存储
         let encryptText = await encryptAES(this.fileData, key)
+        wx.hideLoading({
+          success: (res) => { },
+        })
         let filePath = wx.env.USER_DATA_PATH + '/' + fileName
         let fs = wx.getFileSystemManager()
         fs.writeFileSync(filePath, encryptText, "utf8")
@@ -144,95 +162,35 @@ Page({
         toast('密钥&&邮箱必填')
       }
     } else if (halfDialog.type === 'cloud_backup') {
-      setCloudDataSync('cloud_backup', { checkedValues: this.checkedValues, key })
-      // wx.setStorageSync('cloud_backup', { checkedValues: this.checkedValues, key })
+      // 开启云备份(3.保存云备份配置)
+      Object.assign(cloudConfig, { key, enable: 1 })
+      setCloudConfig(cloudConfig)
       this.setData({
+        cloudConfig,
         key: "",
         "keyDialog.show": false
       })
     } else if (halfDialog.type === 'restore') {
-      let backupData = await decryptAES(this.encryptText, key)
-      if (backupData) {
-        try {
-          backupData = JSON.parse(backupData)
-        } catch (error) {
-          toast.info("文件序列化校验失败");
-          return;
-        }
-        let oldHash = backupData.hash;
-        delete backupData.hash;
-        let newHash = getHash(JSON.stringify(backupData));
-        if (oldHash != newHash) {
-          toast.info("文件hash校验失败:" + newHash + "-" + oldHash);
-          return;
-        }
-        let { account, sign, favorites } = backupData
-        if (this.checkedValues.includes('1') && sign) {
-          // 清除本地签到数据
-          let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
-          signKeys.forEach(key => wx.removeStorageSync(key))
-          // 恢复备份数据
-          let newSign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
-          Object.keys(newSign).sort().forEach(key => wx.setStorageSync(key, newSign[key]))
-        }
-        if (this.checkedValues.includes('2') && account) {
-          wx.setStorageSync('accountData', account);
-        }
-        if (this.checkedValues.includes('3') && favorites) {
-          wx.setStorageSync('favorites', favorites);
-        }
+      restoreData(this.encryptText, key, this.checkedValues).then(() => {
         this.setData({
           "keyDialog.show": false
         })
         toast('数据还原成功')
         this.bindDialogClose()
-      } else {
-        toast('解析失败,请更换文件或密钥!')
-      }
+      }, toast)
     } else if (halfDialog.type === 'cloud_restore') {
       // 从云备份还原
       let cloudData = await getCloudDataSync()
       if (cloudData) {
-        let backupData = await decryptAES(cloudData.encryptText, key)
-        if (backupData) {
-          try {
-            backupData = JSON.parse(backupData)
-          } catch (error) {
-            toast.info("文件序列化校验失败");
-            return;
-          }
-          let oldHash = backupData.hash;
-          delete backupData.hash;
-          let newHash = getHash(JSON.stringify(backupData));
-          if (oldHash != newHash) {
-            toast.info("文件hash校验失败:" + newHash + "-" + oldHash);
-            return;
-          }
-          let { account, sign, favorites } = backupData
-          if (this.checkedValues.includes('1') && sign) {
-            // 清除本地签到数据
-            let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
-            signKeys.forEach(key => wx.removeStorageSync(key))
-            // 恢复备份数据
-            let newSign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
-            Object.keys(newSign).sort().forEach(key => wx.setStorageSync(key, newSign[key]))
-          }
-          if (this.checkedValues.includes('2') && account) {
-            wx.setStorageSync('accountData', account);
-          }
-          if (this.checkedValues.includes('3') && favorites) {
-            wx.setStorageSync('favorites', favorites);
-          }
+        restoreData(cloudData.encryptText, key, this.checkedValues).then(() => {
           this.setData({
             "keyDialog.show": false
           })
           toast('数据还原成功')
           this.bindDialogClose()
-        } else {
-          toast('解析失败,请更换文件或密钥!')
-        }
+        }, toast)
       } else {
-        toast.info("找不到对应账号云备份数据");
+        toast("找不到对应账号云备份数据");
       }
     }
   },
@@ -240,6 +198,7 @@ Page({
     this.checkedValues = value
   },
   bindDialogClose() {
+    // 异常终止流程后，重置所有参数
     this.checkedValues = ["1", "2", "3"]
     this.encryptText = ""
     this.setData({
@@ -247,8 +206,10 @@ Page({
       email: ''
     })
     if (this.data.halfDialog.type === 'cloud_backup') {
-      this.setData({
-        cloud_backup: wx.getStorageSync("cloud_backup")
+      getCloudConfig().then(cloudConfig => {
+        this.setData({
+          cloudConfig
+        })
       })
     }
   },

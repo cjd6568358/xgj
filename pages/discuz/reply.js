@@ -1,4 +1,4 @@
-import { toast } from '../../utils/util'
+import { toast } from '../../utils/index'
 import { dispatcher } from '../../utils/zoro.weapp.js'
 let { discuz: { submitReply } } = dispatcher
 // pages/discuz/reply.js

@@ -1,5 +1,5 @@
 // pages/sign/sign.js
-import { formatTime, getTotalDaysArr, confirm } from '../../utils/util'
+import { formatTime, getTotalDaysArr, confirm } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 
 Page({

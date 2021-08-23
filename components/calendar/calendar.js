@@ -1,5 +1,5 @@
 // components/calendar/calendar.js
-import { formatTime, getTotalDaysArr } from '../../utils/util.js'
+import { formatTime, getTotalDaysArr } from '../../utils/index'
 
 Component({
   externalClasses: ['ext-active-class', 'ext-data-class'],

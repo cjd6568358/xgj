@@ -1,7 +1,7 @@
 // pages/discuz/forum.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache } from '../../utils/util.js'
+import { selectors, pageCache } from '../../utils/index'
 let { discuz: { getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 

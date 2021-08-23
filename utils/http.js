@@ -1,4 +1,4 @@
-import { sendMsg, baseUrl, querystring } from './util.js'
+import { sendMsg, baseUrl, querystring } from './index'
 const http = ((config) => {
   let request = {};
   let methods = ['get', 'post', 'put', 'delete'];
@@ -41,17 +41,18 @@ const http = ((config) => {
               if (defaultConfig.url.split('?')[1]) {
                 defaultConfig.url += '&'
               }
-              defaultConfig.url += qs
+              defaultConfig.url += '?' + qs
             }
           } else {
             defaultConfig.data = postData
           }
         } else {
           if (method == 'get') {
-            let qs = Object.keys(postData).filter(key => postData[key]).map((key, index) => {
-              return `${key}=${postData[key]}`
-            }).join('&')
+            let qs = querystring.stringify(Object.assign({}, postData))
             if (qs) {
+              if (defaultConfig.url.split('?')[1]) {
+                defaultConfig.url += '&'
+              }
               defaultConfig.url += '?' + qs
             }
           } else {

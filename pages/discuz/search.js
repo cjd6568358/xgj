@@ -1,7 +1,7 @@
 // pages/discuz/search.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, toast } from '../../utils/util.js'
+import { selectors, toast } from '../../utils/index'
 let { discuz: { searchData, getPageData } } = dispatcher
 const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
   {

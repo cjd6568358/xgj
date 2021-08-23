@@ -1,5 +1,5 @@
 // pages/account/list.js
-import { accountTypeList, confirm } from '../../utils/util'
+import { accountTypeList, confirm } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 Page({
 

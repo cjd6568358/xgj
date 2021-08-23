@@ -1,5 +1,28 @@
 import http from './http'
-import { getCloudOpenId } from './store'
+import { decryptAES } from './api'
+import { getCloudOpenId, getCloudConfig, getCloudDataSync } from './store'
+
+let initState = {
+  _isReady: false
+};
+
+let initStateListeners = [];
+
+Object.defineProperty(initState, "isReady", {
+  set(value) {
+    if (value === true) {
+      while (initStateListeners.length) {
+        let { timer, resolve } = initStateListeners.pop()
+        resolve(value)
+        clearTimeout(timer)
+      }
+    }
+    this._isReady = value
+  },
+  get() {
+    return this._isReady
+  }
+})
 
 const pageCache = new Map()
 
@@ -128,6 +151,8 @@ let selectors = {
   .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];
   `
 }
+
+let apps = [];
 
 const formatTime = (date, fmt) => {
   var o = {
@@ -329,6 +354,16 @@ const code2Session = (code) => {
 }
 
 const getOpenId = () => {
+  let autoRestore = () => {
+    getCloudConfig().then(async cloudConfig => {
+      let cloudData = await getCloudDataSync()
+      if (cloudConfig.enable && cloudConfig.key && cloudData && cloudData.encryptText && await confirm("检测到您开启了云备份,是否同步数据到本地?")) {
+        restoreData(cloudData.encryptText, cloudConfig.key, cloudConfig.checkedValues).then(() => {
+          toast('数据还原成功')
+        }, toast)
+      }
+    })
+  }
   return new Promise((resolve, reject) => {
     let openid = wx.getStorageSync('openid')
     if (!openid) {
@@ -340,12 +375,22 @@ const getOpenId = () => {
             code2Session(res.code).then(({ statusCode, statusMsg, data }) => {
               if (statusCode == 1) {
                 resolve(data.openid)
+                wx.setStorageSync('openid', data.openid)
+                autoRestore()
               } else {
                 sendMsg('微信小管家', "code2Session error:" + statusMsg)
-                getCloudOpenId().then(openid => resolve(openid)).catch(reason => reject(reason))
+                getCloudOpenId().then(openid => {
+                  resolve(openid)
+                  wx.setStorageSync('openid', data.openid)
+                  autoRestore()
+                }).catch(reason => reject(reason))
               }
             }, (reason) => {
-              getCloudOpenId().then(openid => resolve(openid)).catch(reason => reject(reason))
+              getCloudOpenId().then(openid => {
+                resolve(openid)
+                wx.setStorageSync('openid', data.openid)
+                autoRestore()
+              }).catch(reason => reject(reason))
             })
           } else {
             sendMsg('微信小管家', "wx.login error:" + res.errMsg)
@@ -357,6 +402,7 @@ const getOpenId = () => {
           reject("wx.login error:")
         }
       })
+
     } else {
       resolve(openid)
     }
@@ -387,23 +433,47 @@ let getGlobalConfig = () => {
   })
 }
 
+let onAppReady = () => {
+  if (initState.isReady) {
+    return Promise.resolve(initState.isReady)
+  } else {
+    return new Promise((resolve, reject) => {
+      let timer = setTimeout(() => {
+        initStateListeners = initStateListeners.filter(item => item.resolve !== resolve)
+        reject("timeout")
+      }, 5000)
+      initStateListeners.push({ timer, resolve })
+    })
+  }
+}
+
 let initApp = async () => {
-  let config = await getGlobalConfig()
-  if (config['baseUrl']) {
-    baseUrl = config['baseUrl']
-  }
-  if (config['accountTypeList']) {
-    accountTypeList = config['accountTypeList']
-  }
-  if (config['selectors']) {
-    selectors = config['selectors']
-  }
-  if (config['blockList']) {
-    blockList = config['blockList']
+  if (!initState.isReady) {
+    let config = await getGlobalConfig()
+    if (config['baseUrl']) {
+      baseUrl = config['baseUrl']
+    }
+    if (config['accountTypeList']) {
+      accountTypeList = config['accountTypeList']
+    }
+    if (config['selectors']) {
+      selectors = config['selectors']
+    }
+    if (config['blockList']) {
+      blockList = config['blockList']
+    }
+    if (config['apps']) {
+      apps = config['apps']
+    }
+    initState.isReady = true
   }
   return await getOpenId()
 }
 
+/**
+ * 获取本地需要备份数据
+ * @param {需要备份的数据类型} checkedValues 
+ */
 const getStorageData = (checkedValues) => {
   let backup = {};
   // 签到数据备份
@@ -425,6 +495,51 @@ const getStorageData = (checkedValues) => {
   return JSON.stringify(backup);
 }
 
+const restoreData = async (encryptText, key, checkedValues) => {
+  return new Promise(async (resolve, reject) => {
+    wx.showLoading({
+      title: '',
+    })
+    let backupData = await decryptAES(encryptText, key)
+    wx.hideLoading({
+      success: (res) => { },
+    })
+    if (backupData) {
+      try {
+        backupData = JSON.parse(backupData)
+      } catch (error) {
+        reject("文件序列化校验失败");
+        return;
+      }
+      let oldHash = backupData.hash;
+      delete backupData.hash;
+      let newHash = getHash(JSON.stringify(backupData));
+      if (oldHash != newHash) {
+        reject("文件hash校验失败:" + newHash + "-" + oldHash);
+        return;
+      }
+      let { account, sign, favorites } = backupData
+      if (checkedValues.includes('1') && sign) {
+        // 清除本地签到数据
+        let signKeys = wx.getStorageInfoSync().keys.filter(key => key.includes('signData'))
+        signKeys.forEach(key => wx.removeStorageSync(key))
+        // 恢复备份数据
+        let newSign = groupBy(sign, ({ year, month }) => `signData${year}${String(month).padStart(2, 0)}`)
+        Object.keys(newSign).sort().forEach(key => wx.setStorageSync(key, newSign[key]))
+      }
+      if (checkedValues.includes('2') && account) {
+        wx.setStorageSync('accountData', account);
+      }
+      if (checkedValues.includes('3') && favorites) {
+        wx.setStorageSync('favorites', favorites);
+      }
+      resolve()
+    } else {
+      reject('解析失败,请更换文件或密钥!')
+    }
+  })
+}
+
 export {
   formatTime,
   getTotalDaysArr,
@@ -442,7 +557,10 @@ export {
   getHash,
   groupBy,
   initApp,
+  onAppReady,
   selectors,
   blockList,
-  getStorageData
+  getStorageData,
+  apps,
+  restoreData
 }

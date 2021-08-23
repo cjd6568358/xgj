@@ -1,5 +1,5 @@
 // pages/account/index.js
-import { accountTypeList, toast, calculatGUID } from '../../utils/util'
+import { accountTypeList, toast, calculatGUID } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 
 Page({
@@ -32,7 +32,7 @@ Page({
     })
   },
   onSave() {
-    let accountData = wx.getStorageSync('accountData');
+    let accountData = wx.getStorageSync('accountData') || [];
     let { username, password, remark, type, guid } = this.data
     if (username && password) {
       if (guid) {

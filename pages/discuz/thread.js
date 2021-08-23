@@ -1,7 +1,7 @@
 // pages/discuz/thread.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache, toast } from '../../utils/util'
+import { selectors, pageCache, toast } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({

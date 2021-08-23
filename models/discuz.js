@@ -4,7 +4,7 @@ import {
   confirm,
   selectors,
   pageCache,
-} from "../utils/util";
+} from "../utils/index";
 import http from "../utils/http";
 
 let isLogin = !!wx.getStorageSync("cdb3_auth");

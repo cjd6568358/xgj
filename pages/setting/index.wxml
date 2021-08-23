@@ -74,7 +74,7 @@
 			<text>实时云备份</text>
 		</view>
 		<view class="value">
-			<switch checked="{{cloud_backup.checkedValues.length}}" bindchange="switchChange" />
+			<switch checked="{{cloudConfig.enable}}" bindchange="switchChange" />
 		</view>
 	</view>
 	<view class="item" bindtap='routerToReadMe'>

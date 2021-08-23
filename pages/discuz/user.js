@@ -1,5 +1,5 @@
 // pages/discuz/user.js
-import { selectors } from "../../utils/util.js";
+import { selectors } from "../../utils/index";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
