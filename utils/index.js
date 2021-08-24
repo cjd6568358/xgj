@@ -431,8 +431,8 @@ let onAppReady = () => {
     return new Promise((resolve, reject) => {
       let timer = setTimeout(() => {
         initStateListeners = initStateListeners.filter(item => item.resolve !== resolve)
-        reject("timeout")
-      }, 5000)
+        reject("onAppReady timeout")
+      }, 10000)
       initStateListeners.push({ timer, resolve })
     })
   }
