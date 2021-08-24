@@ -102,6 +102,6 @@
 </mp-halfScreenDialog>
 <mp-dialog title="" show="{{keyDialog.show}}" bindbuttontap="onDialogConfirm" bindclose="bindDialogClose"
 	buttons="{{[{text: '确定'}]}}">
-	<input class="key" model:value="{{key}}" placeholder="请至少输入6位密钥" />
+	<input class="key" model:value="{{key}}" maxlength="16" placeholder="请至少输入6位密钥" />
 	<input wx:if="{{halfDialog.type == 'backup'}}" class="key" model:value="{{email}}" placeholder="请输入邮箱" />
 </mp-dialog>
