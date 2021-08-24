@@ -1,5 +1,5 @@
 // pages/account/list.js
-import { accountTypeList, confirm } from '../../utils/index'
+import { accountTypeList, confirm, onAppReady } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 Page({
 
@@ -19,10 +19,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      accountTypeList,
-      onSearch: this.onSearch.bind(this)
-    })
   },
   onSearch(value) {
     let resultList = this.accountData.map(item => {
@@ -85,10 +81,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let accountData = wx.getStorageSync('accountData') || []
-    this.accountData = accountData
-    this.setData({
-      resultList: [...this.accountData]
+    onAppReady().then(() => {
+      this.accountData = wx.getStorageSync('accountData') || []
+      this.setData({
+        accountTypeList,
+        resultList: [...this.accountData],
+        onSearch: this.onSearch.bind(this)
+      })
     })
   },
 

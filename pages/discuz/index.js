@@ -1,7 +1,7 @@
 // pages/discuz/index.js
 import { dispatcher } from "../../utils/zoro.weapp.js";
 import { connect } from "../../utils/redux.weapp.js";
-import { selectors, pageCache, querystring, toast } from "../../utils/index";
+import { formatTime, selectors, pageCache, querystring, toast } from "../../utils/index";
 import http from "../../utils/http.js";
 let {
   discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn },
@@ -115,7 +115,7 @@ const config = connect(
           item.title ==
           `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
         ) {
-          if (item.lastPost.includes(new Date().Format("yyyy-M-d"))) {
+          if (item.lastPost.includes(formatTime(new Date(), "yyyy-M-d"))) {
             signInfo.isSigned = true;
           } else {
             signInfo.tid = item.tid;

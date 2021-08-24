@@ -33,7 +33,7 @@ const getCloudConfig = async () => {
     if (_cloudConfig) {
       resolve(_cloudConfig)
     } else {
-      let openid = await getOpenId()
+      let { openid } = await getOpenId()
       cloudConfigCollection.where({
         _openid: openid
       }).get().then(res => {
@@ -58,7 +58,7 @@ const getCloudConfig = async () => {
 const setCloudConfig = async (cloudConfig) => {
   return new Promise(async (resolve, reject) => {
     if (cloudConfig) {
-      let openid = await getOpenId()
+      let { openid } = await getOpenId()
       delete cloudConfig._openid
       delete cloudConfig._id
       cloudConfigCollection.where({
@@ -78,7 +78,7 @@ const setCloudDataSync = async (key, data) => {
   wx.setStorageSync(key, data)
   let cloudConfig = await getCloudConfig()
   if (cloudConfig.enable) {
-    let openid = await getOpenId()
+    let { openid } = await getOpenId()
     let storageData = getStorageData(cloudConfig.checkedValues)
     let encryptText = await encryptAES(storageData, cloudConfig.key)
     let cloudData = await getCloudDataSync()
@@ -102,7 +102,7 @@ const setCloudDataSync = async (key, data) => {
 
 const getCloudDataSync = async () => {
   return new Promise(async (resolve, reject) => {
-    let openid = await getOpenId()
+    let { openid } = await getOpenId()
     cloudDataCollection.where({
       _openid: openid
     }).get().then(res => {

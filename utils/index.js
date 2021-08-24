@@ -353,58 +353,49 @@ const code2Session = (code) => {
   })
 }
 
-const getOpenId = () => {
-  let autoRestore = () => {
-    getCloudConfig().then(async cloudConfig => {
-      let cloudData = await getCloudDataSync()
-      if (cloudConfig.enable && cloudConfig.key && cloudData && cloudData.encryptText && await confirm("检测到您开启了云备份,是否同步数据到本地?")) {
-        restoreData(cloudData.encryptText, cloudConfig.key, cloudConfig.checkedValues).then(() => {
-          toast('数据还原成功')
-        }, toast)
+let autoRestore = () => {
+  getCloudConfig().then(async cloudConfig => {
+    let cloudData = await getCloudDataSync()
+    if (cloudConfig.enable && cloudConfig.key && cloudData && cloudData.encryptText && await confirm("检测到您开启了云备份,是否同步数据到本地?")) {
+      restoreData(cloudData.encryptText, cloudConfig.key, cloudConfig.checkedValues).then(() => {
+        toast('数据还原成功')
+      }, toast)
+    }
+  })
+}
+
+let getLoginOpenId = () => {
+  return new Promise((resolve, reject) => {
+    wx.login({
+      success: res => {
+        // 发送 res.code 到后台换取 openid, sessionKey, unionId
+        code2Session(res.code).then(({ statusCode, statusMsg, data }) => {
+          if (statusCode == 1) {
+            resolve(data.openid)
+          } else {
+            sendMsg('微信小管家', "code2Session error:" + statusMsg)
+            reject(statusMsg)
+          }
+        }, reject)
+      },
+      fail: (err) => {
+        sendMsg('微信小管家', "wx.login error:")
+        reject(err)
       }
     })
-  }
+  })
+}
+
+const getOpenId = () => {
   return new Promise((resolve, reject) => {
     let openid = wx.getStorageSync('openid')
     if (!openid) {
-      // 登录
-      wx.login({
-        success: res => {
-          if (res.code) {
-            // 发送 res.code 到后台换取 openid, sessionKey, unionId
-            code2Session(res.code).then(({ statusCode, statusMsg, data }) => {
-              if (statusCode == 1) {
-                resolve(data.openid)
-                wx.setStorageSync('openid', data.openid)
-                autoRestore()
-              } else {
-                sendMsg('微信小管家', "code2Session error:" + statusMsg)
-                getCloudOpenId().then(openid => {
-                  resolve(openid)
-                  wx.setStorageSync('openid', data.openid)
-                  autoRestore()
-                }).catch(reason => reject(reason))
-              }
-            }, (reason) => {
-              getCloudOpenId().then(openid => {
-                resolve(openid)
-                wx.setStorageSync('openid', data.openid)
-                autoRestore()
-              }).catch(reason => reject(reason))
-            })
-          } else {
-            sendMsg('微信小管家', "wx.login error:" + res.errMsg)
-            reject(res.errMsg)
-          }
-        },
-        fail: () => {
-          sendMsg('微信小管家', "wx.login error:")
-          reject("wx.login error:")
-        }
+      getLoginOpenId().catch(() => getCloudOpenId()).then((openid) => {
+        wx.setStorageSync('openid', openid)
+        resolve({ openid, cache: 0 })
       })
-
     } else {
-      resolve(openid)
+      resolve({ openid, cache: 1 })
     }
   })
 }
@@ -448,6 +439,26 @@ let onAppReady = () => {
 }
 
 let initApp = async () => {
+  let { openid, cache } = await getOpenId()
+  // 每次打开执行生物校验
+  try {
+    await soterAuth(openid)
+  } catch (error) {
+    wx.showModal({
+      showCancel: false,
+      title: "验证失败,请确保本人操作",
+      complete: () => {
+        wx.exitMiniProgram({
+          success: (res) => { },
+        })
+      }
+    })
+    return
+  }
+  if (!cache) {
+    // 首次打开检查云备份
+    autoRestore()
+  }
   if (!initState.isReady) {
     let config = await getGlobalConfig()
     if (config['baseUrl']) {
@@ -467,7 +478,7 @@ let initApp = async () => {
     }
     initState.isReady = true
   }
-  return await getOpenId()
+  return openid
 }
 
 /**
@@ -540,6 +551,52 @@ const restoreData = async (encryptText, key, checkedValues) => {
   })
 }
 
+// 生物验证
+const soterAuth = async (openid) => {
+  if (!openid) {
+    let res = await getOpenId()
+    openid = res.openid
+  }
+  return new Promise((resolve, reject) => {
+    wx.checkIsSupportSoterAuthentication().then(({ supportMode }) => {
+      Promise.all(supportMode.map(checkAuthMode => {
+        return wx.checkIsSoterEnrolledInDevice({
+          checkAuthMode,
+        })
+      })).then(resArr => {
+        let authModes = supportMode.filter((item, i) => resArr[i])
+        wx.startSoterAuthentication({
+          requestAuthModes: authModes,
+          challenge: openid,
+          authContent: '请验证'
+        }).then(async ({ authMode, resultJSON, resultJSONSignature }) => {
+          let { statusCode, statusMsg, data } = await http.get({
+            url: `wechat/accessToken/wxac884d9f8dfbc9b6`
+          })
+          if (statusCode) {
+            let { data: { is_ok } } = await http.post({
+              url: "wechat/soter/verify",
+              data: {
+                openid,
+                "access_token": data.access_token,
+                "json_string": resultJSON,
+                "json_signature": resultJSONSignature
+              }
+            })
+            if (!is_ok) {
+              reject("指纹验证失败,请稍后重试")
+            } else {
+              resolve()
+            }
+          } else {
+            reject(statusMsg)
+          }
+        }, err => reject(err.errMsg))
+      }, err => reject(err.errMsg))
+    }, err => reject(err.errMsg))
+  })
+}
+
 export {
   formatTime,
   getTotalDaysArr,
@@ -562,5 +619,6 @@ export {
   blockList,
   getStorageData,
   apps,
-  restoreData
+  restoreData,
+  soterAuth
 }

@@ -1,4 +1,5 @@
 import {
+  formatTime,
   querystring,
   toast,
   confirm,
@@ -110,9 +111,7 @@ export default {
         return;
       }
       let httpConfig = {};
-      let message = `ID: ${username}\r\n日期: ${new Date().Format(
-        "yyyy.M.dd"
-      )}\r\n心情: ......`;
+      let message = `ID: ${username}\r\n日期: ${formatTime(new Date(), "yyyy.M.dd")}\r\n心情: ......`;
       if (!signInfo.tid) {
         // 主题帖签到
         Object.assign(httpConfig, {
@@ -248,7 +247,7 @@ export default {
           const { title, tid, href, date } = threadList[index];
           if (
             title == `${username}/${month || 12}月份/打卡签到帖` &&
-            new Date(date).Format("yyyy") === new Date().Format("yyyy")
+            formatTime(new Date(date), "yyyy") === formatTime(new Date(), "yyyy")
           ) {
             let pageData = await put({
               type: "getPageData",

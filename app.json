@@ -1,20 +1,20 @@
 {
   "pages": [
+    "pages/tool/sign",
+    "pages/tool/location",
+    "pages/tool/systemInfo",
+    "pages/tool/wifi",
+    "pages/tool/storage",
     "pages/discuz/index",
     "pages/discuz/user",
     "pages/discuz/thread",
     "pages/discuz/forum",
     "pages/discuz/reply",
     "pages/discuz/search",
+    "pages/discuz/reader",
     "pages/setting/index",
-    "pages/tool/sign",
-    "pages/tool/location",
-    "pages/tool/systemInfo",
-    "pages/tool/wifi",
-    "pages/tool/storage",
     "pages/account/list",
-    "pages/account/index",
-    "pages/discuz/reader"
+    "pages/account/index"
   ],
   "permission": {
     "scope.userLocation": {

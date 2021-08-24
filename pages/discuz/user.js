@@ -1,5 +1,5 @@
 // pages/discuz/user.js
-import { selectors } from "../../utils/index";
+import { formatTime, selectors } from "../../utils/index";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
@@ -27,9 +27,7 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
           1}月份/打卡签到帖`
         ) {
           if (
-            item.lastPost.includes(
-              new Date().Format("yyyy-M-d")
-            )
+            item.lastPost.includes(formatTime(new Date(), "yyyy-M-d"))
           ) {
             signInfo.isSigned = true;
           } else {

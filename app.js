@@ -9,59 +9,18 @@ app.model(discuz)
 const store = app.start(false)
 setStore(store)
 
-Date.prototype.Format = function (fmt) {
-  var o = {
-    "M+": this.getMonth() + 1, //月份
-    "d+": this.getDate(), //日
-    "h+": this.getHours(), //小时
-    "m+": this.getMinutes(), //分
-    "s+": this.getSeconds(), //秒
-    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-    "S": this.getMilliseconds() //毫秒
-  };
-  if (/(y+)/.test(fmt))
-    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-  for (var k in o)
-    if (new RegExp("(" + k + ")").test(fmt))
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-  return fmt;
-};
-
-// if (!String.prototype.padStart) {
-//   String.prototype.padStart = function padStart(targetLength, padString) {
-//     targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
-//     padString = String((typeof padString !== 'undefined' ? padString : ' '));
-//     if (this.length > targetLength) {
-//       return String(this);
-//     }
-//     else {
-//       targetLength = targetLength - this.length;
-//       if (targetLength > padString.length) {
-//         padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
-//       }
-//       return padString.slice(0, targetLength) + String(this);
-//     }
-//   };
-// }
-
 initApp().then(openid => {
   App({
     onLaunch: function () {
       let guid = wx.getStorageSync('guid') || calculatGUID()
       wx.setStorageSync('guid', guid)
-      this.globalData.guid = guid
       if (blockList.includes(openid)) {
         return
       }
       app.setup()
     },
-    onError: (error) => { 
+    onError: (error) => {
       console.log(error)
-    },
-    globalData: {
-      version: '0.0.1',
-      guid: "",
-      openid: openid,
     }
   })
 })

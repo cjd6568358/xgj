@@ -1,5 +1,5 @@
 // pages/sign/sign.js
-import { formatTime, getTotalDaysArr, confirm } from '../../utils/index'
+import { formatTime, getTotalDaysArr, confirm, onAppReady } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 
 Page({
@@ -90,12 +90,14 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    let now = new Date()
-    let year = now.getFullYear()
-    let month = now.getMonth() + 1
-    let signData = this.getSignData(year, month);
-    this.setData({
-      signData
+    onAppReady().then(() => {
+      let now = new Date()
+      let year = now.getFullYear()
+      let month = now.getMonth() + 1
+      let signData = this.getSignData(year, month);
+      this.setData({
+        signData
+      })
     })
   },
 

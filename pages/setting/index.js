@@ -1,4 +1,4 @@
-import { toast, getStorageData, onAppReady, restoreData } from '../../utils/index'
+import { formatTime, toast, getStorageData, onAppReady, restoreData } from '../../utils/index'
 import { encryptAES, string2File } from '../../utils/api'
 import { getCloudDataSync, getCloudConfig, setCloudConfig } from '../../utils/store'
 Page({
@@ -137,7 +137,7 @@ Page({
   async onDialogConfirm() {
     let { halfDialog, key, email, cloudConfig } = this.data
     if (halfDialog.type === 'backup') {
-      let fileName = `xgj_${new Date().Format("yyyyMMddhhmmss")}.bak`;
+      let fileName = `xgj_${formatTime(new Date(), "yyyyMMddhhmmss")}.bak`;
       if (key && email) {
         wx.showLoading({
           title: '',
@@ -152,7 +152,10 @@ Page({
         fs.writeFileSync(filePath, encryptText, "utf8")
         // 线上邮箱保存
         await string2File(this.fileData, key, email, fileName)
-        toast('备份成功,文件已发送至您的邮箱')
+        await wx.addFileToFavorites({
+          filePath,
+        })
+        toast('备份成功,文件已发送至您的邮箱并加入收藏')
         this.setData({
           "halfDialog.show": false,
           "keyDialog.show": false
