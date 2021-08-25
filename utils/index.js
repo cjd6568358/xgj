@@ -568,7 +568,7 @@ const soterAuth = async (openid) => {
         wx.startSoterAuthentication({
           requestAuthModes: authModes,
           challenge: openid,
-          authContent: '请验证'
+          authContent: '请验证您的身份'
         }).then(async ({ authMode, resultJSON, resultJSONSignature }) => {
           let { statusCode, statusMsg, data } = await http.get({
             url: `wechat/accessToken/wxac884d9f8dfbc9b6`
