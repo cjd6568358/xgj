@@ -354,10 +354,10 @@ const code2Session = (code) => {
 }
 
 let autoRestore = () => {
-  getCloudConfig().then(async cloudConfig => {
+  getCloudConfig().then(async ({ enable, key, checkedValues }) => {
     let cloudData = await getCloudDataSync()
-    if (cloudConfig.enable && cloudConfig.key && cloudData && cloudData.encryptText && await confirm("检测到您开启了云备份,是否同步数据到本地?")) {
-      restoreData(cloudData.encryptText, cloudConfig.key, cloudConfig.checkedValues).then(() => {
+    if (enable && key && cloudData && cloudData.encryptText && await confirm("检测到您开启了云备份,是否同步数据到本地?")) {
+      restoreData(cloudData.encryptText, key, checkedValues).then(() => {
         toast('数据还原成功')
       }, toast)
     }
@@ -431,8 +431,8 @@ let onAppReady = () => {
     return new Promise((resolve, reject) => {
       let timer = setTimeout(() => {
         initStateListeners = initStateListeners.filter(item => item.resolve !== resolve)
-        reject("timeout")
-      }, 5000)
+        reject("onAppReady timeout")
+      }, 10000)
       initStateListeners.push({ timer, resolve })
     })
   }
