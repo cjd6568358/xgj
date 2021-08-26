@@ -1,4 +1,4 @@
-import { toast } from '../../utils/index'
+import { toast, testing } from '../../utils/index'
 import { dispatcher } from '../../utils/zoro.weapp.js'
 let { discuz: { submitReply } } = dispatcher
 // pages/discuz/reply.js
@@ -16,23 +16,29 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.showLoading({
-      title: '加载中',
-    })
-    // 监听content事件，获取上一页面通过eventChannel传送到当前页面的数据
-    let channel = this.getOpenerEventChannel()
-    channel.on && channel.on.on('content', ({ fid = "", tid = "", title }) => {
-      this.setData({
-        fid,
-        tid
+    if (testing) {
+      wx.switchTab({
+        url: '/pages/tool/sign',
       })
-      wx.setNavigationBarTitle({
-        title,
+    } else {
+      wx.showLoading({
+        title: '加载中',
       })
-      wx.hideLoading({
-        success: (res) => { },
+      // 监听content事件，获取上一页面通过eventChannel传送到当前页面的数据
+      let channel = this.getOpenerEventChannel()
+      channel.on && channel.on.on('content', ({ fid = "", tid = "", title }) => {
+        this.setData({
+          fid,
+          tid
+        })
+        wx.setNavigationBarTitle({
+          title,
+        })
+        wx.hideLoading({
+          success: (res) => { },
+        })
       })
-    })
+    }
   },
   async bindSubmit() {
     let { fid, tid, subject, message } = this.data;
