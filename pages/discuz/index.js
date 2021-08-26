@@ -1,13 +1,14 @@
 // pages/discuz/index.js
 import { dispatcher } from "../../utils/zoro.weapp.js";
 import { connect } from "../../utils/redux.weapp.js";
-import { formatTime, selectors, pageCache, querystring, toast } from "../../utils/index";
+import { formatTime, selectors, pageCache, querystring } from "../../utils/index";
 import http from "../../utils/http.js";
 let {
   discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn },
 } = dispatcher;
 const config = connect(
-  ({ discuz: { isLogin, signInfo, userInfo, webSite, webSiteList } }) => ({
+  ({ discuz: { isOwner, isLogin, signInfo, userInfo, webSite, webSiteList } }) => ({
+    isOwner,
     isLogin,
     signInfo,
     userInfo,
@@ -20,7 +21,6 @@ const config = connect(
    */
   data: {
     areaList: [],
-    isOwner: false,
     webSiteIndex: 0,
   },
 
@@ -28,14 +28,6 @@ const config = connect(
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (
-      wx.getStorageSync("openid") === "oZ_Zn5KcVjk5CyWfgHLm4T8MQ_3s" ||
-      wx.getStorageSync("openkey") === "openkey"
-    ) {
-      this.setData({
-        isOwner: true,
-      });
-    }
   },
   logout,
   dailySignIn,
@@ -227,7 +219,7 @@ const config = connect(
    */
   onReady: async function () {
     let { signInfo, isLogin, webSiteList, webSite } = this.data;
-    if (webSiteList.length && webSite) {
+    if (webSiteList && webSiteList.length && webSite) {
       this.setData({
         webSiteIndex: webSiteList.findIndex((item) => item === webSite),
       });

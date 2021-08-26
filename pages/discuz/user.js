@@ -1,5 +1,5 @@
 // pages/discuz/user.js
-import { formatTime, selectors } from "../../utils/index";
+import { formatTime, selectors, onAppReady, testing } from "../../utils/index";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
@@ -57,6 +57,7 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    
   },
 
   /**
@@ -70,16 +71,28 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
    * 生命周期函数--监听页面显示
    */
   onShow: async function () {
-    if (this.data.isLogin) {
-      await this.getMyPageData();
-      this.setData({
-        favorites: wx.getStorageSync('favorites') || []
+    onAppReady().then(async () => {
+      wx.showLoading({
+        title: '加载中',
       })
-    } else {
-      wx.redirectTo({
-        url: '/pages/discuz/login',
-      })
-    }
+      if (this.data.isLogin) {
+        await this.getMyPageData();
+        this.setData({
+          favorites: wx.getStorageSync('favorites') || []
+        })
+      } else {
+        if (!testing) {
+          wx.redirectTo({
+            url: '/pages/discuz/index',
+          })
+        }
+      }
+      if (!testing) {
+        wx.hideLoading({
+          success: (res) => { },
+        })
+      }
+    })
   },
 
   /**

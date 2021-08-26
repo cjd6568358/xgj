@@ -16,14 +16,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading({
+      title: '加载中',
+    })
     // 监听content事件，获取上一页面通过eventChannel传送到当前页面的数据
-    this.getOpenerEventChannel().on('content', ({ fid = "", tid = "", title }) => {
+    let channel = this.getOpenerEventChannel()
+    channel.on && channel.on.on('content', ({ fid = "", tid = "", title }) => {
       this.setData({
         fid,
         tid
       })
       wx.setNavigationBarTitle({
         title,
+      })
+      wx.hideLoading({
+        success: (res) => { },
       })
     })
   },

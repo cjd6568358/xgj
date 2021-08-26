@@ -154,6 +154,10 @@ let selectors = {
 
 let apps = [];
 
+let soterAuthCheck = false
+
+let testing = true
+
 const formatTime = (date, fmt) => {
   var o = {
     "M+": date.getMonth() + 1, //月份
@@ -442,7 +446,9 @@ let initApp = async () => {
   let { openid, cache } = await getOpenId()
   // 每次打开执行生物校验
   try {
-    await soterAuth(openid)
+    if (soterAuthCheck) {
+      await soterAuth(openid)
+    }
   } catch (error) {
     wx.showModal({
       showCancel: false,
@@ -475,6 +481,12 @@ let initApp = async () => {
     }
     if (config['apps']) {
       apps = config['apps']
+    }
+    if (config['soterAuthCheck']) {
+      soterAuthCheck = config['soterAuthCheck']
+    }
+    if (config['testing']) {
+      testing = config['testing']
     }
     initState.isReady = true
   }
@@ -620,5 +632,6 @@ export {
   getStorageData,
   apps,
   restoreData,
-  soterAuth
+  soterAuth,
+  testing
 }

@@ -1,7 +1,7 @@
 // pages/discuz/search.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, toast } from '../../utils/index'
+import { selectors, toast, onAppReady, testing } from '../../utils/index'
 let { discuz: { searchData, getPageData } } = dispatcher
 const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
   {
@@ -21,7 +21,16 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-
+      onAppReady().then(() => {
+        wx.showLoading({
+          title: '加载中',
+        })
+        if (!testing) {
+          wx.hideLoading({
+            success: (res) => { },
+          })
+        }
+      })
     },
     async onSearch() {
       let { srchtxt, srchuname, orderBy, sortType } = this.data

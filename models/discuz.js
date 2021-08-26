@@ -8,10 +8,6 @@ import {
 } from "../utils/index";
 import http from "../utils/http";
 
-let isLogin = !!wx.getStorageSync("cdb3_auth");
-let webSiteList = wx.getStorageSync("webSiteList") || [];
-let webSite = wx.getStorageSync("webSite") || webSiteList[0];
-
 let isLoading = false;
 
 export default {
@@ -23,20 +19,13 @@ export default {
    * state是model初始值，优先级如下：initial state < plugin state < model state，理论上可以是任意的值，但多数情况下，我们希望这是一个javascript的对象
    */
   state: {
+    isOwner: undefined,
     formhash: "",
-    isLogin,
-    webSiteList,
-    webSite,
-    userInfo: {
-      username: "",
-      password: "",
-      QA: "",
-      creditList: [],
-    },
-    signInfo: {
-      isSigned: false,
-      tid: null,
-    },
+    isLogin: undefined,
+    webSiteList: undefined,
+    webSite: undefined,
+    userInfo: undefined,
+    signInfo: undefined,
   },
   /**
    * 应用初始化调用app.start()或者app.setup()时触发，主要设计用于处理本模块中的初始化工作，支持async, await异步语法
@@ -52,6 +41,9 @@ export default {
    */
   async setup({ put, select, selectAll }) {
     console.log("discuz init");
+    if (wx.getStorageSync("openkey") === "openkey") {
+      put({ type: "INIT_OWNER_STATE" })
+    }
   },
   /**
    * 用于定义异步action，支持async，await
@@ -276,5 +268,27 @@ export default {
       }
       return { ...state, ...newState };
     },
+    INIT_OWNER_STATE({ payload }, state) {
+      let webSiteList = wx.getStorageSync("webSiteList") || [];
+      let webSite = wx.getStorageSync("webSite") || webSiteList[0];
+      let isLogin = !!wx.getStorageSync("cdb3_auth");
+      return {
+        ...state,
+        isOwner: true,
+        isLogin,
+        webSiteList,
+        webSite,
+        userInfo: {
+          username: "",
+          password: "",
+          QA: "",
+          creditList: [],
+        },
+        signInfo: {
+          isSigned: false,
+          tid: null,
+        },
+      };
+    }
   },
 };
