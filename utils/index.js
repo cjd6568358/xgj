@@ -444,27 +444,6 @@ let onAppReady = () => {
 
 let initApp = async () => {
   let { openid, cache } = await getOpenId()
-  // 每次打开执行生物校验
-  try {
-    if (soterAuthCheck) {
-      await soterAuth(openid)
-    }
-  } catch (error) {
-    wx.showModal({
-      showCancel: false,
-      title: "验证失败,请确保本人操作",
-      complete: () => {
-        wx.exitMiniProgram({
-          success: (res) => { },
-        })
-      }
-    })
-    return
-  }
-  if (!cache) {
-    // 首次打开检查云备份
-    autoRestore()
-  }
   if (!initState.isReady) {
     let config = await getGlobalConfig()
     if (config['baseUrl']) {
@@ -489,6 +468,27 @@ let initApp = async () => {
       testing = config['testing']
     }
     initState.isReady = true
+  }
+  // 每次打开执行生物校验
+  try {
+    if (soterAuthCheck) {
+      await soterAuth(openid)
+    }
+  } catch (error) {
+    wx.showModal({
+      showCancel: false,
+      title: "验证失败,请确保本人操作",
+      complete: () => {
+        wx.exitMiniProgram({
+          success: (res) => { },
+        })
+      }
+    })
+    return
+  }
+  if (!cache) {
+    // 首次打开检查云备份
+    autoRestore()
   }
   return openid
 }
