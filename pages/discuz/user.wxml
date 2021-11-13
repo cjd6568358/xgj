@@ -1,14 +1,14 @@
 <!--pages/discuz/user.wxml-->
+<page-meta>
+  <navigation-bar title="{{userInfo.username}}-{{signInfo.isSigned ? '已签到':'未签到'}}" />
+</page-meta>
 <block wx:if="{{userInfo.username}}">
-  <page-meta>
-    <navigation-bar title="{{userInfo.username}}-{{signInfo.isSigned ? '已签到':'未签到'}}" />
-  </page-meta>
   <view class="area credit" data-title="我的资产">
     <view wx:for="{{creditList}}" wx:key="item">{{item}}</view>
   </view>
   <view class="area" data-title="我的收藏">
     <block wx:for="{{favorites}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
-      <view wx:if="{{thread}}" data-path="{{thread.href}}" data-scroll-top="{{thread.scrollTop}}"
+      <view wx:if="{{thread}}" data-href="{{thread.href}}" data-scroll-top="{{thread.scrollTop}}"
         bindtap="routerToThread">{{thread.title}}</view>
     </block>
     <view class="empty" wx:if="{{favorites.length == 0}}">
@@ -17,7 +17,7 @@
   </view>
   <view class="area" data-title="最近回复">
     <block wx:for="{{recentReply}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
-      <view wx:if="{{thread}}" data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">
+      <view wx:if="{{thread}}" data-href="{{thread.href}}" bindtap="routerToThread">
         {{thread.title}}</view>
     </block>
     <view class="empty" wx:if="{{recentReply.length == 0}}">
@@ -26,7 +26,7 @@
   </view>
   <view class="area" data-title="最近主题">
     <block wx:for="{{recentTopics}}" wx:for-index="i" wx:for-item="thread" wx:key="i">
-      <view wx:if="{{thread}}" data-path="{{'http://'+webSite+'/bbs/'+thread.href}}" bindtap="routerToThread">
+      <view wx:if="{{thread}}" data-href="{{thread.href}}" bindtap="routerToThread">
         {{thread.title}}</view>
     </block>
     <view class="empty" wx:if="{{recentTopics.length == 0}}">

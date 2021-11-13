@@ -1,7 +1,7 @@
 // pages/discuz/thread.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache, toast } from '../../utils/index'
+import { selectors, pageCache, toast, protocol } from '../../utils/index'
 import { setCloudDataSync } from '../../utils/store'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
@@ -45,7 +45,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       pageCache.set(url, pageData);
     }
     let { tid, fid, webSite } = this.data
-    let targetBase = `http://${webSite}/bbs/`
+    let targetBase = `${protocol}${webSite}/bbs/`
     let {
       documentTitle,
       pageInfo = {
@@ -128,7 +128,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       console.log('navigateTo=====>', href)
       let { webSite } = this.data;
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(`http://${webSite}/bbs/` + href),
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${protocol}${webSite}/bbs/` + href),
       })
       ignore()
     }
@@ -172,7 +172,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       return item.tid == tid;
     });
     let scrollObj = {
-      href: url,
+      href: url.replace(/(^.*bbs\/)/, ''),
       tid: tid,
       title: documentTitle,
       scrollTop

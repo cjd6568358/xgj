@@ -158,6 +158,10 @@ let soterAuthCheck = false
 
 let testing = true
 
+let protocol = 'http://'
+
+let fetchWebSiteUrl = "http://www.oznewspaper.com/"
+
 const formatTime = (date, fmt) => {
   var o = {
     "M+": date.getMonth() + 1, //月份
@@ -446,28 +450,35 @@ let initApp = async () => {
   let { openid, cache } = await getOpenId()
   if (!initState.isReady) {
     let config = await getGlobalConfig()
-    if (config['baseUrl']) {
+    if ('baseUrl' in config) {
       baseUrl = config['baseUrl']
     }
-    if (config['accountTypeList']) {
+    if ('accountTypeList' in config) {
       accountTypeList = config['accountTypeList']
     }
-    if (config['selectors']) {
+    if ('selectors' in config) {
       selectors = config['selectors']
     }
-    if (config['blockList']) {
+    if ('blockList' in config) {
       blockList = config['blockList']
     }
-    if (config['apps']) {
+    if ('apps' in config) {
       apps = config['apps']
     }
-    if (config['soterAuthCheck']) {
+    if ('soterAuthCheck' in config) {
       soterAuthCheck = config['soterAuthCheck']
     }
-    if (config['testing']) {
+    if ('testing' in config) {
       testing = config['testing']
     }
+    if ('protocol' in config) {
+      protocol = config['protocol']
+    }
+    if ('fetchWebSiteUrl' in config) {
+      fetchWebSiteUrl = config['fetchWebSiteUrl']
+    }
     initState.isReady = true
+    console.log("initApp")
   }
   // 每次打开执行生物校验
   try {
@@ -633,5 +644,7 @@ export {
   apps,
   restoreData,
   soterAuth,
-  testing
+  testing,
+  protocol,
+  fetchWebSiteUrl
 }

@@ -1,5 +1,5 @@
 // pages/discuz/user.js
-import { formatTime, selectors, onAppReady, testing } from "../../utils/index";
+import { formatTime, selectors, onAppReady, testing, protocol } from "../../utils/index";
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
@@ -16,7 +16,7 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
   },
   async getMyPageData() {
     let { webSite, signInfo } = this.data;
-    let pageData = await getPageData({ url: `http://${webSite}/bbs/my.php`, selector: selectors.my });
+    let pageData = await getPageData({ url: `${protocol}${webSite}/bbs/my.php`, selector: selectors.my });
     let { formhash, username, creditList, recentReply, recentTopics } = pageData;
     recentTopics &&
       recentTopics.forEach(item => {
@@ -42,14 +42,18 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
     })
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash })
   },
-  routerToThread({ currentTarget: { dataset: { path, scrollTop } } }) {
+  routerToThread({ currentTarget: { dataset: { href, scrollTop } } }) {
+    let { webSite } = this.data;
+    if (!href.startsWith("http")) {
+      href = `${protocol}${webSite}/bbs/${href}`
+    }
     if (scrollTop) {
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(path) + "&scrollTop=" + scrollTop,
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(href) + "&scrollTop=" + scrollTop,
       })
     } else {
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(path),
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(href),
       })
     }
   },
@@ -57,7 +61,7 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+
   },
 
   /**

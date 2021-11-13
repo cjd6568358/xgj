@@ -5,6 +5,7 @@ import {
   confirm,
   selectors,
   pageCache,
+  protocol
 } from "../utils/index";
 import http from "../utils/http";
 
@@ -83,7 +84,7 @@ export default {
         return;
       }
       let httpConfig = {
-        url: `http://${webSite}/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+        url: `${protocol}${webSite}/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
         data: querystring.stringify({
           formhash,
           message,
@@ -107,7 +108,7 @@ export default {
       if (!signInfo.tid) {
         // 主题帖签到
         Object.assign(httpConfig, {
-          url: `http://${webSite}/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+          url: `${protocol}${webSite}/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -121,7 +122,7 @@ export default {
       } else {
         // 回复帖签到
         Object.assign(httpConfig, {
-          url: `http://${webSite}/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+          url: `${protocol}${webSite}/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -155,7 +156,7 @@ export default {
           } = select();
           let lastMonthSignInfo = await put({ type: "getLastMonthSignInfo" });
           let httpConfig = {
-            url: `http://${webSite}/bbs/post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+            url: `${protocol}${webSite}/bbs/post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",
@@ -212,7 +213,7 @@ export default {
       let { formhash, webSite } = select();
       let postData = {
         httpConfig: {
-          url: `http://${webSite}/bbs/search.php`,
+          url: `${protocol}${webSite}/bbs/search.php`,
           data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=${orderBy}&ascdesc=${sortType}&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer",
@@ -244,7 +245,7 @@ export default {
             let pageData = await put({
               type: "getPageData",
               payload: {
-                url: `http://${webSite}/bbs/${href}`,
+                url: `${protocol}${webSite}/bbs/${href}`,
                 selector: selectors.thread,
               },
             });
@@ -278,6 +279,7 @@ export default {
         isLogin,
         webSiteList,
         webSite,
+        protocol,
         userInfo: {
           username: "",
           password: "",

@@ -1,7 +1,7 @@
 // pages/discuz/index.js
 import { dispatcher } from "../../utils/zoro.weapp.js";
 import { connect } from "../../utils/redux.weapp.js";
-import { formatTime, selectors, pageCache, querystring } from "../../utils/index";
+import { formatTime, selectors, pageCache, querystring, protocol, fetchWebSiteUrl } from "../../utils/index";
 import http from "../../utils/http.js";
 let {
   discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn },
@@ -57,7 +57,7 @@ const config = connect(
       }
       let postData = {
         httpConfig: {
-          url: `http://${webSite}/bbs/logging.php?action=login&loginsubmit=true`,
+          url: `${protocol}${webSite}/bbs/logging.php?action=login&loginsubmit=true`,
           method: "post",
           responseType: "arraybuffer",
           data: querystring.stringify(formData),
@@ -96,7 +96,7 @@ const config = connect(
   },
   async checkSigned() {
     let { webSite, signInfo } = this.data;
-    let url = `http://${webSite}/bbs/my.php`;
+    let url = `${protocol}${webSite}/bbs/my.php`;
     let selector = selectors.my;
     let pageData = await getPageData({ url, selector });
     let { formhash, username, recentTopics } = pageData;
@@ -118,7 +118,7 @@ const config = connect(
   },
   async getIndexPageData() {
     let { webSite } = this.data;
-    let url = `http://${webSite}/bbs/index.php`;
+    let url = `${protocol}${webSite}/bbs/index.php`;
     let selector = selectors.index;
     let pageData = {};
     if (pageCache.has(url)) {
@@ -147,7 +147,7 @@ const config = connect(
     },
   }) {
     let { webSite } = this.data;
-    let url = `http://${webSite}/bbs/` + path;
+    let url = `${protocol}${webSite}/bbs/` + path;
     wx.navigateTo({
       url: "/pages/discuz/forum?url=" + encodeURIComponent(url),
     });
@@ -159,7 +159,7 @@ const config = connect(
   },
   async updateWebSiteList() {
     if (this.data.isOwner) {
-      let url = `http://www.oznewspaper.com/`;
+      let url = fetchWebSiteUrl;
       let selector = selectors.webSiteList;
       let pageData = await getPageData({ url, selector });
       let webSiteList = [];

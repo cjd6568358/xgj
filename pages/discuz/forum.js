@@ -1,7 +1,7 @@
 // pages/discuz/forum.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache } from '../../utils/index'
+import { selectors, pageCache, protocol } from '../../utils/index'
 let { discuz: { getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 
@@ -34,13 +34,13 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
   routerToForum({ currentTarget: { dataset: { href }, }, }) {
     let { webSite } = this.data;
     wx.navigateTo({
-      url: "/pages/discuz/forum?url=" + encodeURIComponent(`http://${webSite}/bbs/` + href),
+      url: "/pages/discuz/forum?url=" + encodeURIComponent(`${protocol}${webSite}/bbs/` + href),
     });
   },
   routerToThread({ currentTarget: { dataset: { href } } }) {
     let { webSite } = this.data;
     wx.navigateTo({
-      url: '/pages/discuz/thread?url=' + encodeURIComponent(`http://${webSite}/bbs/` + href),
+      url: '/pages/discuz/thread?url=' + encodeURIComponent(`${protocol}${webSite}/bbs/` + href),
     })
   },
   async getForumPageData(url) {
