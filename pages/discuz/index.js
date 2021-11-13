@@ -218,7 +218,10 @@ const config = connect(
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: async function () {
-    let { signInfo, isLogin, webSiteList, webSite } = this.data;
+    let { isOwner, signInfo, isLogin, webSiteList, webSite } = this.data;
+    if (!isOwner) {
+      return
+    }
     if (webSiteList && webSiteList.length && webSite) {
       this.setData({
         webSiteIndex: webSiteList.findIndex((item) => item === webSite),

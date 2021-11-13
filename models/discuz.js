@@ -5,7 +5,8 @@ import {
   confirm,
   selectors,
   pageCache,
-  protocol
+  protocol,
+  testing
 } from "../utils/index";
 import http from "../utils/http";
 
@@ -275,7 +276,7 @@ export default {
       let isLogin = !!wx.getStorageSync("cdb3_auth");
       return {
         ...state,
-        isOwner: true,
+        isOwner: !testing,
         isLogin,
         webSiteList,
         webSite,
