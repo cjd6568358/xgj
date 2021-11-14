@@ -1,101 +1,106 @@
 <template>
   <div class="discuzSearch-page">
-    <div class="search_wrap">
-      <input
-        class="search_input"
-        type="text"
-        v-model="srchtxt"
-        maxlength="40"
-        placeholder="请输入关键词, 关键字中可使用通配符 '*'"
-      />
-      <input
-        class="search_input"
-        type="text"
-        v-model="srchuname"
-        maxlength="40"
-        placeholder="请输入用户名, 用户名中可使用通配符 '*', 如 *user*"
-      />
-      <div class="search_params">
-        <label class="title">排序类型:</label>
-      </div>
-      <div class="search_params">
-        <radio-group class="radio-group" @change="orderByChange">
-          <label class="radio">
-            <radio
-              value="lastpost"
-              color="#2b91fd"
-              :checked="orderBy === 'lastpost'"
-            />回复时间
-          </label>
-          <label class="radio">
-            <radio
-              value="dateline"
-              color="#2b91fd"
-              :checked="orderBy === 'dateline'"
-            />发布时间
-          </label>
-          <label class="radio">
-            <radio
-              value="replies"
-              color="#2b91fd"
-              :checked="orderBy === 'replies'"
-            />回复数量
-          </label>
-          <label class="radio">
-            <radio
-              value="divs"
-              color="#2b91fd"
-              :checked="orderBy === 'divs'"
-            />浏览次数
-          </label>
-        </radio-group>
-      </div>
-      <div class="search_params">
-        <label class="title">排序方式:</label>
-        <switch
-          class="sort_switch"
-          color="#2b91fd"
-          :checked="sortType === 'asc'"
-          @change="sortTypeChange"
+    <List
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      :immediate-check="false"
+      @load="loadMore"
+    >
+      <div class="search_wrap">
+        <input
+          class="search_input"
+          type="text"
+          v-model="srchtxt"
+          maxlength="40"
+          placeholder="请输入关键词, 关键字中可使用通配符 '*'"
         />
-        {{ sortType === "asc" ? "升序" : "降序" }}
+        <input
+          class="search_input"
+          type="text"
+          v-model="srchuname"
+          maxlength="40"
+          placeholder="请输入用户名, 用户名中可使用通配符 '*', 如 *user*"
+        />
+        <div class="search_params">
+          <label class="title">排序类型:</label>
+        </div>
+        <div class="search_params">
+          <RadioGroup direction="horizontal" v-model="orderBy">
+            <Radio icon-size="20px" checked-color="#2b91fd" name="lastpost"
+              >回复时间</Radio
+            >
+            <Radio icon-size="20px" checked-color="#2b91fd" name="dateline"
+              >发布时间</Radio
+            >
+            <Radio icon-size="20px" checked-color="#2b91fd" name="replies"
+              >回复数量</Radio
+            >
+            <Radio icon-size="20px" checked-color="#2b91fd" name="divs"
+              >浏览次数</Radio
+            >
+          </RadioGroup>
+        </div>
+        <div class="search_params">
+          <label class="title">排序方式:</label>
+          <van-switch
+            size="20px"
+            v-model="sortType"
+            active-value="asc"
+            inactive-value="desc"
+            active-color="#2b91fd"
+          />
+          &nbsp;&nbsp; {{ sortType == "asc" ? "  升序" : "  降序" }}
+        </div>
+        <div class="search_btn" @click="onSearch">搜索</div>
       </div>
-      <div class="search_btn" @click="onSearch">搜索</div>
-    </div>
-    <div class="result_empty" v-if="!isLoading && threadList.length === 0">
-      暂无数据
-    </div>
-    <ul class="area" v-if="threadList.length" data-title="最近主题">
-      <template v-for="(thread, i) of threadList">
-        <router-link
-          v-if="thread"
-          :key="i"
-          :to="{
-            name: 'DiscuzThreadView',
-            params: { url: `thread-${thread.tid}-1-1.html` },
-          }"
-          custom
-          v-slot="{ navigate }"
-        >
-          <li class="item" @click="navigate">
-            [{{ thread.date }}] {{ thread.title }} ({{ thread.nums }})
-          </li>
-        </router-link>
-      </template>
-    </ul>
+      <div class="result_empty" v-if="!loading && threadList.length === 0">
+        暂无数据
+      </div>
+      <ul class="area" v-if="threadList.length" data-title="最近主题">
+        <template v-for="(thread, i) of threadList">
+          <router-link
+            v-if="thread"
+            :key="i"
+            :to="{
+              name: 'DiscuzThreadView',
+              params: { url: `thread-${thread.tid}-1-1.html` },
+            }"
+            custom
+            v-slot="{ navigate }"
+          >
+            <li class="item" @click="navigate">
+              [{{ thread.date }}] {{ thread.title }} ({{ thread.nums }})
+            </li>
+          </router-link>
+        </template>
+      </ul>
+    </List>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
+import { RadioGroup, Radio, Switch, List } from "vant";
+import { selectors } from "../../util";
 export default {
-  name: "DiscuzSearchdiv",
+  name: "DiscuzSearchView",
+  components: {
+    RadioGroup,
+    Radio,
+    List,
+    "van-switch": Switch,
+  },
   data() {
     return {
+      loading: false,
+      finished: false,
       srchtxt: "",
       srchuname: "",
       orderBy: "lastpost",
       sortType: "desc",
       threadList: [],
+      pageNum: 0,
+      pageCount: 0,
     };
   },
   computed: {
@@ -107,6 +112,8 @@ export default {
     async onSearch() {
       let { srchtxt, srchuname, orderBy, sortType } = this;
       if (srchtxt || srchuname) {
+        this.loading = true;
+        this.finished = false;
         let { threadList, pageCount, searchHref } = await this.searchData({
           srchtxt,
           srchuname,
@@ -114,50 +121,41 @@ export default {
           sortType,
         });
         if (pageCount) {
-          Object.assign(this.$data, {
+          Object.assign(this, {
             threadList,
             searchHref: searchHref.replace(/page=(.*)$/g, ""),
             pageNum: 1,
             pageCount,
           });
         } else {
-          Object.assign(this.$data, {
+          Object.assign(this, {
             threadList: [],
             searchHref: "",
             pageNum: 1,
             pageCount: 0,
           });
         }
+        this.loading = false;
+        if (1 >= pageCount) {
+          this.finished = true;
+        }
       }
     },
-    orderByChange({ detail: { value } }) {
-      this.setData({
-        orderBy: value,
-      });
-    },
-    sortTypeChange({ detail: { value } }) {
-      this.setData({
-        sortType: value ? "asc" : "desc",
-      });
-    },
     async loadMore() {
-      let { pageNum, pageCount } = this;
-      if (pageNum >= pageCount) {
-        this.$Toast.info("没有更多啦!");
-        return;
-      } else {
-        let { targetHost, searchHref } = this;
-        let { threadList, threadTotal } = await this.getPageData({
-          url: `${targetHost}${searchHref}page=${pageNum + 1}`,
-          selector: selectors.search,
+      let { targetHost, searchHref, pageNum } = this;
+      let { threadList } = await this.getPageData({
+        url: `${targetHost}${searchHref}page=${pageNum + 1}`,
+        selector: selectors.search,
+      });
+      if (threadList.length > 0) {
+        Object.assign(this, {
+          threadList: this.threadList.concat(threadList),
+          pageNum: pageNum + 1
         });
-        if (threadList.length > 0) {
-          this.setData({
-            threadList: this.threadList.concat(threadList),
-            pageNum: pageNum + 1,
-            pageCount: Math.ceil(threadTotal / 38) || 1,
-          });
-        }
+      }
+      this.loading = false;
+      if (this.pageNum >= this.pageCount) {
+        this.finished = true;
       }
     },
   },
@@ -180,7 +178,7 @@ export default {
     }
 
     .search_params {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       display: flex;
       align-items: center;
       font-size: 26px;
@@ -230,6 +228,7 @@ export default {
     background: #fff;
     max-height: 99999px;
     &::before {
+      box-sizing: border-box;
       position: absolute;
       top: 0;
       left: 0;

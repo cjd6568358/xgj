@@ -339,6 +339,7 @@ a.btn {
   background: #fff;
   max-height: 99999px;
   &::before {
+    box-sizing: border-box;
     position: absolute;
     top: 0;
     left: 0;

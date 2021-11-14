@@ -257,11 +257,11 @@ export default new Vuex.Store({
         encoding: "gbk",
         selector: selectors.search,
       };
-      commit("SET_LOADING_STATUS", true);
+      // commit("SET_LOADING_STATUS", true);
       let {
         data: { data },
       } = await http.post(`${HOST}/api/html2Json`, postData);
-      commit("SET_LOADING_STATUS", false);
+      // commit("SET_LOADING_STATUS", false);
       return data;
     },
     async getLastMonthSignInfo({ dispatch, state, getters }) {
