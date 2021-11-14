@@ -74,12 +74,11 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
         return
       } else {
         let { webSite, searchHref } = this.data
-        let { threadList, threadTotal } = await getPageData({ url: `${protocol}${webSite}/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
+        let { threadList } = await getPageData({ url: `${protocol}${webSite}/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
         if (threadList.length > 0) {
           this.setData({
             threadList: this.data.threadList.concat(threadList),
-            pageNum: pageNum + 1,
-            pageCount: Math.ceil(threadTotal / 38) || 1
+            pageNum: pageNum + 1
           })
         }
       }
