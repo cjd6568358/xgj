@@ -3,7 +3,9 @@
     <div class="overflow-container">
       <ul class="user-info">
         <li>用户名:{{ discuz.userInfo.username }}</li>
-        <li v-if="discuz.signInfo.isSigned">签到状态:{{ discuz.signInfo.isSigned ? "已签到" : "未签到" }}</li>
+        <li v-if="discuz.signInfo.isSigned">
+          签到状态:{{ discuz.signInfo.isSigned ? "已签到" : "未签到" }}
+        </li>
         <li v-for="item of creditList" :key="item">{{ item }}</li>
       </ul>
       <ul class="area" data-title="我的收藏">
@@ -29,9 +31,11 @@
               name: 'DiscuzThreadView',
               params: { url: thread.href },
             }"
-            tag="li"
-            >{{ thread.title }}</router-link
+            custom
+            v-slot="{ navigate }"
           >
+            <li @click="navigate">{{ thread.title }}</li>
+          </router-link>
         </template>
       </ul>
       <ul class="area" data-title="最近主题">
@@ -43,9 +47,11 @@
               name: 'DiscuzThreadView',
               params: { url: thread.href },
             }"
-            tag="li"
-            >{{ thread.title }}</router-link
+            custom
+            v-slot="{ navigate }"
           >
+            <li @click="navigate">{{ thread.title }}</li>
+          </router-link>
         </template>
       </ul>
     </div>
@@ -98,7 +104,11 @@ export default {
       this.recentTopics = pageData.recentTopics;
       this.recentTopics &&
         this.recentTopics.forEach((item) => {
-          if (item && item.title == `${pageData.username}/${new Date().getMonth() + 1}月份/打卡签到帖`) {
+          if (
+            item &&
+            item.title ==
+              `${pageData.username}/${new Date().getMonth() + 1}月份/打卡签到帖`
+          ) {
             if (item.lastPost.includes(new Date().Format("yyyy-M-d"))) {
               signInfo.isSigned = true;
             } else {

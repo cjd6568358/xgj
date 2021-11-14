@@ -25,6 +25,9 @@
     <li>
       <span @click="onReload">刷新</span>
     </li>
+    <li>
+      <span @click="onSearch">搜索</span>
+    </li>
   </ul>
 </template>
 <script>
@@ -89,6 +92,9 @@ export default {
       sessionStorage.removeItem(this.url);
       location.reload(true);
     },
+    onSearch(){
+      this.$router.push('/discuz/search');
+    }
   },
 };
 </script>
@@ -131,6 +137,12 @@ ul {
         transform: rotate(90deg);
         span {
           transform: rotate(-90deg);
+        }
+      }
+      &:nth-of-type(5) {
+        transform: rotate(120deg);
+        span {
+          transform: rotate(-120deg);
         }
       }
     }

@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import querystring from "querystring";
 import {
   getCookie,
   delCookie,
@@ -8,6 +7,7 @@ import {
   loadScript,
   selectors,
   proxyServers,
+  protocol
 } from "./util";
 import http from "./util/http";
 
@@ -128,13 +128,13 @@ export default new Vuex.Store({
       if (isLoading || !message) {
         return;
       }
+      const params = new URLSearchParams();
+      params.set('formhash', formhash);
+      params.set('message', message);
+      params.set('subject', subject);
       let httpConfig = {
         url: `${targetHost}post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
-        data: querystring.stringify({
-          formhash,
-          message,
-          subject,
-        }),
+        data: params.toString,
       };
       await dispatch("submitPost", httpConfig);
     },
@@ -156,28 +156,28 @@ export default new Vuex.Store({
         "yyyy.M.dd"
       )}\r\n心情: ......`;
       if (!signInfo.tid) {
+        const params = new URLSearchParams();
+        params.set('formhash', formhash);
+        params.set('message', message);
+        params.set('frombbs', 1);
+        params.set('typeid', 797);
+        params.set('selecttypeid', 797);
+        params.set('readperm', 101);
+        params.set('subject', `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`);
         // 主题帖签到
         Object.assign(httpConfig, {
           url: `${targetHost}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
-          data: querystring.stringify({
-            formhash,
-            message,
-            frombbs: 1,
-            typeid: 797,
-            selecttypeid: 797,
-            readperm: 101,
-            subject: `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`,
-          }),
+          data: params.toString(),
         });
       } else {
+        const params = new URLSearchParams();
+        params.set('formhash', formhash);
+        params.set('message', message);
+        params.set('subject', "");
         // 回复帖签到
         Object.assign(httpConfig, {
           url: `${targetHost}post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
-          data: querystring.stringify({
-            formhash,
-            message,
-            subject: "",
-          }),
+          data: params.toString(),
         });
       }
       await dispatch("submitPost", httpConfig);
@@ -197,19 +197,18 @@ export default new Vuex.Store({
         } = state;
         let { targetHost } = getters;
         let lastMonthSignInfo = await dispatch("getLastMonthSignInfo");
+        const params = new URLSearchParams();
+        params.set('formhash', formhash);
+        params.set('fid', 420);
+        params.set('wysiwyg', 0);
+        params.set('subject', "");
+        params.set('message', `ID: ${username}\r\n签到次数: ${lastMonthSignInfo.count
+          }\r\n签到链接: [bbs]${encodeURIComponent(
+            `thread-${lastMonthSignInfo.tid}-1-1.html`
+          )}[/bbs]`);
         let httpConfig = {
           url: `${targetHost}post.php?action=reply&fid=420&tid=8186986&extra=page%3D1&replysubmit=yes`,
-          data: querystring.stringify({
-            formhash,
-            subject: "",
-            message: `ID: ${username}\r\n签到次数: ${
-              lastMonthSignInfo.count
-            }\r\n签到链接: [bbs]${encodeURIComponent(
-              `thread-${lastMonthSignInfo.tid}-1-1.html`
-            )}[/bbs]`,
-            fid: 420,
-            wysiwyg: 0,
-          }),
+          data: params.toString(),
         };
         await dispatch("submitPost", httpConfig);
         alert("上报成功!");
@@ -227,6 +226,36 @@ export default new Vuex.Store({
         },
         encoding: "gbk",
         selector,
+      };
+      commit("SET_LOADING_STATUS", true);
+      let {
+        data: { data },
+      } = await http.post(`${HOST}/api/html2Json`, postData);
+      commit("SET_LOADING_STATUS", false);
+      return data;
+    },
+    async searchData(
+      { commit, state, getters },
+      { srchtxt = "",
+        srchuname = "",
+        orderBy = "lastpost",
+        sortType = "desc", HOST = state.discuz.HOST }
+    ) {
+      let {
+        discuz: {
+          formhash,
+        },
+      } = state;
+      let { targetHost } = getters;
+      let postData = {
+        httpConfig: {
+          url: `${targetHost}search.php`,
+          data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=${orderBy}&ascdesc=${sortType}&srchfid%5B%5D=all`,
+          method: "post",
+          responseType: "arraybuffer",
+        },
+        encoding: "gbk",
+        selector: selectors.search,
       };
       commit("SET_LOADING_STATUS", true);
       let {
@@ -283,7 +312,7 @@ export default new Vuex.Store({
   },
   getters: {
     targetHost: (state) => {
-      return `http://${state.discuz.webSite}/bbs/`;
+      return `${protocol}${state.discuz.webSite}/bbs/`;
     },
   },
 });

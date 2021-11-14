@@ -4,10 +4,29 @@
       <div class="title">
         <span class="icon-back" @click="$router.go(-1)"></span>
         网站列表
-        <router-link class="icon-plus" tag="span" :to="{ name: 'AccountView', params: { type: 'add' } }"></router-link>
+        <router-link
+          :to="{ name: 'AccountView', params: { type: 'add' } }"
+          custom
+          v-slot="{ navigate }"
+        >
+          <span class="icon-plus" @click="navigate" role="link"></span>
+        </router-link>
       </div>
       <ul>
-        <router-link tag="li" :key="i" v-for="(item, i) of accountList" :to="{ name: 'AccountView', params: { type: 'edit', id: item.guid } }">{{ item.remark }}</router-link>
+        <router-link
+          :to="{
+            name: 'AccountView',
+            params: { type: 'edit', id: item.guid },
+          }"
+          custom
+          v-slot="{ navigate }"
+          :key="i"
+          v-for="(item, i) of accountList"
+        >
+          <li @click="navigate">
+            {{ item.remark }}
+          </li>
+        </router-link>
       </ul>
     </div>
     <TabBar></TabBar>

@@ -15,6 +15,8 @@ const DiscuzThreadView = () =>
     import( /* webpackChunkName: "DiscuzThreadView" */ './views/Discuz/thread.vue')
 const DiscuzAutoLoginView = () =>
     import( /* webpackChunkName: "DiscuzAutoLoginView" */ './views/Discuz/autoLogin.vue')
+const DiscuzSearchView = () =>
+    import( /* webpackChunkName: "DiscuzSearchView" */ './views/Discuz/search.vue')
 const MyView = () =>
     import( /* webpackChunkName: "MyView" */ './views/My/index.vue')
 const AccountListView = () =>
@@ -66,6 +68,14 @@ export default new Router({
             name: 'DiscuzAutoLoginView',
             component: DiscuzAutoLoginView,
             props: true
+        },
+        {
+            path: '/discuz/search',
+            name: 'DiscuzSearchView',
+            component: DiscuzSearchView,
+            meta: {
+                keepAlive: true // true 表示需要使用缓存 false表示不需要被缓存
+            }
         },
         {
             path: '/sign',

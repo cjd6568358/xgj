@@ -142,8 +142,12 @@ let proxyServers = [
   },
 ];
 
-let checkWebp = function() {
-  return new Promise(function(resolve) {
+let protocol = 'http://'
+
+let fetchWebSiteUrl = "http://www.oznewspaper.com/"
+
+let checkWebp = function () {
+  return new Promise(function (resolve) {
     if (getCookie("webpSupport") == "true") {
       resolve(true);
     } else if (getCookie("webpSupport") == "false") {
@@ -165,7 +169,7 @@ let checkWebp = function() {
   });
 };
 
-let calculatGUID = function() {
+let calculatGUID = function () {
   let guid = "";
   for (let i = 1; i <= 32; i++) {
     let n = Math.floor(Math.random() * 16.0).toString(16);
@@ -177,7 +181,7 @@ let calculatGUID = function() {
   return guid;
 };
 
-let getYMD = function(timestamp = Date.now()) {
+let getYMD = function (timestamp = Date.now()) {
   let date = new Date(timestamp);
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
@@ -185,7 +189,7 @@ let getYMD = function(timestamp = Date.now()) {
   return { year, month, day };
 };
 
-let getHash = function(str) {
+let getHash = function (str) {
   var I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(
     ""
   );
@@ -210,15 +214,15 @@ let getHash = function(str) {
   return retValue;
 };
 
-let setCookie = function(cookieKey, cookieVal) {
+let setCookie = function (cookieKey, cookieVal) {
   Cookies.set(cookieKey, cookieVal, { expires: 30 });
 };
 
-let getCookie = function(cookieKey) {
+let getCookie = function (cookieKey) {
   return Cookies.get(cookieKey);
 };
 
-let delCookie = function(cookieKey) {
+let delCookie = function (cookieKey) {
   Cookies.remove(cookieKey);
 };
 
@@ -226,7 +230,7 @@ let delCookie = function(cookieKey) {
  * data 必须为字符串
  * @param {Object} params
  */
-let string2File = function(params = { fileName: "", data: "", key: "" }) {
+let string2File = function (params = { fileName: "", data: "", key: "" }) {
   let HOST = proxyServers[2].host;
   if (typeof params.encrypt === "undefined") {
     params.encrypt = true;
@@ -259,14 +263,14 @@ let string2File = function(params = { fileName: "", data: "", key: "" }) {
       "about:blank",
       "name",
       "height=" +
-        iHeight +
-        ", width=" +
-        iWidth +
-        ", top=" +
-        iTop +
-        ", left=" +
-        iLeft +
-        ",toolbar=no, menubar=no,  scrollbars=yes,resizable=yes,location=no, status=no"
+      iHeight +
+      ", width=" +
+      iWidth +
+      ", top=" +
+      iTop +
+      ", left=" +
+      iLeft +
+      ",toolbar=no, menubar=no,  scrollbars=yes,resizable=yes,location=no, status=no"
     );
   });
   document.body.appendChild(tmpForm);
@@ -284,7 +288,7 @@ let string2File = function(params = { fileName: "", data: "", key: "" }) {
  * @param {String} data
  * @param {String} key
  */
-let encryptAES = async function(data, key) {
+let encryptAES = async function (data, key) {
   let HOST = proxyServers[0].host;
   if (localStorage.getItem("proxy_host")) {
     HOST = localStorage.getItem("proxy_host");
@@ -303,7 +307,7 @@ let encryptAES = async function(data, key) {
  * @param {String} encryptedString
  * @param {String} key
  */
-let decryptAES = async function(data, key) {
+let decryptAES = async function (data, key) {
   let HOST = proxyServers[0].host;
   if (localStorage.getItem("proxy_host")) {
     HOST = localStorage.getItem("proxy_host");
@@ -336,8 +340,8 @@ let getTotalDaysArr = (yyyy, MM, leftPad = false) => {
  * 动态加载脚本
  * @param {String} src
  */
-let loadScript = function(src) {
-  return new Promise(function(resolve, reject) {
+let loadScript = function (src) {
+  return new Promise(function (resolve, reject) {
     var script = document.createElement("script");
     script.async = true;
     script.src = src;
@@ -354,26 +358,20 @@ let loadScript = function(src) {
 
 let getGlobalConfig = () => {
   return new Promise((reslove, reject) => {
-    loadScript("https://cjd6568358.gitee.io/static/xgj/config.js").then(
-      () => {
-        if (window.globalConfig) {
-          localStorage.setItem(
-            "globalConfig",
-            JSON.stringify(window.globalConfig)
-          );
-          reslove(window.globalConfig);
-        } else {
-          let globalConfig = localStorage.getItem("globalConfig");
-          if (globalConfig) {
-            console.log("globalConfig use cache data");
-            reslove(JSON.parse(globalConfig));
-          } else {
-            console.warn("globalConfig初始化异常");
-            reslove({});
-          }
-        }
-      },
-      () => {
+    http({
+      method: "get",
+      url: "https://cjd6568358.3322.org:6706/api/padavan_proxy",
+      headers: {
+        "proxy_pass": "https://cjd6568358.gitee.io/static/xgj/config.json",
+      }
+    }).then(({ data }) => {
+      if (data) {
+        localStorage.setItem(
+          "globalConfig",
+          JSON.stringify(data)
+        );
+        reslove(data);
+      } else {
         let globalConfig = localStorage.getItem("globalConfig");
         if (globalConfig) {
           console.log("globalConfig use cache data");
@@ -383,17 +381,32 @@ let getGlobalConfig = () => {
           reslove({});
         }
       }
-    );
+    }, () => {
+      let globalConfig = localStorage.getItem("globalConfig");
+      if (globalConfig) {
+        console.log("globalConfig use cache data");
+        reslove(JSON.parse(globalConfig));
+      } else {
+        console.warn("globalConfig初始化异常");
+        reslove({});
+      }
+    });
   });
 };
 
 let initApp = async () => {
   let config = await getGlobalConfig();
-  if (config["accountTypeList"]) {
+  if ("accountTypeList" in config) {
     accountTypeList = config["accountTypeList"];
   }
-  if (config["selectors"]) {
+  if ("selectors" in config) {
     selectors = config["selectors"];
+  }
+  if ("protocol" in config) {
+    protocol = config["protocol"];
+  }
+  if ("fetchWebSiteUrl" in config) {
+    fetchWebSiteUrl = config["fetchWebSiteUrl"];
   }
 };
 
@@ -413,4 +426,6 @@ export {
   selectors,
   proxyServers,
   initApp,
+  protocol,
+  fetchWebSiteUrl
 };

@@ -7,32 +7,61 @@
         </center>
         <div class="input-warp">
           <select name id placeholder="请选择站点" v-model="webSite">
-            <option v-for="item of discuz.webSiteList" :key="item" :value="item">
+            <option
+              v-for="item of discuz.webSiteList"
+              :key="item"
+              :value="item"
+            >
               {{ item }}
             </option>
           </select>
           <a class="btn" @click="updateWebSiteList">更新列表</a>
         </div>
         <div class="input-warp">
-          <input type="text" v-model="userInfo.username" placeholder="请输入用户名" />
+          <input
+            type="text"
+            v-model="userInfo.username"
+            placeholder="请输入用户名"
+          />
         </div>
         <div class="input-warp">
-          <input type="password" v-model="userInfo.password" placeholder="请输入密码" />
+          <input
+            type="password"
+            v-model="userInfo.password"
+            placeholder="请输入密码"
+          />
         </div>
         <div class="input-warp">
-          <input type="text" v-model="userInfo.QA" placeholder="请输入问题ID和答案(以逗号分隔)" />
+          <input
+            type="text"
+            v-model="userInfo.QA"
+            placeholder="请输入问题ID和答案(以逗号分隔)"
+          />
         </div>
         <a class="btn" @click="login">登录</a>
       </div>
       <template v-if="discuz.isLogin">
         <ul class="user-info">
-          <router-link :to="{ name: 'DiscuzMyView' }" tag="li">{{ discuz.userInfo.username }}</router-link>
+          <router-link
+            :to="{ name: 'DiscuzMyView' }"
+            custom
+            v-slot="{ navigate }"
+          >
+            <li @click="navigate">
+              {{ discuz.userInfo.username }}
+            </li>
+          </router-link>
           <li v-if="discuz.signInfo.isSigned">已签到</li>
           <li v-else @click="dailySignIn">日签到</li>
           <li @click="monthSignIn">月签到</li>
           <li @click="logout">退出</li>
         </ul>
-        <ul class="area" v-for="(area, i) of areaList" :key="i" :data-title="area.name">
+        <ul
+          class="area"
+          v-for="(area, i) of areaList"
+          :key="i"
+          :data-title="area.name"
+        >
           <router-link
             v-for="(form, ii) of area.value"
             :key="ii"
@@ -40,20 +69,28 @@
               name: 'DiscuzForumView',
               params: { url: form.value },
             }"
-            tag="li"
-            >{{ form.name }}</router-link
+            custom
+            v-slot="{ navigate }"
           >
+            <li @click="navigate">{{ form.name }}</li>
+          </router-link>
         </ul>
       </template>
-      <a class="btn switch" @click="switchProxy">切换代理源({{ proxyServerPlatom }})</a>
+      <a class="btn switch" @click="switchProxy"
+        >切换代理源({{ proxyServerPlatom }})</a
+      >
     </div>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import http from "../../util/http";
-import querystring from "querystring";
-import { getCookie, selectors, proxyServers } from "../../util";
+import {
+  getCookie,
+  selectors,
+  proxyServers,
+  fetchWebSiteUrl,
+} from "../../util";
 export default {
   name: "discuz-page",
   components: {},
@@ -81,7 +118,8 @@ export default {
       },
     },
     proxyServerPlatom() {
-      return proxyServers.filter((item) => item.host === this.discuz.HOST)[0].platom;
+      return proxyServers.filter((item) => item.host === this.discuz.HOST)[0]
+        .platom;
     },
   },
   mounted() {},
@@ -89,12 +127,20 @@ export default {
     this.init();
     // eslint-disable-next-line
     console.log("isLogin:", this.discuz.isLogin, this.discuz.HOST);
-    document.querySelector(".overflow-container").scrollTop = sessionStorage.getItem("homePage") || 0;
+    document.querySelector(".overflow-container").scrollTop =
+      sessionStorage.getItem("homePage") || 0;
   },
   beforeMount() {},
   destroyed() {},
   methods: {
-    ...mapActions(["switchProxy", "logout", "submitPost", "dailySignIn", "monthSignIn", "getPageData"]),
+    ...mapActions([
+      "switchProxy",
+      "logout",
+      "submitPost",
+      "dailySignIn",
+      "monthSignIn",
+      "getPageData",
+    ]),
     async init() {
       let { isLogin, signInfo, webSiteList } = this.discuz;
       if (isLogin) {
@@ -132,17 +178,21 @@ export default {
           delete formData.questionid;
           delete formData.answer;
         }
+        const params = new URLSearchParams(Object.entries(formData));
         let postData = {
           httpConfig: {
             url: `${targetHost}logging.php?action=login&loginsubmit=true`,
             method: "post",
             responseType: "arraybuffer",
-            data: querystring.stringify(formData),
+            data: params.toString(),
           },
           encoding: "gbk",
         };
         this.$store.commit("SET_LOADING_STATUS", true);
-        let { headers } = await http.post(`${HOST}/api/advancedProxy`, postData);
+        let { headers } = await http.post(
+          `${HOST}/api/advancedProxy`,
+          postData
+        );
         this.$store.commit("SET_LOADING_STATUS", false);
         if (headers.corscookies) {
           headers.corscookies.split("|$$|").forEach((cookie) => {
@@ -168,7 +218,11 @@ export default {
       this.discuz.formhash = formhash;
       recentTopics &&
         recentTopics.forEach((item) => {
-          if (item && item.title == `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`) {
+          if (
+            item &&
+            item.title ==
+              `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`
+          ) {
             if (item.lastPost.includes(new Date().Format("yyyy-M-d"))) {
               signInfo.isSigned = true;
             } else {
@@ -199,8 +253,10 @@ export default {
     },
     async updateWebSiteList() {
       let gfwProxyServers = proxyServers.filter((item) => item.gfw);
-      let HOST = gfwProxyServers[Math.floor(Math.random() * gfwProxyServers.length)].host;
-      let url = `http://www.oznewspaper.com/`;
+      let HOST =
+        gfwProxyServers[Math.floor(Math.random() * gfwProxyServers.length)]
+          .host;
+      let url = fetchWebSiteUrl;
       let selector = selectors.webSiteList;
       let pageData = await this.getPageData({ url, selector, HOST });
       let webSiteList = [];
