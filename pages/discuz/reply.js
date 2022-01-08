@@ -26,7 +26,7 @@ Page({
       })
       // 监听content事件，获取上一页面通过eventChannel传送到当前页面的数据
       let channel = this.getOpenerEventChannel()
-      channel.on && channel.on.on('content', ({ fid = "", tid = "", title }) => {
+      channel.on && channel.on('content', ({ fid = "", tid = "", title }) => {
         this.setData({
           fid,
           tid
