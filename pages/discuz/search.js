@@ -26,6 +26,16 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
           title: '加载中',
         })
         if (!testing) {
+          // 监听searchParams事件，获取上一页面通过eventChannel传送到当前页面的数据
+          let channel = this.getOpenerEventChannel()
+          channel.on && channel.on('searchParams', ({ srchtxt = "", srchuname = "", orderBy = "lastpost", sortType = "desc" }) => {
+            this.setData({
+              srchtxt,
+              srchuname,
+              orderBy,
+              sortType
+            })
+          })
           wx.hideLoading({
             success: (res) => { },
           })

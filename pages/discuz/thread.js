@@ -160,6 +160,15 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       })
     }, 500)
   },
+  navigateToSearch(e) {
+    wx.navigateTo({
+      url: '/pages/discuz/search',
+      success: function (res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('searchParams', e.target.dataset)
+      }
+    })
+  },
   onReload() {
     let { url } = this.data
     pageCache.delete(url)

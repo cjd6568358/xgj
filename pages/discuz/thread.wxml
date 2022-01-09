@@ -3,7 +3,7 @@
 	<view class="post" wx:for="{{postList}}" wx:key="pid">
 		<view class="post-info">
 			<view class="name-floor">
-				<label class="name">{{item.authorName}}</label>
+				<label class="name" bindtap="navigateToSearch" data-srchtxt="{{item.postTitle}}" data-srchuname="{{item.authorName}}">{{item.authorName}}</label>
 				<label class="level">{{item.authorLevel}}</label>
 			</view>
 			<view class="level-time">
@@ -12,13 +12,11 @@
 			</view>
 		</view>
 		<view>{{item.postTitle}}</view>
-		<parser wx:if="{{renderType === 'parser'}}" data-context="{{item.content}}"
-			bindlinkpress="bindLinkPress" compress="{{3}}" selectable class="post-content" html="{{item.content}}" />
+		<parser wx:if="{{renderType === 'parser'}}" data-context="{{item.content}}" bindlinkpress="bindLinkPress" compress="{{3}}" selectable class="post-content" html="{{item.content}}" />
 		<rich-text wx:else class="post-content" nodes="{{item.content}}"></rich-text>
 	</view>
 </view>
 <move-menu wx:if="{{url && tid}}" x="{{-30}}" y="{{-30}}" key="discuz_thread">
 	<mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="setting"></mp-icon>
 </move-menu>
-<pagination wx:if="{{postList.length}}" curr="{{pageInfo.pageNum}}" total="{{pageInfo.pageCount}}"
-	bindpageChange="pageChange"></pagination>
+<pagination wx:if="{{postList.length}}" curr="{{pageInfo.pageNum}}" total="{{pageInfo.pageCount}}" bindpageChange="pageChange"></pagination>
