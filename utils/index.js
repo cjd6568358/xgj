@@ -26,7 +26,7 @@ Object.defineProperty(initState, "isReady", {
 
 const pageCache = new Map()
 
-let configUrl = 'https://cjd6568358.gitee.io/static/xgj/config.json';
+let configUrl = 'https://cjd6568358.3322.org:6706/static/xgj/config.json';
 
 let baseUrl = 'https://cjd6568358.3322.org:6706/api/';
 
@@ -482,7 +482,7 @@ let initApp = async () => {
   }
   // 每次打开执行生物校验
   try {
-    if (soterAuthCheck) {
+    if (!testing && soterAuthCheck) {
       await soterAuth(openid)
     }
   } catch (error) {
