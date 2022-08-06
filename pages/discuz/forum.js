@@ -33,14 +33,16 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
   },
   routerToForum({ currentTarget: { dataset: { href }, }, }) {
     let { webSite } = this.data;
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
     wx.navigateTo({
-      url: "/pages/discuz/forum?url=" + encodeURIComponent(`${protocol}${webSite}/bbs/` + href),
+      url: "/pages/discuz/forum?url=" + encodeURIComponent(`${url_prefix}/bbs/` + href),
     });
   },
   routerToThread({ currentTarget: { dataset: { href } } }) {
     let { webSite } = this.data;
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
     wx.navigateTo({
-      url: '/pages/discuz/thread?url=' + encodeURIComponent(`${protocol}${webSite}/bbs/` + href),
+      url: '/pages/discuz/thread?url=' + encodeURIComponent(`${url_prefix}/bbs/` + href),
     })
   },
   async getForumPageData(url) {

@@ -16,7 +16,8 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
   },
   async getMyPageData() {
     let { webSite, signInfo } = this.data;
-    let pageData = await getPageData({ url: `${protocol}${webSite}/bbs/my.php`, selector: selectors.my });
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+    let pageData = await getPageData({ url: `${url_prefix}/bbs/my.php`, selector: selectors.my });
     let { formhash, username, creditList, recentReply, recentTopics } = pageData;
     recentTopics &&
       recentTopics.forEach(item => {
@@ -45,7 +46,8 @@ const config = connect(({ discuz: { isLogin, signInfo, userInfo, webSite } }) =>
   routerToThread({ currentTarget: { dataset: { href, scrollTop } } }) {
     let { webSite } = this.data;
     if (!href.startsWith("http")) {
-      href = `${protocol}${webSite}/bbs/${href}`
+      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+      href = `${url_prefix}/bbs/${href}`
     }
     if (scrollTop) {
       wx.navigateTo({

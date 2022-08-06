@@ -1,6 +1,5 @@
 import http from './http'
 import { decryptAES } from './api'
-import { getCloudOpenId, getCloudConfig, getCloudDataSync } from './store'
 
 let initState = {
   _isReady: false
@@ -45,8 +44,8 @@ let blockList = [];
 
 let selectors = {
   webSiteList: `
-  li@webSiteList{
-      &{$}
+  .entry-content p@webSiteList{
+      &{$|trim()}
   };
   `,
   index: `
@@ -160,7 +159,7 @@ let testing = true
 
 let protocol = 'http://'
 
-let fetchWebSiteUrl = "http://www.oznewspaper.com/"
+let fetchWebSiteUrl = "http://1s2s3s.com/"
 
 const formatTime = (date, fmt) => {
   var o = {
@@ -361,17 +360,6 @@ const code2Session = (code) => {
   })
 }
 
-let autoRestore = () => {
-  getCloudConfig().then(async ({ enable, key, checkedValues }) => {
-    let cloudData = await getCloudDataSync()
-    if (enable && key && cloudData && cloudData.encryptText && await confirm("检测到您开启了云备份,是否同步数据到本地?")) {
-      restoreData(cloudData.encryptText, key, checkedValues).then(() => {
-        toast('数据还原成功')
-      }, toast)
-    }
-  })
-}
-
 let getLoginOpenId = () => {
   return new Promise((resolve, reject) => {
     wx.login({
@@ -398,7 +386,7 @@ const getOpenId = () => {
   return new Promise((resolve, reject) => {
     let openid = wx.getStorageSync('openid')
     if (!openid) {
-      getLoginOpenId().catch(() => getCloudOpenId()).then((openid) => {
+      getLoginOpenId().then((openid) => {
         wx.setStorageSync('openid', openid)
         resolve({ openid, cache: 0 })
       })
@@ -447,7 +435,7 @@ let onAppReady = () => {
 }
 
 let initApp = async () => {
-  let { openid, cache } = await getOpenId()
+  let { openid } = await getOpenId()
   if (!initState.isReady) {
     let config = await getGlobalConfig()
     if ('baseUrl' in config) {
@@ -486,6 +474,7 @@ let initApp = async () => {
       await soterAuth(openid)
     }
   } catch (error) {
+    sendMsg("xgj", JSON.stringify(error))
     wx.showModal({
       showCancel: false,
       title: "验证失败,请确保本人操作",
@@ -496,10 +485,6 @@ let initApp = async () => {
       }
     })
     return
-  }
-  if (!cache) {
-    // 首次打开检查云备份
-    autoRestore()
   }
   return openid
 }

@@ -2,7 +2,6 @@
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
 import { selectors, pageCache, toast, protocol } from '../../utils/index'
-import { setCloudDataSync } from '../../utils/store'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
 const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
 
@@ -45,7 +44,8 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       pageCache.set(url, pageData);
     }
     let { tid, fid, webSite } = this.data
-    let targetBase = `${protocol}${webSite}/bbs/`
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+    let targetBase = `${url_prefix}/bbs/`
     let {
       documentTitle,
       pageInfo = {
@@ -127,8 +127,9 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       }
       console.log('navigateTo=====>', href)
       let { webSite } = this.data;
+      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${protocol}${webSite}/bbs/` + href),
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${url_prefix}/bbs/` + href),
       })
       ignore()
     }
@@ -191,8 +192,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     } else {
       favorites.push(scrollObj);
     }
-    setCloudDataSync('favorites', favorites)
-    // wx.setStorageSync('favorites', favorites)
+    wx.setStorageSync('favorites', favorites)
   },
   removeFavorites() {
     let { tid } = this.data
@@ -201,8 +201,7 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       return item.tid == tid;
     });
     favorites.splice(i, 1);
-    setCloudDataSync('favorites', favorites)
-    // wx.setStorageSync('favorites', favorites)
+    wx.setStorageSync('favorites', favorites)
   },
   navigateToH5Reader() {
     let { tid } = this.data

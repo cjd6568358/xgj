@@ -2,8 +2,7 @@
 <block wx:if="{{isOwner}}">
   <block wx:if="{{isLogin}}">
     <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
-      <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii"
-        data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
+      <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
     </view>
   </block>
   <block wx:else>
@@ -36,7 +35,7 @@
 </block>
 <block wx:else>
   <view class="note">
-    <view class="item">1、数据支持存储在本地/云数据库,请放心使用</view>
+    <view class="item">1、数据支持存储在本地,请放心使用</view>
     <view class="item">2、支持签到/帐号数据的导入导出</view>
     <view class="item">3、使用过程中如遇到问题欢迎及时反馈</view>
   </view>

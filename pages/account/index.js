@@ -1,6 +1,5 @@
 // pages/account/index.js
 import { accountTypeList, toast, calculatGUID } from '../../utils/index'
-import { setCloudDataSync } from '../../utils/store'
 
 Page({
 
@@ -39,7 +38,6 @@ Page({
         accountData = accountData.filter(info => info.guid !== guid)
       }
       accountData.push({ username, password, remark, type, guid: calculatGUID() })
-      setCloudDataSync('accountData', accountData)
       // wx.setStorageSync('accountData', accountData)
       wx.navigateBack({
         delta: 1,

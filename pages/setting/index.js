@@ -1,6 +1,5 @@
 import { formatTime, toast, getStorageData, onAppReady, restoreData } from '../../utils/index'
-import { encryptAES, string2File } from '../../utils/api'
-import { getCloudDataSync, getCloudConfig, setCloudConfig } from '../../utils/store'
+import { string2File } from '../../utils/api'
 Page({
 
   /**
@@ -37,61 +36,27 @@ Page({
    */
   onReady: function () {
     onAppReady().then(() => {
-      getCloudConfig().then(cloudConfig => {
-        this.setData({
-          cloudConfig
-        })
-      })
     })
-  },
-  switchChange({ detail: { value } }) {
-    if (value) {
-      // 开启云备份(1.选择需要备份的数据类型)
-      let { halfDialog } = this.data
-      halfDialog.show = true
-      halfDialog.type = 'cloud_backup'
-      this.setData({
-        halfDialog
-      })
-    } else {
-      // 关闭云备份
-      let { cloudConfig } = this.data
-      cloudConfig.enable = 0;
-      setCloudConfig(cloudConfig)
-      this.setData({
-        cloudConfig
-      })
-    }
   },
   backupStore() {
     wx.showActionSheet({
-      itemList: ['备份至文件', '从文件还原', '从云备份还原'],
+      itemList: ['备份至文件', '从文件还原'],
       success: ({ tapIndex }) => {
+        let { halfDialog } = this.data
+        halfDialog.show = true
         if (tapIndex === 0) {
           // 备份至文件
-          let { halfDialog } = this.data
-          halfDialog.show = true
           halfDialog.type = 'backup'
           this.setData({
             halfDialog
           })
         } else if (tapIndex === 1) {
           // 从文件还原
-          let { halfDialog } = this.data
-          halfDialog.show = true
           halfDialog.type = 'restore'
-          this.setData({
-            halfDialog
-          })
-        } else if (tapIndex === 2) {
-          // 从云备份还原
-          let { halfDialog } = this.data
-          halfDialog.show = true
-          halfDialog.type = 'cloud_restore'
-          this.setData({
-            halfDialog
-          })
         }
+        this.setData({
+          halfDialog
+        })
       }
     })
   },
@@ -99,12 +64,6 @@ Page({
     let { halfDialog } = this.data
     if (halfDialog.type === 'backup') {
       this.fileData = getStorageData(this.checkedValues);
-      this.setData({
-        "halfDialog.show": false,
-        "keyDialog.show": true
-      })
-    } else if (halfDialog.type === 'cloud_backup') {
-      // 开启云备份(2.输入云备份秘钥)
       this.setData({
         "halfDialog.show": false,
         "keyDialog.show": true
@@ -127,34 +86,18 @@ Page({
       this.setData({
         "halfDialog.show": false,
       })
-    } else if (halfDialog.type === 'cloud_restore') {
-      this.setData({
-        "halfDialog.show": false,
-        "keyDialog.show": true
-      })
     }
   },
   async onDialogConfirm() {
-    let { halfDialog, key, email, cloudConfig } = this.data
+    let { halfDialog, key, email } = this.data
     if (halfDialog.type === 'backup') {
       let fileName = `xgj_${formatTime(new Date(), "yyyyMMddhhmmss")}.bak`;
       if (key && email) {
         wx.showLoading({
           title: '',
         })
-        // 小程序本地存储
-        let encryptText = await encryptAES(this.fileData, key)
-        wx.hideLoading({
-          success: (res) => { },
-        })
-        let filePath = wx.env.USER_DATA_PATH + '/' + fileName
-        let fs = wx.getFileSystemManager()
-        fs.writeFileSync(filePath, encryptText, "utf8")
         // 线上邮箱保存
         await string2File(this.fileData, key, email, fileName)
-        await wx.addFileToFavorites({
-          filePath,
-        })
         toast('备份成功,文件已发送至您的邮箱并加入收藏')
         this.setData({
           "halfDialog.show": false,
@@ -164,15 +107,6 @@ Page({
       } else {
         toast('密钥&&邮箱必填')
       }
-    } else if (halfDialog.type === 'cloud_backup') {
-      // 开启云备份(3.保存云备份配置)
-      Object.assign(cloudConfig, { key, enable: 1 })
-      setCloudConfig(cloudConfig)
-      this.setData({
-        cloudConfig,
-        key: "",
-        "keyDialog.show": false
-      })
     } else if (halfDialog.type === 'restore') {
       restoreData(this.encryptText, key, this.checkedValues).then(() => {
         this.setData({
@@ -181,20 +115,6 @@ Page({
         toast('数据还原成功')
         this.bindDialogClose()
       }, toast)
-    } else if (halfDialog.type === 'cloud_restore') {
-      // 从云备份还原
-      let cloudData = await getCloudDataSync()
-      if (cloudData) {
-        restoreData(cloudData.encryptText, key, this.checkedValues).then(() => {
-          this.setData({
-            "keyDialog.show": false
-          })
-          toast('数据还原成功')
-          this.bindDialogClose()
-        }, toast)
-      } else {
-        toast("找不到对应账号云备份数据");
-      }
     }
   },
   bindCheckboxChange({ detail: { value } }) {
@@ -208,13 +128,6 @@ Page({
       key: '',
       email: ''
     })
-    if (this.data.halfDialog.type === 'cloud_backup') {
-      getCloudConfig().then(cloudConfig => {
-        this.setData({
-          cloudConfig
-        })
-      })
-    }
   },
   clearAllStorage() {
     wx.showModal({

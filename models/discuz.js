@@ -84,8 +84,9 @@ export default {
       if (isLoading || !message) {
         return;
       }
+      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       let httpConfig = {
-        url: `${protocol}${webSite}/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+        url: `${url_prefix}/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
         data: querystring.stringify({
           formhash,
           message,
@@ -108,8 +109,9 @@ export default {
       let message = `ID: ${username}\r\n日期: ${formatTime(new Date(), "yyyy.M.dd")}\r\n心情: ......`;
       if (!signInfo.tid) {
         // 主题帖签到
+        let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
         Object.assign(httpConfig, {
-          url: `${protocol}${webSite}/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+          url: `${url_prefix}/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -122,8 +124,9 @@ export default {
         });
       } else {
         // 回复帖签到
+        let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
         Object.assign(httpConfig, {
-          url: `${protocol}${webSite}/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+          url: `${url_prefix}/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -156,8 +159,9 @@ export default {
             webSite,
           } = select();
           let lastMonthSignInfo = await put({ type: "getLastMonthSignInfo" });
+          let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
           let httpConfig = {
-            url: `${protocol}${webSite}/bbs/post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+            url: `${url_prefix}/bbs/post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",
@@ -212,9 +216,10 @@ export default {
       { put, select, selectAll }
     ) {
       let { formhash, webSite } = select();
+      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       let postData = {
         httpConfig: {
-          url: `${protocol}${webSite}/bbs/search.php`,
+          url: `${url_prefix}/bbs/search.php`,
           data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=${orderBy}&ascdesc=${sortType}&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer",
@@ -243,10 +248,11 @@ export default {
             title == `${username}/${month || 12}月份/打卡签到帖` &&
             formatTime(new Date(date), "yyyy") === formatTime(new Date(), "yyyy")
           ) {
+            let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
             let pageData = await put({
               type: "getPageData",
               payload: {
-                url: `${protocol}${webSite}/bbs/${href}`,
+                url: `${url_prefix}/bbs/${href}`,
                 selector: selectors.thread,
               },
             });

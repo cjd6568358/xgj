@@ -55,9 +55,10 @@ const config = connect(
         delete formData.questionid;
         delete formData.answer;
       }
+      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       let postData = {
         httpConfig: {
-          url: `${protocol}${webSite}/bbs/logging.php?action=login&loginsubmit=true`,
+          url: `${url_prefix}/bbs/logging.php?action=login&loginsubmit=true`,
           method: "post",
           responseType: "arraybuffer",
           data: querystring.stringify(formData),
@@ -96,7 +97,8 @@ const config = connect(
   },
   async checkSigned() {
     let { webSite, signInfo } = this.data;
-    let url = `${protocol}${webSite}/bbs/my.php`;
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+    let url = `${url_prefix}/bbs/my.php`;
     let selector = selectors.my;
     let pageData = await getPageData({ url, selector });
     let { formhash, username, recentTopics } = pageData;
@@ -118,7 +120,8 @@ const config = connect(
   },
   async getIndexPageData() {
     let { webSite } = this.data;
-    let url = `${protocol}${webSite}/bbs/index.php`;
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+    let url = `${url_prefix}/bbs/index.php`;
     let selector = selectors.index;
     let pageData = {};
     if (pageCache.has(url)) {
@@ -147,7 +150,8 @@ const config = connect(
     },
   }) {
     let { webSite } = this.data;
-    let url = `${protocol}${webSite}/bbs/` + path;
+    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+    let url = `${url_prefix}/bbs/` + path;
     wx.navigateTo({
       url: "/pages/discuz/forum?url=" + encodeURIComponent(url),
     });

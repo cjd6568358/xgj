@@ -1,6 +1,5 @@
 // pages/account/list.js
 import { accountTypeList, confirm, onAppReady } from '../../utils/index'
-import { setCloudDataSync } from '../../utils/store'
 Page({
 
   /**
@@ -48,8 +47,7 @@ Page({
       this.setData({
         resultList
       })
-      setCloudDataSync('accountData', this.accountData)
-      // wx.setStorageSync('accountData', this.accountData)
+      wx.setStorageSync('accountData', this.accountData)
     })
   },
   onItemClick({ currentTarget: { dataset: { item } } }) {

@@ -84,7 +84,8 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
         return
       } else {
         let { webSite, searchHref } = this.data
-        let { threadList } = await getPageData({ url: `${protocol}${webSite}/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
+        let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+        let { threadList } = await getPageData({ url: `${url_prefix}/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
         if (threadList.length > 0) {
           this.setData({
             threadList: this.data.threadList.concat(threadList),
@@ -95,8 +96,9 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
     },
     routerToThread({ currentTarget: { dataset: { tid } } }) {
       let { webSite } = this.data
+      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${protocol}${webSite}/bbs/thread-${tid}-1-1.html`),
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${url_prefix}/bbs/thread-${tid}-1-1.html`),
       })
     },
     /**
