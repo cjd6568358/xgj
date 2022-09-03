@@ -6,12 +6,8 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
 export default {
   props: ["prevUrl", "nextUrl", "pageNum", "pageCount"],
-  computed: {
-    ...mapGetters(["targetHost"]),
-  },
   methods: {
     gotoPage(url) {
       this.$router.push(encodeURIComponent(url));

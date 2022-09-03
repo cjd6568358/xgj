@@ -29,10 +29,10 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
-import { selectors } from "../../util";
+import { selectors, defaultWebSite, onlineWebSite } from "../../util";
 export default {
   props: ["url"],
   components: { Pagination, Menus },
@@ -49,7 +49,6 @@ export default {
   },
   computed: {
     ...mapState(["isLoading", "discuz"]),
-    ...mapGetters(["targetHost"]),
     prevUrl() {
       let prevUrl = "";
       let { pageNum } = this.pageInfo;
@@ -86,8 +85,6 @@ export default {
       scrollElement && scrollElement.scrollIntoView();
     }
   },
-  beforeMount() {},
-  destroyed() {},
   async beforeRouteUpdate(to, from, next) {
     next();
     await this.getThreadPageJson(to.params.url);
@@ -102,13 +99,14 @@ export default {
   methods: {
     ...mapActions(["getPageData"]),
     async getThreadPageJson(url) {
+      url = "/bbs/" + url;
       let pageData = {};
       if (sessionStorage.getItem(url)) {
         pageData = JSON.parse(sessionStorage.getItem(url));
       } else {
         let selector = selectors.thread;
         pageData = await this.getPageData({
-          url: this.targetHost + url,
+          url,
           selector,
         });
         sessionStorage.setItem(url, JSON.stringify(pageData));
@@ -155,9 +153,18 @@ export default {
         item.content = item.content
           .replace(/[\t]/g, ``)
           .replace(/(\S)(<br>)(\S)/g, "$1$3")
-          .replace(/="attachment/g, `="${this.targetHost}attachment`)
-          .replace(/="images/g, `="${this.targetHost}images`)
-          .replace(/="http:\/\/(.*)\/bbs\//g, `="${this.targetHost}`)
+          .replace(
+            /="attachment/g,
+            `="${onlineWebSite || defaultWebSite}/bbs/attachment`
+          )
+          .replace(
+            /="images/g,
+            `="${onlineWebSite || defaultWebSite}/bbs/images`
+          )
+          .replace(
+            /="http:\/\/(.*)\/bbs\//g,
+            `="${onlineWebSite || defaultWebSite}/bbs/`
+          )
           // .replace(/(href="viewthread.*tid=)(\d.*)(&page=)(\d.*)(#pid\d.*)"?/g,'href="thread-$2-$4-1.html$5"')
           .replace(/:14pt/g, ":5vw");
       });
@@ -166,11 +173,17 @@ export default {
       let {
         target: { href, nodeName },
       } = event;
-      if (nodeName === "A" && href.includes("viewthread.php?tid=")) {
-        href = href.replace(
-          /(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g,
-          `thread-$2-$3-1.html#postmessage_$4`
-        );
+      if (nodeName === "A") {
+        if (href.includes("viewthread.php?tid=")) {
+          href = href.replace(
+            /(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g,
+            `thread-$2-$3-1.html#postmessage_$4`
+          );
+        }
+        // 这里拿到的href是完整url
+        if (href.startsWith("http")) {
+          href = href.replace(location.origin + process.env.BASE_URL, "/");
+        }
         let { params, hash } = this.$route;
         if (params.url + hash != href) {
           this.$router.push(href);

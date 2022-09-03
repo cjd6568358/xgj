@@ -3,8 +3,6 @@ import Router from 'vue-router'
 
 const SignView = () =>
     import( /* webpackChunkName: "SignView" */ './views/Sign/index.vue')
-// const ToolsView = () =>
-//     import ( /* webpackChunkName: "ToolsView" */ './views/Tools/index.vue')
 const DiscuzView = () =>
     import( /* webpackChunkName: "DiscuzView" */ './views/Discuz/index.vue')
 const DiscuzForumView = () =>
@@ -30,11 +28,6 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-        // {
-        //     path: '/tools',
-        //     name: 'ToolsView',
-        //     component: ToolsView
-        // },
         {
             path: '/discuz',
             name: 'DiscuzView',

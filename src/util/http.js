@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Agent from 'agentkeepalive'
 // import temme from 'temme'
+import { defaultWebSite, onlineWebSite } from './index'
 // let temme = null
 const keepaliveAgent = new Agent({
     maxSockets: 100,
@@ -21,6 +22,17 @@ httpClient.interceptors.request.use(async (config) => {
     // Do something before request is sent
     if (document.cookie) {
         config.headers['corscookies'] = document.cookie
+    }
+    console.log(config.method, config.data)
+    if (config.method.toLowerCase() === "post" && config?.data?.httpConfig?.url?.startsWith('/bbs/')) {
+        config.data.httpConfig.url = (onlineWebSite || defaultWebSite) + config.data.httpConfig.url;
+        console.log(config.data)
+        if (defaultWebSite && !onlineWebSite) {
+            config.data.disablePrefixProxy = true
+        }
+        if (localStorage.getItem('withSocks5') === "true") {
+            config.data.httpConfig.withSocks5 = true
+        }
     }
     return config;
 }, async function (error) {

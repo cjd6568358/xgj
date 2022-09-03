@@ -79,7 +79,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { RadioGroup, Radio, Switch, List } from "vant";
 import { selectors } from "../../util";
 export default {
@@ -105,7 +105,6 @@ export default {
   },
   computed: {
     ...mapState(["isLoading", "discuz"]),
-    ...mapGetters(["targetHost"]),
   },
   methods: {
     ...mapActions(["getPageData", "searchData"]),
@@ -142,9 +141,9 @@ export default {
       }
     },
     async loadMore() {
-      let { targetHost, searchHref, pageNum } = this;
+      let { searchHref, pageNum } = this;
       let { threadList } = await this.getPageData({
-        url: `${targetHost}${searchHref}page=${pageNum + 1}`,
+        url: `/bbs/${searchHref}page=${pageNum + 1}`,
         selector: selectors.search,
       });
       if (threadList.length > 0) {

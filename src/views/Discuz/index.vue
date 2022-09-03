@@ -6,18 +6,6 @@
           <h3>discuz论坛手机版</h3>
         </center>
         <div class="input-warp">
-          <select name id placeholder="请选择站点" v-model="webSite">
-            <option
-              v-for="item of discuz.webSiteList"
-              :key="item"
-              :value="item"
-            >
-              {{ item }}
-            </option>
-          </select>
-          <a class="btn" @click="updateWebSiteList">更新列表</a>
-        </div>
-        <div class="input-warp">
           <input
             type="text"
             v-model="userInfo.username"
@@ -85,15 +73,9 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import http from "../../util/http";
-import {
-  getCookie,
-  selectors,
-  proxyServers,
-  fetchWebSiteUrl,
-} from "../../util";
+import { getCookie, selectors, proxyServers } from "../../util";
 export default {
   name: "discuz-page",
-  components: {},
   data() {
     return {
       areaList: [],
@@ -106,23 +88,11 @@ export default {
   },
   computed: {
     ...mapState(["isLoading", "discuz"]),
-    ...mapGetters(["targetHost"]),
-    webSite: {
-      get() {
-        return this.discuz.webSite;
-      },
-      set(newValue) {
-        this.$store.commit("UPDATE_DISCUZ", {
-          webSite: newValue,
-        });
-      },
-    },
     proxyServerPlatom() {
       return proxyServers.filter((item) => item.host === this.discuz.HOST)[0]
         .platom;
     },
   },
-  mounted() {},
   activated() {
     this.init();
     // eslint-disable-next-line
@@ -130,8 +100,6 @@ export default {
     document.querySelector(".overflow-container").scrollTop =
       sessionStorage.getItem("homePage") || 0;
   },
-  beforeMount() {},
-  destroyed() {},
   methods: {
     ...mapActions([
       "switchProxy",
@@ -142,21 +110,16 @@ export default {
       "getPageData",
     ]),
     async init() {
-      let { isLogin, signInfo, webSiteList } = this.discuz;
+      let { isLogin, signInfo } = this.discuz;
       if (isLogin) {
         if (!signInfo.isSigned) {
           this.checkSigned();
         }
         this.getIndexPageData();
-      } else {
-        if (!webSiteList.length) {
-          this.updateWebSiteList();
-        }
       }
     },
     async login() {
       let {
-        targetHost,
         discuz: { HOST },
         userInfo: { username, password, QA },
       } = this;
@@ -181,7 +144,7 @@ export default {
         const params = new URLSearchParams(Object.entries(formData));
         let postData = {
           httpConfig: {
-            url: `${targetHost}logging.php?action=login&loginsubmit=true`,
+            url: `/bbs/logging.php?action=login&loginsubmit=true`,
             method: "post",
             responseType: "arraybuffer",
             data: params.toString(),
@@ -208,10 +171,9 @@ export default {
     },
     async checkSigned() {
       let {
-        targetHost,
         discuz: { signInfo },
       } = this;
-      let url = `${targetHost}my.php`;
+      let url = `/bbs/my.php`;
       let selector = selectors.my;
       let pageData = await this.getPageData({ url, selector });
       let { formhash, username, recentReply, recentTopics } = pageData;
@@ -232,7 +194,7 @@ export default {
         });
     },
     async getIndexPageData() {
-      let url = `${this.targetHost}index.php`;
+      let url = `/bbs/index.php`;
       let selector = selectors.index;
       let pageData = {};
       if (sessionStorage.getItem(url)) {
@@ -250,21 +212,6 @@ export default {
       if (!pageData.username) {
         this.logout();
       }
-    },
-    async updateWebSiteList() {
-      let gfwProxyServers = proxyServers.filter((item) => item.gfw);
-      let HOST =
-        gfwProxyServers[Math.floor(Math.random() * gfwProxyServers.length)]
-          .host;
-      let url = fetchWebSiteUrl;
-      let selector = selectors.webSiteList;
-      let pageData = await this.getPageData({ url, selector, HOST });
-      let webSiteList = [];
-      pageData.webSiteList.forEach((webSite) => {
-        webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
-      });
-      localStorage.setItem("webSiteList", JSON.stringify(webSiteList));
-      this.$store.commit("UPDATE_DISCUZ", { webSiteList });
     },
     onScroll(e) {
       if (this.timer) {

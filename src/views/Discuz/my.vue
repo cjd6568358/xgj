@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { selectors } from "../../util";
 export default {
   name: "discuz-page",
@@ -73,7 +73,6 @@ export default {
   },
   computed: {
     ...mapState(["isLoading", "discuz"]),
-    ...mapGetters(["targetHost"]),
   },
   mounted() {
     this.init();
@@ -92,10 +91,9 @@ export default {
     },
     async getMyPageData() {
       let {
-        targetHost,
         discuz: { userInfo, signInfo },
       } = this;
-      let url = `${targetHost}my.php`;
+      let url = `/bbs/my.php`;
       let selector = selectors.my;
       let pageData = await this.getPageData({ url, selector });
       userInfo.username = pageData.username;

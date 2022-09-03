@@ -56,7 +56,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
 import { selectors } from "../../util";
@@ -75,7 +75,6 @@ export default {
   },
   computed: {
     ...mapState(["isLoading", "discuz"]),
-    ...mapGetters(["targetHost"]),
     prevUrl() {
       let prevUrl = "";
       if (this.pageInfo && this.pageInfo.pageNum != 1 && this.url) {
@@ -118,13 +117,14 @@ export default {
   methods: {
     ...mapActions(["getPageData"]),
     async getForumPageData(url) {
+      url = "/bbs/" + url;
       let pageData = {};
       if (sessionStorage.getItem(url)) {
         pageData = JSON.parse(sessionStorage.getItem(url));
       } else {
         let selector = selectors.forum;
         pageData = await this.getPageData({
-          url: this.targetHost + url,
+          url,
           selector,
         });
         sessionStorage.setItem(url, JSON.stringify(pageData));

@@ -3,111 +3,117 @@ import Cookies from "js-cookie";
 
 let selectors = {
   webSiteList: `
-    li@webSiteList{
-        &{$}
-    };
-    `,
+ .entry-content p@webSiteList{
+      &{$|trim()}
+  };
+  `,
   index: `
-    .mainbox.forumlist@areaList{
-        h3 a{$name};
-        tbody:has(.lastpost a)@value{
-            h2 a[href=$value]{$name}
-        }
-    };
-    #creditlist_menu>li@creditList{
-        &{$}
-    };
-    #creditlist{$username}
-    `,
+  .mainbox.forumlist@areaList{
+      h3 a{$name};
+      tbody:has(.lastpost a)@value{
+          h2 a[href=$value]{$name}
+      }
+  };
+  #creditlist_menu>li@creditList{
+      &{$}
+  };
+  #creditlist{$username}
+  `,
   forum: `
-    filter MathCeil() {
-      return Math.ceil(this/38)
-    };
-    head title{$documentTitle};
-    .mainbox.forumlist tbody:has(.lastpost a)@forumList{
-        h2 a[href=$href]{$name}
-    }
-    .mainbox.threadlist table:has(thead.separation)@threadList{
-        thead.separation td b{$name};
-        tbody:has(th)@value{
-            th span[id^=thread_] a[href=$href]{$title};
-            .nums{$nums};
-            td.icon img[alt=$type];
-            span.bold{$permission|Number}
-            .author cite{html($thanks|replace(/<a(.*)absmiddle">/g,'')|Number)}
-            .author em{$date}
-        }
-    };
-    .mainbox.threadlist+.pages_btns .pages@pageInfo|pack{
-        $pageNum = 1;
-        $pageCount = 1;
-        strong{$pageNum|Number};
-        em{$pageCount|Number|MathCeil};
-    }
-    `,
+  filter MathCeil() {
+    return Math.ceil(this/38)
+  };
+  head title{$documentTitle};
+  .mainbox.forumlist tbody:has(.lastpost a)@forumList{
+      h2 a[href=$href]{$name}
+  }
+  .mainbox.threadlist table:has(thead.separation)@threadList{
+      thead.separation td b{$name};
+      tbody:has(th)@value{
+          th span[id^=thread_] a[href=$href]{$title};
+          .nums{$nums};
+          td.icon img[alt=$type];
+          span.bold{$permission|Number}
+          .author cite{html($thanks|replace(/<a(.*)absmiddle">/g,'')|Number)}
+          .author em{$date}
+      }
+  };
+  .mainbox.threadlist+.pages_btns .pages@pageInfo|pack{
+      $pageNum = 1;
+      $pageCount = 1;
+      strong{$pageNum|Number};
+      em{$pageCount|Number|MathCeil};
+  }
+  `,
   thread: `
-    filter MathCeil() {
-        return Math.ceil(this/10)
-    };
-    form input[name=formhash][value=$formhash];
-    #postform[action=$replyUrl];
-    form+.pages_btns .threadflow a:nth-of-type(1)[href=$prevTopicUrl];
-    form+.pages_btns .threadflow a:nth-of-type(2)[href=$nextTopicUrl];
-    #ajax_favorite[href=$favoriteUrl];
-    #newspecial_menu li:nth-of-type(1) a[href=$newThreadUrl];
-    head title{$documentTitle};
-    form .mainbox.viewthread@postList{
-        .postauthor cite a[id^=userinfo]{$authorName};
-        .postauthor p:nth-of-type(1){$authorLevel};
-        .postcontent .postinfo strong[id=$pid|replace(/postnum_/g,'')][onclick=$absPostUrl|replace(/',.*/g,'')|match(/viewth.*/g)|first]{$postFloor}
-        .postcontent .postinfo{find('小',$postTime|replace(/^.*发表于 /g,''), '只看该作者')}
-        .postcontent .postmessage>h2{html($postTitle)}
-        .postcontent .postmessage .notice{html($content|replace(/border(.*)alt=""/g,""))}
-        .postcontent .postmessage .t_msgfont{html($content|replace(/border(.*)alt=""/g,""))}
-    };
-    form+.pages_btns .pages@pageInfo|pack{
-        $pageNum = 1;
-        $pageCount = 1;
-        $total = 1;
-        strong{$pageNum|Number};
-        em{$pageCount|Number|MathCeil};
-        em{$total|Number};
-    }
-    `,
+  filter MathCeil() {
+      return Math.ceil(this/10)
+  };
+  form input[name=formhash][value=$formhash];
+  #postform[action=$replyUrl];
+  form+.pages_btns .threadflow a:nth-of-type(1)[href=$prevTopicUrl];
+  form+.pages_btns .threadflow a:nth-of-type(2)[href=$nextTopicUrl];
+  #ajax_favorite[href=$favoriteUrl];
+  #newspecial_menu li:nth-of-type(1) a[href=$newThreadUrl];
+  head title{$documentTitle};
+  form .mainbox.viewthread@postList{
+      .postauthor cite a[id^=userinfo]{$authorName};
+      .postauthor p:nth-of-type(1){$authorLevel};
+      .postcontent .postinfo strong[id=$pid|replace(/postnum_/g,'')][onclick=$absPostUrl|replace(/',.*/g,'')|match(/viewth.*/g)|first]{$postFloor}
+      .postcontent .postinfo{find('小',$postTime|replace(/^.*发表于 /g,''), '只看该作者')}
+      .postcontent .postmessage>h2{html($postTitle)}
+      .postcontent .postmessage .notice{html($content|replace(/border(.*)alt=""/g,""))}
+      .postcontent .postmessage .t_msgfont{html($content|replace(/border(.*)alt=""/g,""))}
+  };
+  form+.pages_btns .pages@pageInfo|pack{
+      $pageNum = 1;
+      $pageCount = 1;
+      $total = 1;
+      strong{$pageNum|Number};
+      em{$pageCount|Number|MathCeil};
+      em{$total|Number};
+  }
+  `,
   my: `
-    .credits_info ul>li@creditList{
-        &{$|trim()}
-    };
-    #wrapper #menu ul li:nth-child(2) a[href=$formhash|split('formhash=')|slice(1,2)|first];
-    #menu li cite a{$username};
-    .mainbox table:nth-of-type(1) tbody tr@recentTopics{
-        td:nth-child(1) a[href=$href]{$title}
-        td:nth-child(1) a[href=$tid|split('-')|slice(1,2)|first];
-        td:nth-child(2){$forum}
-        td:nth-child(3) a[href=$lastPostUrl]{$lastPost}
-        td:nth-child(4){$status}
-    };
-    .mainbox table:nth-of-type(2) tbody tr@recentReply{
-        td:nth-child(1) a[href=$href]{$title}
-        td:nth-child(1) a[href=$tid|replace(/^redirect.*ptid=/g,'')];
-        td:nth-child(2){$forum}
-        td:nth-child(3){$lastPost}
-        td:nth-child(4){$status}
-    }
-    `,
+  .credits_info ul>li@creditList{
+      &{$|trim()}
+  };
+  #wrapper #menu ul li:nth-child(2) a[href=$formhash|split('formhash=')|slice(1,2)|first];
+  #menu li cite a{$username};
+  .mainbox table:nth-of-type(1) tbody tr@recentTopics{
+      td:nth-child(1) a[href=$href]{$title}
+      td:nth-child(1) a[href=$tid|split('-')|slice(1,2)|first];
+      td:nth-child(2){$forum}
+      td:nth-child(3) a[href=$lastPostUrl]{$lastPost}
+      td:nth-child(4){$status}
+  };
+  .mainbox table:nth-of-type(2) tbody tr@recentReply{
+      td:nth-child(1) a[href=$href]{$title}
+      td:nth-child(1) a[href=$tid|replace(/^redirect.*ptid=/g,'')];
+      td:nth-child(2){$forum}
+      td:nth-child(3){$lastPost}
+      td:nth-child(4){$status}
+  }
+  `,
   search: `
-    filter MathCeil() {
-      return Math.ceil(this/38)
-    };
-    .mainbox.threadlist tbody@threadList{
-        th a[href=$href]
-        th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
-        td.author em{$date};
-        td.nums{$nums};
-    };
-    .mainbox.threadlist+.pages_btns .pages em{$pageCount|Number|MathCeil};
-    .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];
-    `,
+  filter MathCeil() {
+    return Math.ceil(this/38)
+  };
+  .mainbox.threadlist tbody@threadList{
+      th a[href=$href];
+      th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
+      td.author em{$date};
+      td.nums{$nums};
+  };
+  .mainbox.threadlist[class=$searchHref]{
+      $pageCount = 1;
+  };
+  .mainbox.threadlist tbody th[colspan="6"]{
+      $pageCount = 0;
+  };
+  .mainbox.threadlist+.pages_btns .pages em{$pageCount|Number|MathCeil};
+  .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];
+  `
 };
 
 let accountTypeList = [
@@ -137,14 +143,10 @@ let proxyServers = [
   {
     protocol: "https",
     host: "https://cjd6568358.3322.org:6706",
-    platom: "N270",
+    platom: "N1",
     gfw: false,
-  },
+  }
 ];
-
-let protocol = 'http://'
-
-let fetchWebSiteUrl = "http://www.oznewspaper.com/"
 
 let checkWebp = function () {
   return new Promise(function (resolve) {
@@ -360,10 +362,7 @@ let getGlobalConfig = () => {
   return new Promise((reslove, reject) => {
     http({
       method: "get",
-      url: "https://cjd6568358.3322.org:6706/api/padavan_proxy",
-      headers: {
-        "proxy_pass": "https://cjd6568358.gitee.io/static/xgj/config.json",
-      }
+      url: "https://cjd6568358.3322.org:6706/static/xgj/config.json",
     }).then(({ data }) => {
       if (data) {
         localStorage.setItem(
@@ -394,19 +393,28 @@ let getGlobalConfig = () => {
   });
 };
 
+
+let HOST = localStorage.getItem("proxy_host");
+if (!proxyServers.some((item) => item.host === HOST)) {
+  HOST = proxyServers[0].host;
+  localStorage.setItem("proxy_host", HOST);
+}
+
+let defaultWebSite = getCookie("webSite") || `http://gomadsis.com`;
+let onlineWebSite = "";
+
 let initApp = async () => {
   let config = await getGlobalConfig();
+  // let { data: { data } } = await http.get(`${HOST}/api/prefix/sis`)
+  // if (data) {
+  //   setCookie('webSite', data)
+  //   onlineWebSite = data
+  // }
   if ("accountTypeList" in config) {
     accountTypeList = config["accountTypeList"];
   }
   if ("selectors" in config) {
     selectors = config["selectors"];
-  }
-  if ("protocol" in config) {
-    protocol = config["protocol"];
-  }
-  if ("fetchWebSiteUrl" in config) {
-    fetchWebSiteUrl = config["fetchWebSiteUrl"];
   }
 };
 
@@ -426,6 +434,7 @@ export {
   selectors,
   proxyServers,
   initApp,
-  protocol,
-  fetchWebSiteUrl
+  HOST,
+  defaultWebSite,
+  onlineWebSite
 };

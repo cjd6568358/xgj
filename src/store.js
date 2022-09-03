@@ -7,17 +7,11 @@ import {
   loadScript,
   selectors,
   proxyServers,
-  protocol
+  HOST
 } from "./util";
 import http from "./util/http";
 
 Vue.use(Vuex);
-
-let HOST = localStorage.getItem("proxy_host");
-if (!proxyServers.some((item) => item.host === HOST)) {
-  localStorage.removeItem("proxy_host");
-  HOST = proxyServers[0].host;
-}
 
 // let temmeConvert = 'client'
 // if (localStorage.getItem("temmeConvert")) {
@@ -26,8 +20,6 @@ if (!proxyServers.some((item) => item.host === HOST)) {
 //     localStorage.setItem("temmeConvert", temmeConvert);
 // }
 let isLogin = !!getCookie("cdb3_auth");
-let webSiteList = JSON.parse(localStorage.getItem("webSiteList") || "[]");
-let webSite = getCookie("webSite") || webSiteList[0];
 let debug = localStorage.getItem("debug") === "true";
 if (debug) {
   loadScript("https://wechatfe.github.io/vconsole/lib/vconsole.min.js").then(
@@ -46,8 +38,6 @@ export default new Vuex.Store({
       formhash: "",
       HOST,
       isLogin,
-      webSiteList,
-      webSite,
       userInfo: {
         username: "",
         password: "",
@@ -71,9 +61,6 @@ export default new Vuex.Store({
       state.isLoading = STATUS;
     },
     UPDATE_DISCUZ(state, info) {
-      if (info.webSite) {
-        setCookie("webSite", info.webSite);
-      }
       Object.assign(state.discuz, info);
     },
   },
@@ -124,7 +111,6 @@ export default new Vuex.Store({
         isLoading,
         discuz: { formhash },
       } = state;
-      let { targetHost } = getters;
       if (isLoading || !message) {
         return;
       }
@@ -133,7 +119,7 @@ export default new Vuex.Store({
       params.set('message', message);
       params.set('subject', subject);
       let httpConfig = {
-        url: `${targetHost}post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+        url: `/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
         data: params.toString,
       };
       await dispatch("submitPost", httpConfig);
@@ -147,7 +133,6 @@ export default new Vuex.Store({
           signInfo,
         },
       } = state;
-      let { targetHost } = getters;
       if (isLoading) {
         return;
       }
@@ -166,7 +151,7 @@ export default new Vuex.Store({
         params.set('subject', `${username}/${new Date().getMonth() + 1}月份/打卡签到帖`);
         // 主题帖签到
         Object.assign(httpConfig, {
-          url: `${targetHost}post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+          url: `/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
           data: params.toString(),
         });
       } else {
@@ -176,7 +161,7 @@ export default new Vuex.Store({
         params.set('subject', "");
         // 回复帖签到
         Object.assign(httpConfig, {
-          url: `${targetHost}post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+          url: `/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
           data: params.toString(),
         });
       }
@@ -195,7 +180,6 @@ export default new Vuex.Store({
             userInfo: { username },
           },
         } = state;
-        let { targetHost } = getters;
         let lastMonthSignInfo = await dispatch("getLastMonthSignInfo");
         const params = new URLSearchParams();
         params.set('formhash', formhash);
@@ -207,7 +191,7 @@ export default new Vuex.Store({
             `thread-${lastMonthSignInfo.tid}-1-1.html`
           )}[/bbs]`);
         let httpConfig = {
-          url: `${targetHost}post.php?action=reply&fid=420&tid=8186986&extra=page%3D1&replysubmit=yes`,
+          url: `/bbs/post.php?action=reply&fid=420&tid=8186986&extra=page%3D1&replysubmit=yes`,
           data: params.toString(),
         };
         await dispatch("submitPost", httpConfig);
@@ -246,10 +230,9 @@ export default new Vuex.Store({
           formhash,
         },
       } = state;
-      let { targetHost } = getters;
       let postData = {
         httpConfig: {
-          url: `${targetHost}search.php`,
+          url: `/bbs/search.php`,
           data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=${orderBy}&ascdesc=${sortType}&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer",
@@ -271,10 +254,9 @@ export default new Vuex.Store({
           formhash,
         },
       } = state;
-      let { targetHost } = getters;
       let postData = {
         httpConfig: {
-          url: `${targetHost}search.php`,
+          url: `/bbs/search.php`,
           data: `formhash=${formhash}&srchtxt=${username}&srchuname=&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=lastpost&ascdesc=desc&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer",
@@ -297,7 +279,7 @@ export default new Vuex.Store({
             new Date(date).Format("yyyy") === new Date().Format("yyyy")
           ) {
             let pageData = await dispatch("getPageData", {
-              url: `${targetHost}${href}`,
+              url: `/bbs/${href}`,
               selector: selectors.thread,
             });
             resolve({
@@ -308,11 +290,6 @@ export default new Vuex.Store({
           }
         }
       });
-    },
-  },
-  getters: {
-    targetHost: (state) => {
-      return `${protocol}${state.discuz.webSite}/bbs/`;
     },
   },
 });

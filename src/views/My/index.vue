@@ -16,18 +16,6 @@
         <li @click="recordsImportClick">导入</li>
         <li @click="debugClick">{{ debug ? "关闭" : "打开" }}调试</li>
         <!-- <li @click="switchTemmeConvert">{{temmeConvert}}进行HTML转换</li> -->
-        <li>
-          <span>切换论坛源</span>
-          <select name id placeholder="请选择站点" v-model="webSite">
-            <option
-              v-for="item of discuz.webSiteList"
-              :key="item"
-              :value="item"
-            >
-              {{ item }}
-            </option>
-          </select>
-        </li>
       </ul>
     </div>
     <TabBar></TabBar>
@@ -35,7 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import TabBar from "../../components/TabBar/index.vue";
 import RecordsImport from "../../components/RecordsImport/index.vue";
 import RecordsExport from "../../components/RecordsExport/index.vue";
@@ -46,18 +34,8 @@ export default {
     return {};
   },
   computed: {
-    // ...mapState(["debug", "temmeConvert", "discuz"]),
-    ...mapState(["debug", "discuz"]),
-    webSite: {
-      get() {
-        return this.discuz.webSite;
-      },
-      set(newValue) {
-        this.$store.commit("UPDATE_DISCUZ", {
-          webSite: newValue,
-        });
-      },
-    },
+    // ...mapState(["debug", "temmeConvert"]),
+    ...mapState(["debug"]),
   },
   mounted() {},
   methods: {
