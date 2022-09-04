@@ -20,19 +20,10 @@ Vue.use(Vuex);
 //     localStorage.setItem("temmeConvert", temmeConvert);
 // }
 let isLogin = !!getCookie("cdb3_auth");
-let debug = localStorage.getItem("debug") === "true";
-if (debug) {
-  loadScript("https://wechatfe.github.io/vconsole/lib/vconsole.min.js").then(
-    () => {
-      new window.VConsole();
-    }
-  );
-}
 
 export default new Vuex.Store({
   state: {
     isLoading: false,
-    debug,
     // temmeConvert,
     discuz: {
       formhash: "",

@@ -14,8 +14,11 @@
         <li @click="clearCacheClick">清除缓存</li>
         <li @click="recordsExportClick">备份</li>
         <li @click="recordsImportClick">导入</li>
-        <li @click="debugClick">{{ debug ? "关闭" : "打开" }}调试</li>
+        <li @click="debugModeClick">{{ debugMode ? "关闭" : "打开" }}调试</li>
         <!-- <li @click="switchTemmeConvert">{{temmeConvert}}进行HTML转换</li> -->
+        <li @click="socks5ModeClick">
+          {{ socks5Mode ? "关闭" : "打开" }}Socks5
+        </li>
       </ul>
     </div>
     <TabBar></TabBar>
@@ -23,19 +26,22 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+// import { mapState, mapActions } from "vuex";
 import TabBar from "../../components/TabBar/index.vue";
 import RecordsImport from "../../components/RecordsImport/index.vue";
 import RecordsExport from "../../components/RecordsExport/index.vue";
 import DbHelper from "../../util/dbHelper";
+import { debugMode, socks5Mode } from "../../util/index";
 export default {
   components: { TabBar },
   data() {
-    return {};
+    return {
+      debugMode,
+      socks5Mode,
+    };
   },
   computed: {
-    // ...mapState(["debug", "temmeConvert"]),
-    ...mapState(["debug"]),
+    // ...mapState(["temmeConvert"]),
   },
   mounted() {},
   methods: {
@@ -85,8 +91,12 @@ export default {
         this.$Toast.info("清除成功");
       }
     },
-    debugClick() {
-      localStorage.setItem("debug", !this.debug);
+    debugModeClick() {
+      localStorage.setItem("debugMode", !this.debugMode);
+      location.reload();
+    },
+    socks5ModeClick() {
+      localStorage.setItem("socks5Mode", !this.socks5Mode);
       location.reload();
     },
   },

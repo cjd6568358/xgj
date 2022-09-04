@@ -23,14 +23,12 @@ httpClient.interceptors.request.use(async (config) => {
     if (document.cookie) {
         config.headers['corscookies'] = document.cookie
     }
-    console.log(config.method, config.data)
     if (config.method.toLowerCase() === "post" && config?.data?.httpConfig?.url?.startsWith('/bbs/')) {
         config.data.httpConfig.url = (onlineWebSite || defaultWebSite) + config.data.httpConfig.url;
-        console.log(config.data)
         if (defaultWebSite && !onlineWebSite) {
             config.data.disablePrefixProxy = true
         }
-        if (localStorage.getItem('withSocks5') === "true") {
+        if (localStorage.getItem('socks5Mode') === "true") {
             config.data.httpConfig.withSocks5 = true
         }
     }

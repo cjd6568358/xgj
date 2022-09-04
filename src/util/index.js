@@ -399,17 +399,28 @@ if (!proxyServers.some((item) => item.host === HOST)) {
   HOST = proxyServers[0].host;
   localStorage.setItem("proxy_host", HOST);
 }
+let debugMode = localStorage.getItem("debugMode") === "true";
+if (debugMode) {
+  loadScript("https://wechatfe.github.io/vconsole/lib/vconsole.min.js").then(
+    () => {
+      new window.VConsole();
+    }
+  );
+}
+let socks5Mode = localStorage.getItem("socks5Mode") === "true";
 
 let defaultWebSite = getCookie("webSite") || `http://gomadsis.com`;
 let onlineWebSite = "";
 
 let initApp = async () => {
   let config = await getGlobalConfig();
-  // let { data: { data } } = await http.get(`${HOST}/api/prefix/sis`)
-  // if (data) {
-  //   setCookie('webSite', data)
-  //   onlineWebSite = data
-  // }
+  http.get(`${HOST}/api/prefix/sis`).then(({ data: { data } }) => {
+    if (data) {
+      setCookie('webSite', data)
+      onlineWebSite = data
+    }
+  })
+
   if ("accountTypeList" in config) {
     accountTypeList = config["accountTypeList"];
   }
@@ -435,6 +446,8 @@ export {
   proxyServers,
   initApp,
   HOST,
+  debugMode,
+  socks5Mode,
   defaultWebSite,
   onlineWebSite
 };

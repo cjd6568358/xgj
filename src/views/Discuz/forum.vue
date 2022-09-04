@@ -112,8 +112,6 @@ export default {
     document.querySelector(".overflow-container").scrollTop =
       sessionStorage.getItem(this.url + "_scrollTop") || 0;
   },
-  beforeMount() {},
-  destroyed() {},
   methods: {
     ...mapActions(["getPageData"]),
     async getForumPageData(url) {
