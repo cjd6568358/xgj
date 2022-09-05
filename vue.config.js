@@ -51,5 +51,5 @@ module.exports = {
     productionSourceMap: false,
     parallel: undefined,
     css: undefined,
-    publicPath: '/xgj'
+    publicPath: process.env.BASE_URL || '/xgj'
 }
