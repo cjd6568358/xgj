@@ -1,9 +1,9 @@
 // pages/discuz/search.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, toast, onAppReady, testing, protocol } from '../../utils/index'
+import { selectors, toast, onAppReady, testing } from '../../utils/index'
 let { discuz: { searchData, getPageData } } = dispatcher
-const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
+const config = connect(({ discuz: { isOwner, isLogin, } }) => ({ isOwner, isLogin, }))(
   {
 
     /**
@@ -83,9 +83,8 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
         toast("没有更多啦!")
         return
       } else {
-        let { webSite, searchHref } = this.data
-        let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
-        let { threadList } = await getPageData({ url: `${url_prefix}/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
+        let { searchHref } = this.data
+        let { threadList } = await getPageData({ url: `/bbs/${searchHref}page=${pageNum + 1}`, selector: selectors.search })
         if (threadList.length > 0) {
           this.setData({
             threadList: this.data.threadList.concat(threadList),
@@ -95,10 +94,8 @@ const config = connect(({ discuz: { webSite } }) => ({ webSite }))(
       }
     },
     routerToThread({ currentTarget: { dataset: { tid } } }) {
-      let { webSite } = this.data
-      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${url_prefix}/bbs/thread-${tid}-1-1.html`),
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(`thread-${tid}-1-1.html`),
       })
     },
     /**

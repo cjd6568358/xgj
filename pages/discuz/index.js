@@ -1,19 +1,17 @@
 // pages/discuz/index.js
 import { dispatcher } from "../../utils/zoro.weapp.js";
 import { connect } from "../../utils/redux.weapp.js";
-import { formatTime, selectors, pageCache, querystring, protocol, fetchWebSiteUrl } from "../../utils/index";
+import { formatTime, selectors, pageCache, querystring } from "../../utils/index";
 import http from "../../utils/http.js";
 let {
   discuz: { logout, UPDATE_DISCUZ, getPageData, dailySignIn, monthSignIn },
 } = dispatcher;
 const config = connect(
-  ({ discuz: { isOwner, isLogin, signInfo, userInfo, webSite, webSiteList } }) => ({
+  ({ discuz: { isOwner, isLogin, signInfo, userInfo } }) => ({
     isOwner,
     isLogin,
     signInfo,
     userInfo,
-    webSite,
-    webSiteList,
   })
 )({
   /**
@@ -21,7 +19,6 @@ const config = connect(
    */
   data: {
     areaList: [],
-    webSiteIndex: 0,
   },
 
   /**
@@ -34,13 +31,10 @@ const config = connect(
   monthSignIn,
   async login() {
     let {
-      webSite,
       userInfo: { username, password, QA },
     } = this.data;
     if (username && password && QA && QA.includes(",")) {
-      let QAarr = QA.split(",");
-      let questionid = (QAarr.length > 1 && QAarr[0]) || null;
-      let answer = (QAarr.length > 1 && QAarr[1]) || null;
+      let [questionid, answer] = QA.split(",");
       let formData = {
         formhash: "30b7da0e",
         cookietime: "315360000",
@@ -55,10 +49,9 @@ const config = connect(
         delete formData.questionid;
         delete formData.answer;
       }
-      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       let postData = {
         httpConfig: {
-          url: `${url_prefix}/bbs/logging.php?action=login&loginsubmit=true`,
+          url: `/bbs/logging.php?action=login&loginsubmit=true`,
           method: "post",
           responseType: "arraybuffer",
           data: querystring.stringify(formData),
@@ -75,15 +68,11 @@ const config = connect(
         wx.setNavigationBarTitle({
           title: "首页",
         });
-        UPDATE_DISCUZ({ isLogin, webSite });
+        UPDATE_DISCUZ({ isLogin });
         await this.getIndexPageData();
         await this.checkSigned();
       }
     }
-  },
-  bindPickerChange(e) {
-    console.log("picker发送选择改变，携带值为", e.detail.value);
-    UPDATE_DISCUZ({ webSite: this.data.webSiteList[e.detail.value] });
   },
   inputChange({
     currentTarget: {
@@ -96,9 +85,8 @@ const config = connect(
     UPDATE_DISCUZ({ userInfo: newUserInfo });
   },
   async checkSigned() {
-    let { webSite, signInfo } = this.data;
-    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
-    let url = `${url_prefix}/bbs/my.php`;
+    let { signInfo } = this.data;
+    let url = `/bbs/my.php`;
     let selector = selectors.my;
     let pageData = await getPageData({ url, selector });
     let { formhash, username, recentTopics } = pageData;
@@ -119,9 +107,7 @@ const config = connect(
     UPDATE_DISCUZ({ signInfo: Object.assign({}, signInfo), formhash });
   },
   async getIndexPageData() {
-    let { webSite } = this.data;
-    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
-    let url = `${url_prefix}/bbs/index.php`;
+    let url = `/bbs/index.php`;
     let selector = selectors.index;
     let pageData = {};
     if (pageCache.has(url)) {
@@ -149,9 +135,7 @@ const config = connect(
       dataset: { path },
     },
   }) {
-    let { webSite } = this.data;
-    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
-    let url = `${url_prefix}/bbs/` + path;
+    let url = path;
     wx.navigateTo({
       url: "/pages/discuz/forum?url=" + encodeURIComponent(url),
     });
@@ -160,19 +144,6 @@ const config = connect(
     wx.navigateTo({
       url: "/pages/discuz/user",
     });
-  },
-  async updateWebSiteList() {
-    if (this.data.isOwner) {
-      let url = fetchWebSiteUrl;
-      let selector = selectors.webSiteList;
-      let pageData = await getPageData({ url, selector });
-      let webSiteList = [];
-      pageData.webSiteList.forEach((webSite) => {
-        webSiteList.push(webSite.replace("\n", "").replace(/ .*/g, ""));
-      });
-      wx.setStorageSync("webSiteList", webSiteList);
-      UPDATE_DISCUZ({ webSiteList });
-    }
   },
   async openMenu() {
     let { signInfo, userInfo } = this.data;
@@ -207,29 +178,13 @@ const config = connect(
       },
     });
   },
-  touchstart() {
-    console.log('touchstart')
-    this.touchstartTime = Date.now()
-  },
-  touchend() {
-    console.log('touchend')
-    if (this.touchstartTime && Date.now() - this.touchstartTime > 1000 * 10) {
-      this.updateWebSiteList();
-    }
-    this.touchstartTime = null;
-  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: async function () {
-    let { isOwner, signInfo, isLogin, webSiteList, webSite } = this.data;
+    let { isOwner, signInfo, isLogin } = this.data;
     if (!isOwner) {
       return
-    }
-    if (webSiteList && webSiteList.length && webSite) {
-      this.setData({
-        webSiteIndex: webSiteList.findIndex((item) => item === webSite),
-      });
     }
     if (isLogin) {
       await this.getIndexPageData();

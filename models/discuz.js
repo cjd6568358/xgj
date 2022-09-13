@@ -5,8 +5,8 @@ import {
   confirm,
   selectors,
   pageCache,
-  protocol,
-  testing
+  testing,
+  monthThreadId
 } from "../utils/index";
 import http from "../utils/http";
 
@@ -24,8 +24,6 @@ export default {
     isOwner: undefined,
     formhash: "",
     isLogin: undefined,
-    webSiteList: undefined,
-    webSite: undefined,
     userInfo: undefined,
     signInfo: undefined,
   },
@@ -42,8 +40,8 @@ export default {
    *      const globalState = selectAll() 或者 const modelState = selectAll(state => state['modelName'])
    */
   async setup({ put, select, selectAll }) {
-    console.log("discuz init");
     if (wx.getStorageSync("openkey") === "openkey") {
+      console.log("discuz init");
       put({ type: "INIT_OWNER_STATE" })
     }
   },
@@ -80,13 +78,12 @@ export default {
       { payload: { fid, tid, message = "", subject = "" } },
       { put, select, selectAll }
     ) {
-      let { formhash, webSite } = select();
+      let { formhash } = select();
       if (isLoading || !message) {
         return;
       }
-      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
       let httpConfig = {
-        url: `${url_prefix}/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+        url: `/bbs/post.php?action=reply&fid=${fid}&tid=${tid}&extra=page%3D1&replysubmit=yes`,
         data: querystring.stringify({
           formhash,
           message,
@@ -99,7 +96,6 @@ export default {
       let {
         userInfo: { username },
         formhash,
-        webSite,
         signInfo,
       } = select();
       if (isLoading) {
@@ -109,9 +105,8 @@ export default {
       let message = `ID: ${username}\r\n日期: ${formatTime(new Date(), "yyyy.M.dd")}\r\n心情: ......`;
       if (!signInfo.tid) {
         // 主题帖签到
-        let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
         Object.assign(httpConfig, {
-          url: `${url_prefix}/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
+          url: `/bbs/post.php?action=newthread&fid=420&extra=page%3D1&topicsubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -124,9 +119,8 @@ export default {
         });
       } else {
         // 回复帖签到
-        let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
         Object.assign(httpConfig, {
-          url: `${url_prefix}/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
+          url: `/bbs/post.php?action=reply&fid=420&tid=${signInfo.tid}&extra=&replysubmit=yes`,
           data: querystring.stringify({
             formhash,
             message,
@@ -142,7 +136,6 @@ export default {
       });
     },
     async monthSignIn({ payload }, { put, select, selectAll }) {
-      let tid = wx.getStorageSync("tid") || "8186986";
       try {
         if (new Date().getDate() > 10) {
           toast("每月1-10号才可以签到");
@@ -156,12 +149,10 @@ export default {
           let {
             formhash,
             userInfo: { username },
-            webSite,
           } = select();
           let lastMonthSignInfo = await put({ type: "getLastMonthSignInfo" });
-          let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
           let httpConfig = {
-            url: `${url_prefix}/bbs/post.php?action=reply&fid=420&tid=${tid}&extra=page%3D1&replysubmit=yes`,
+            url: `/bbs/post.php?action=reply&fid=420&tid=${monthThreadId}&extra=page%3D1&replysubmit=yes`,
             data: querystring.stringify({
               formhash,
               subject: "",
@@ -215,11 +206,10 @@ export default {
       },
       { put, select, selectAll }
     ) {
-      let { formhash, webSite } = select();
-      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+      let { formhash } = select();
       let postData = {
         httpConfig: {
-          url: `${url_prefix}/bbs/search.php`,
+          url: `/bbs/search.php`,
           data: `formhash=${formhash}&srchtxt=${srchtxt}&srchuname=${srchuname}&searchsubmit=true&srchtype=title&srchfilter=all&srchtypeid=&srchfrom=0&before=&orderby=${orderBy}&ascdesc=${sortType}&srchfid%5B%5D=all`,
           method: "post",
           responseType: "arraybuffer",
@@ -233,7 +223,6 @@ export default {
     async getLastMonthSignInfo({ payload }, { put, select, selectAll }) {
       let {
         userInfo: { username },
-        webSite,
       } = select();
       let { threadList } = await put({
         type: "searchData",
@@ -248,11 +237,10 @@ export default {
             title == `${username}/${month || 12}月份/打卡签到帖` &&
             formatTime(new Date(date), "yyyy") === formatTime(new Date(), "yyyy")
           ) {
-            let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
             let pageData = await put({
               type: "getPageData",
               payload: {
-                url: `${url_prefix}/bbs/${href}`,
+                url: `/bbs/${href}`,
                 selector: selectors.thread,
               },
             });
@@ -271,22 +259,14 @@ export default {
    */
   reducers: {
     UPDATE_DISCUZ({ payload: newState }, state) {
-      if (newState.webSite) {
-        wx.setStorageSync("webSite", newState.webSite);
-      }
       return { ...state, ...newState };
     },
     INIT_OWNER_STATE({ payload }, state) {
-      let webSiteList = wx.getStorageSync("webSiteList") || [];
-      let webSite = wx.getStorageSync("webSite") || webSiteList[0];
       let isLogin = !!wx.getStorageSync("cdb3_auth");
       return {
         ...state,
         isOwner: !testing,
         isLogin,
-        webSiteList,
-        webSite,
-        protocol,
         userInfo: {
           username: "",
           password: "",

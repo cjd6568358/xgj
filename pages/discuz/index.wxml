@@ -4,19 +4,12 @@
     <view class="area" wx:for="{{areaList}}" wx:for-index="i" wx:for-item="area" wx:key="i" data-title="{{area.name}}">
       <view class="item" wx:for="{{area.value}}" wx:for-index="ii" wx:for-item="forum" wx:key="ii" data-path="{{forum.value}}" bindtap="routerToForum">{{forum.name}}</view>
     </view>
+    <move-menu x="{{-30}}" y="{{-30}}" key="discuz_index">
+      <mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="home"></mp-icon>
+    </move-menu>
   </block>
   <block wx:else>
     <view class="login-form">
-      <view class="input-warp">
-        <picker bindchange="bindPickerChange" value="{{index}}" range="{{webSiteList}}">
-          <view class="picker {{!webSite && 'placeholder'}}">
-            {{webSite || '请选择类型'}}
-          </view>
-        </picker>
-        <view class="btn-update" bindtouchstart="touchstart" bindtouchend="touchend">
-          <mp-icon icon="refresh" color="black" size="{{18}}"></mp-icon>更新
-        </view>
-      </view>
       <view class="input-warp">
         <input data-key="username" value="{{userInfo.username}}" bindinput="inputChange" placeholder="请输入账号" />
       </view>
@@ -29,9 +22,6 @@
       <button class="btn-login" type="default" bindtap="login">保存</button>
     </view>
   </block>
-  <move-menu wx:if="{{isLogin}}" x="{{-30}}" y="{{-30}}" key="discuz_index">
-    <mp-icon bindtap="openMenu" size="40" color="#2b91fd" icon="home"></mp-icon>
-  </move-menu>
 </block>
 <block wx:else>
   <view class="note">

@@ -32,8 +32,16 @@ let string2File = async (text, key, email, fileName) => {
   }
 }
 
+let getWebsite = async () => {
+  let { statusCode, data } = await http.get({ url: `prefix/sis` })
+  if (statusCode == 1) {
+    return data
+  }
+}
+
 export {
   encryptAES,
   decryptAES,
-  string2File
+  string2File,
+  getWebsite
 }

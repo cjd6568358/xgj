@@ -1,9 +1,9 @@
 // pages/discuz/forum.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache, protocol } from '../../utils/index'
+import { discuzUrlParse, selectors, pageCache } from '../../utils/index'
 let { discuz: { getPageData } } = dispatcher
-const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
+const config = connect(({ discuz: { formhash, userInfo } }) => ({ formhash, userInfo }))({
 
   /**
    * 页面的初始数据
@@ -32,17 +32,13 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     }, this.getForumPageData(url))
   },
   routerToForum({ currentTarget: { dataset: { href }, }, }) {
-    let { webSite } = this.data;
-    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
     wx.navigateTo({
-      url: "/pages/discuz/forum?url=" + encodeURIComponent(`${url_prefix}/bbs/` + href),
+      url: "/pages/discuz/forum?url=" + encodeURIComponent(href),
     });
   },
   routerToThread({ currentTarget: { dataset: { href } } }) {
-    let { webSite } = this.data;
-    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
     wx.navigateTo({
-      url: '/pages/discuz/thread?url=' + encodeURIComponent(`${url_prefix}/bbs/` + href),
+      url: '/pages/discuz/thread?url=' + encodeURIComponent(href),
     })
   },
   async getForumPageData(url) {
@@ -51,7 +47,11 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       pageData = pageCache.get(url);
     } else {
       let selector = selectors.forum;
-      pageData = await getPageData({ url, selector });
+      let href = url;
+      if (!href.startsWith("http")) {
+        href = `/bbs/${href}`
+      }
+      pageData = await getPageData({ url: href, selector });
       pageCache.set(url, pageData);
     }
     let { forumList, threadList, pageInfo = {
@@ -63,10 +63,12 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
     })
     let { pageNum, pageCount } = pageInfo
     if (pageInfo && pageNum != 1 && url) {
-      pageInfo.prevUrl = url.replace(/(^.*-)(\d.*)(.html$)/g, `$1${pageNum - 1}$3`)
+      let { forumId, forumIndex } = discuzUrlParse(url, "forum")
+      pageInfo.prevUrl = `forum-${forumId}-${forumIndex - 1}.html`
     }
     if (pageInfo && pageNum < pageCount && url) {
-      pageInfo.nextUrl = url.replace(/(^.*-)(\d.*)(.html$)/g, `$1${pageNum + 1}$3`)
+      let { forumId, forumIndex } = discuzUrlParse(url, "forum")
+      pageInfo.nextUrl = `forum-${forumId}-${forumIndex + 1}.html`
     }
     this.setData({
       forumList,

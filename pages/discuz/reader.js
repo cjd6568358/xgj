@@ -1,4 +1,5 @@
 // pages/discuz/read.js
+import { webSite } from '../../utils/index'
 Page({
 
   /**
@@ -15,7 +16,6 @@ Page({
     let cdb3_sid = encodeURIComponent(wx.getStorageSync('cdb3_sid'))
     let cdb3_cookietime = wx.getStorageSync('cdb3_cookietime')
     let cdb3_auth = encodeURIComponent(wx.getStorageSync('cdb3_auth'))
-    let webSite = wx.getStorageSync('webSite')
     wx.showLoading({
       title: '加载中',
     })

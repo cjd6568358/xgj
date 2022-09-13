@@ -1,9 +1,9 @@
 // pages/discuz/thread.js
 import { dispatcher } from '../../utils/zoro.weapp.js'
 import { connect } from '../../utils/redux.weapp.js'
-import { selectors, pageCache, toast, protocol } from '../../utils/index'
+import { discuzUrlParse, selectors, pageCache, toast, webSite } from '../../utils/index'
 let { discuz: { UPDATE_DISCUZ, getPageData } } = dispatcher
-const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formhash, userInfo, webSite }))({
+const config = connect(({ discuz: { formhash, userInfo } }) => ({ formhash, userInfo }))({
 
   /**
    * 页面的初始数据
@@ -40,12 +40,15 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       pageData = pageCache.get(url);
     } else {
       let selector = selectors.thread;
-      pageData = await getPageData({ url, selector });
+      let href = url;
+      if (!href.startsWith("http")) {
+        href = `/bbs/${href}`
+      }
+      pageData = await getPageData({ url: href, selector });
       pageCache.set(url, pageData);
     }
-    let { tid, fid, webSite } = this.data
-    let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
-    let targetBase = `${url_prefix}/bbs/`
+    let { tid, fid } = this.data
+    let prefix = `${webSite}/bbs/`
     let {
       documentTitle,
       pageInfo = {
@@ -83,18 +86,18 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
       item.content = item.content
         .replace(/[\t]/g, ``)
         .replace(/(\S)(<br>)(\S)/g, '$1$3')
-        .replace(/="attachment/g, `="${targetBase}attachment`)
-        .replace(/="images/g, `="${targetBase}images`)
-        .replace(/="http:\/\/(.*)\/bbs\//g, `="${targetBase}`)
+        .replace(/="attachment/g, `="${prefix}attachment`)
+        .replace(/="images/g, `="${prefix}images`)
+        .replace(/="http:\/\/(.*)\/bbs\//g, `="${prefix}`)
         .replace(/:14pt/g, ":5vw");
       item.postTime = item.postTime.replace(/[\t]/g, ``)
     });
     let { pageNum, pageCount } = pageInfo
     if (pageInfo && pageNum != 1) {
-      pageInfo.prevUrl = url.replace(/(^.*\/bbs\/)(.*$)/g, `$1thread-${tid}-${pageNum - 1}-1.html`)
+      pageInfo.prevUrl = `thread-${tid}-${pageNum - 1}-1.html`
     }
     if (pageInfo && pageNum < pageCount && url) {
-      pageInfo.nextUrl = url.replace(/(^.*\/bbs\/)(.*$)/g, `$1thread-${tid}-${pageNum + 1}-1.html`)
+      pageInfo.nextUrl = `thread-${tid}-${pageNum + 1}-1.html`
     }
     UPDATE_DISCUZ({ formhash })
     this.setData({
@@ -121,18 +124,19 @@ const config = connect(({ discuz: { formhash, userInfo, webSite } }) => ({ formh
   },
   bindLinkPress({ detail: { href, ignore } }) {
     console.log('bindLinkPress:', href)
-    if (/viewthread\.php|thread\-.*\.html$/g.test(href)) {
-      if (/viewthread\.php/g.test(href)) {
-        href = href.replace(/(^.*tid=)(\d.*)&page=(\d.*)(#pid\d.*)/g, `thread-$2-$3-1.html`)
-      }
-      console.log('navigateTo=====>', href)
-      let { webSite } = this.data;
-      let url_prefix = webSite.startsWith("http") ? webSite : protocol + webSite;
+    let { type, threadId, threadIndex, forumId, forumIndex, } = discuzUrlParse(href)
+    if (type === "forum" && forumId) {
+      href = `forum-${forumId}-${forumIndex}.html`
       wx.navigateTo({
-        url: '/pages/discuz/thread?url=' + encodeURIComponent(`${url_prefix}/bbs/` + href),
+        url: '/pages/discuz/forum?url=' + encodeURIComponent(href),
       })
-      ignore()
+    } else if (type === "thread" && threadId) {
+      href = `thread-${threadId}-${threadIndex}-1.html`
+      wx.navigateTo({
+        url: '/pages/discuz/thread?url=' + encodeURIComponent(href),
+      })
     }
+    ignore()
   },
   pageChange({ detail }) {
     let { pageInfo: { prevUrl, nextUrl } } = this.data

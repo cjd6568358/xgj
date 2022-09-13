@@ -1,5 +1,5 @@
 import http from './http'
-import { decryptAES } from './api'
+import { decryptAES, getWebsite } from './api'
 
 let initState = {
   _isReady: false
@@ -44,7 +44,7 @@ let blockList = [];
 
 let selectors = {
   webSiteList: `
-  .entry-content p@webSiteList{
+ .entry-content p@webSiteList{
       &{$|trim()}
   };
   `,
@@ -107,13 +107,13 @@ let selectors = {
       .postcontent .postmessage .t_msgfont{html($content|replace(/border(.*)alt=""/g,""))}
   };
   form+.pages_btns .pages@pageInfo|pack{
-    $pageNum = 1;
-    $pageCount = 1;
-    $total = 1;
-    strong{$pageNum|Number};
-    em{$pageCount|Number|MathCeil};
-    em{$total|Number};
-}
+      $pageNum = 1;
+      $pageCount = 1;
+      $total = 1;
+      strong{$pageNum|Number};
+      em{$pageCount|Number|MathCeil};
+      em{$total|Number};
+  }
   `,
   my: `
   .credits_info ul>li@creditList{
@@ -141,25 +141,89 @@ let selectors = {
     return Math.ceil(this/38)
   };
   .mainbox.threadlist tbody@threadList{
-      th a[href=$href]
+      th a[href=$href];
       th a[href=$tid|replace('viewthread.php?tid=','')|replace(/&highlight=.*$/g,'')]{$title};
       td.author em{$date};
       td.nums{$nums};
+  };
+  .mainbox.threadlist[class=$searchHref]{
+      $pageCount = 1;
+  };
+  .mainbox.threadlist tbody th[colspan="6"]{
+      $pageCount = 0;
   };
   .mainbox.threadlist+.pages_btns .pages em{$pageCount|Number|MathCeil};
   .mainbox.threadlist+.pages_btns .pages a:nth-of-type(1)[href=$searchHref];
   `
 }
 
-let apps = [];
+let webSite = "https://sexinsex.net"
+
+let monthThreadId = "8186986"
 
 let soterAuthCheck = false
 
 let testing = true
 
-let protocol = 'http://'
-
-let fetchWebSiteUrl = "http://1s2s3s.com/"
+const forumUrlParse = (url) => {
+  let forumId = 0;
+  let forumIndex = 1
+  if (/forum-(\d.*)-(\d.*)(.html$)/g.test(url)) {
+    // forum-351-1.html
+    url.replace(/forum-(\d.*)-(\d.*)(.html$)/g, function (...argu) {
+      forumId = +argu[1]
+      forumIndex = +argu[2]
+    })
+  } else if (/forumdisplay.php\?fid=(\d.*$)/g.test(url)) {
+    // forumdisplay.php?fid=351
+    forumId = +url.replace(/forumdisplay.php\?fid=(\d.*$)/g, "$1")
+  }
+  return { forumId, forumIndex, type: "forum" }
+}
+const ThreadUrlParse = (url) => {
+  let threadId = 0;
+  let threadIndex = 1;
+  let postId = 1;
+  if (/thread-(\d.*)-(\d.*)-(\d.*)(.html$)/g.test(url)) {
+    // thread-6379736-1-1.html
+    url.replace(/thread-(\d.*)-(\d.*)-(\d.*)(.html$)/g, function (...argu) {
+      threadId = +argu[1]
+      threadIndex = +argu[2]
+    })
+  } else if (/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g.test(url)) {
+    // viewthread.php?tid=6369158&page=1#pid110991881
+    url.replace(/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g, function (...argu) {
+      threadId = +argu[2]
+      threadIndex = +argu[3]
+      postId = +argu[4]
+    })
+  } else if (/(^.*tid=)(\d.*)&page=(\d.*)/g.test(url)) {
+    // viewthread.php?tid=6369158&page=1
+    url.replace(/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g, function (...argu) {
+      threadId = +argu[2]
+      threadIndex = +argu[3]
+    })
+  } else if (/(^.*tid=)(\d.*)/g.test(url)) {
+    // viewthread.php?tid=4182257
+    url.replace(/(^.*tid=)(\d.*$)/g, function (...argu) {
+      threadId = +argu[2]
+    })
+  }
+  return { threadId, threadIndex, postId, type: "thread" }
+}
+const discuzUrlParse = (url, type) => {
+  if (type === "forum") {
+    return forumUrlParse(url)
+  } else if (type === "thread") {
+    return ThreadUrlParse(url)
+  } else {
+    let res = forumUrlParse(url)
+    if (res.forumId === 0) {
+      res = ThreadUrlParse(url)
+    }
+    return res
+  }
+}
 
 const formatTime = (date, fmt) => {
   var o = {
@@ -438,6 +502,10 @@ let initApp = async () => {
   let { openid } = await getOpenId()
   if (!initState.isReady) {
     let config = await getGlobalConfig()
+    let url = await getWebsite()
+    if (url) {
+      webSite = url
+    }
     if ('baseUrl' in config) {
       baseUrl = config['baseUrl']
     }
@@ -450,20 +518,19 @@ let initApp = async () => {
     if ('blockList' in config) {
       blockList = config['blockList']
     }
-    if ('apps' in config) {
-      apps = config['apps']
+    if ('monthThreadId' in config) {
+      monthThreadId = config['monthThreadId']
     }
     if ('soterAuthCheck' in config) {
-      soterAuthCheck = config['soterAuthCheck']
+      try {
+        await wx.checkIsSupportSoterAuthentication()
+        soterAuthCheck = config['soterAuthCheck']
+      } catch (error) {
+
+      }
     }
     if ('testing' in config) {
       testing = config['testing']
-    }
-    if ('protocol' in config) {
-      protocol = config['protocol']
-    }
-    if ('fetchWebSiteUrl' in config) {
-      fetchWebSiteUrl = config['fetchWebSiteUrl']
     }
     initState.isReady = true
     console.log("initApp")
@@ -626,10 +693,10 @@ export {
   selectors,
   blockList,
   getStorageData,
-  apps,
   restoreData,
   soterAuth,
   testing,
-  protocol,
-  fetchWebSiteUrl
+  monthThreadId,
+  webSite,
+  discuzUrlParse
 }
