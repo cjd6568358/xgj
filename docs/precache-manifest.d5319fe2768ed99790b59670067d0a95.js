@@ -1,50 +1,50 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e549f042de925d4e3f5b9f41a33f61d5",
+    "revision": "c8289474c9706e77c4b498c0f92bafa1",
     "url": "/xgj/404.html"
   },
   {
-    "revision": "4e6518bb78e2788d6278",
+    "revision": "cea554614724e0debc28",
     "url": "/xgj/css/AccountListView.f85398f6.css"
   },
   {
-    "revision": "a652482ebe0f348699ef",
+    "revision": "01613fbf2b749b48a4a9",
     "url": "/xgj/css/AccountView.542b8437.css"
   },
   {
-    "revision": "84f09369fd8dc25a9745",
-    "url": "/xgj/css/DiscuzForumView.a46de2c5.css"
+    "revision": "21ef2b0954377f3f6ebb",
+    "url": "/xgj/css/DiscuzForumView.1c6357f4.css"
   },
   {
     "revision": "33f1425c352e88c4495a",
     "url": "/xgj/css/DiscuzForumView~DiscuzThreadView.97004d1a.css"
   },
   {
-    "revision": "791c1e69e73034af26ec",
+    "revision": "d64f64125921396bdf2e",
     "url": "/xgj/css/DiscuzMyView.5c76908a.css"
   },
   {
-    "revision": "3262296035172a10bffb",
+    "revision": "cef7ffa7c04e4de9ad3a",
     "url": "/xgj/css/DiscuzSearchView.b46f0dd6.css"
   },
   {
-    "revision": "cb3f0e1ca958d5f97cf8",
+    "revision": "50393f704b7879c71491",
     "url": "/xgj/css/DiscuzThreadView.7087b763.css"
   },
   {
-    "revision": "8c0414b2df6a214700dd",
-    "url": "/xgj/css/DiscuzView.db4820f3.css"
+    "revision": "a034ceac0cbd4fcba9b8",
+    "url": "/xgj/css/DiscuzView.e281e364.css"
   },
   {
-    "revision": "b9c6d5c5130723f0912a",
+    "revision": "aef75879c8a344d185b6",
     "url": "/xgj/css/MyView.63e54d08.css"
   },
   {
-    "revision": "d99704454eac0a59064f",
+    "revision": "27522698a1350bce8d7a",
     "url": "/xgj/css/SignView.10cf286b.css"
   },
   {
-    "revision": "00efe6f6713e8d1329c3",
+    "revision": "6f4686ceb5e4300a8d20",
     "url": "/xgj/css/app.eec47ea0.css"
   },
   {
@@ -64,60 +64,60 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/xgj/img/plus.70f8b6fd.svg"
   },
   {
-    "revision": "e549f042de925d4e3f5b9f41a33f61d5",
+    "revision": "c8289474c9706e77c4b498c0f92bafa1",
     "url": "/xgj/index.html"
   },
   {
-    "revision": "4e6518bb78e2788d6278",
-    "url": "/xgj/js/AccountListView.a80608ae.js"
+    "revision": "cea554614724e0debc28",
+    "url": "/xgj/js/AccountListView.43f6e53c.js"
   },
   {
     "revision": "1dfd0a0579843643235d",
     "url": "/xgj/js/AccountListView~AccountView~MyView~SignView.322c19b0.js"
   },
   {
-    "revision": "a652482ebe0f348699ef",
-    "url": "/xgj/js/AccountView.9ec1d0e4.js"
+    "revision": "01613fbf2b749b48a4a9",
+    "url": "/xgj/js/AccountView.09f80c82.js"
   },
   {
     "revision": "b26a838a5450ce564a99",
     "url": "/xgj/js/DiscuzAutoLoginView.37fabfc6.js"
   },
   {
-    "revision": "84f09369fd8dc25a9745",
-    "url": "/xgj/js/DiscuzForumView.34136e08.js"
+    "revision": "21ef2b0954377f3f6ebb",
+    "url": "/xgj/js/DiscuzForumView.793ffe15.js"
   },
   {
     "revision": "33f1425c352e88c4495a",
     "url": "/xgj/js/DiscuzForumView~DiscuzThreadView.ab94247c.js"
   },
   {
-    "revision": "791c1e69e73034af26ec",
-    "url": "/xgj/js/DiscuzMyView.b7743833.js"
+    "revision": "d64f64125921396bdf2e",
+    "url": "/xgj/js/DiscuzMyView.a069a100.js"
   },
   {
-    "revision": "3262296035172a10bffb",
-    "url": "/xgj/js/DiscuzSearchView.7c540177.js"
+    "revision": "cef7ffa7c04e4de9ad3a",
+    "url": "/xgj/js/DiscuzSearchView.57f0bcf1.js"
   },
   {
-    "revision": "cb3f0e1ca958d5f97cf8",
-    "url": "/xgj/js/DiscuzThreadView.174f89bb.js"
+    "revision": "50393f704b7879c71491",
+    "url": "/xgj/js/DiscuzThreadView.b3af73d6.js"
   },
   {
-    "revision": "8c0414b2df6a214700dd",
-    "url": "/xgj/js/DiscuzView.a8edb08e.js"
+    "revision": "a034ceac0cbd4fcba9b8",
+    "url": "/xgj/js/DiscuzView.f9e987d5.js"
   },
   {
-    "revision": "b9c6d5c5130723f0912a",
-    "url": "/xgj/js/MyView.e655a407.js"
+    "revision": "aef75879c8a344d185b6",
+    "url": "/xgj/js/MyView.72e95c34.js"
   },
   {
-    "revision": "d99704454eac0a59064f",
-    "url": "/xgj/js/SignView.1e7452d3.js"
+    "revision": "27522698a1350bce8d7a",
+    "url": "/xgj/js/SignView.08827aa7.js"
   },
   {
-    "revision": "00efe6f6713e8d1329c3",
-    "url": "/xgj/js/app.6b0f2952.js"
+    "revision": "6f4686ceb5e4300a8d20",
+    "url": "/xgj/js/app.d1b56d16.js"
   },
   {
     "revision": "049c163dfa1745e792fd",

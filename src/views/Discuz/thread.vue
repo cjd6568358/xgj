@@ -32,7 +32,12 @@
 import { mapState, mapActions } from "vuex";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
-import { selectors, defaultWebSite, onlineWebSite } from "../../util";
+import {
+  selectors,
+  defaultWebSite,
+  onlineWebSite,
+  discuzUrlParse,
+} from "../../util";
 export default {
   props: ["url"],
   components: { Pagination, Menus },
@@ -99,14 +104,17 @@ export default {
   methods: {
     ...mapActions(["getPageData"]),
     async getThreadPageJson(url) {
-      url = "/bbs/" + url;
       let pageData = {};
       if (sessionStorage.getItem(url)) {
         pageData = JSON.parse(sessionStorage.getItem(url));
       } else {
+        let href = url;
+        if (!href.startsWith("http")) {
+          href = "/bbs/" + href;
+        }
         let selector = selectors.thread;
         pageData = await this.getPageData({
-          url,
+          url: href,
           selector,
         });
         sessionStorage.setItem(url, JSON.stringify(pageData));
@@ -173,20 +181,30 @@ export default {
       let {
         target: { href, nodeName },
       } = event;
+      let { params } = this.$route;
       if (nodeName === "A") {
-        if (href.includes("viewthread.php?tid=")) {
-          href = href.replace(
-            /(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g,
-            `thread-$2-$3-1.html#postmessage_$4`
-          );
-        }
-        // 这里拿到的href是完整url
-        if (href.startsWith("http")) {
-          href = href.replace(location.origin + process.env.BASE_URL, "/");
-        }
-        let { params, hash } = this.$route;
-        if (params.url + hash != href) {
-          this.$router.push(href);
+        let { type, forumId, forumIndex, threadId, threadIndex } =
+          discuzUrlParse(href);
+        if (type === "forum") {
+          let to_url = `forum-${forumId}-${forumIndex}.html`;
+          if (params.url != to_url) {
+            this.$router.push({
+              name: "DiscuzForumView",
+              params: {
+                url: to_url,
+              },
+            });
+          }
+        } else if (type === "thread") {
+          let to_url = `thread-${threadId}-${threadIndex}-1.html`;
+          if (params.url != to_url) {
+            this.$router.push({
+              name: "DiscuzThreadView",
+              params: {
+                url: to_url,
+              },
+            });
+          }
         }
         event.preventDefault();
         event.stopPropagation();

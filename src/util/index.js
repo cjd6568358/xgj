@@ -148,6 +148,66 @@ let proxyServers = [
   }
 ];
 
+const forumUrlParse = (url) => {
+  let forumId = 0;
+  let forumIndex = 1
+  if (/forum-(\d.*)-(\d.*)(.html$)/g.test(url)) {
+    // forum-351-1.html
+    url.replace(/forum-(\d.*)-(\d.*)(.html$)/g, function (...argu) {
+      forumId = +argu[1]
+      forumIndex = +argu[2]
+    })
+  } else if (/forumdisplay.php\?fid=(\d.*$)/g.test(url)) {
+    // forumdisplay.php?fid=351
+    forumId = +url.replace(/forumdisplay.php\?fid=(\d.*$)/g, "$1")
+  }
+  return { forumId, forumIndex, type: "forum" }
+}
+const ThreadUrlParse = (url) => {
+  let threadId = 0;
+  let threadIndex = 1;
+  let postId = 1;
+  if (/thread-(\d.*)-(\d.*)-(\d.*)(.html$)/g.test(url)) {
+    // thread-6379736-1-1.html
+    url.replace(/thread-(\d.*)-(\d.*)-(\d.*)(.html$)/g, function (...argu) {
+      threadId = +argu[1]
+      threadIndex = +argu[2]
+    })
+  } else if (/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g.test(url)) {
+    // viewthread.php?tid=6369158&page=1#pid110991881
+    url.replace(/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g, function (...argu) {
+      threadId = +argu[2]
+      threadIndex = +argu[3]
+      postId = +argu[4]
+    })
+  } else if (/(^.*tid=)(\d.*)&page=(\d.*)/g.test(url)) {
+    // viewthread.php?tid=6369158&page=1
+    url.replace(/(^.*tid=)(\d.*)&page=(\d.*)#pid(\d.*)/g, function (...argu) {
+      threadId = +argu[2]
+      threadIndex = +argu[3]
+    })
+  } else if (/(^.*tid=)(\d.*)/g.test(url)) {
+    // viewthread.php?tid=4182257
+    url.replace(/(^.*tid=)(\d.*$)/g, function (...argu) {
+      threadId = +argu[2]
+    })
+  }
+  return { threadId, threadIndex, postId, type: "thread" }
+}
+const discuzUrlParse = (url, type) => {
+  if (type === "forum") {
+    return forumUrlParse(url)
+  } else if (type === "thread") {
+    return ThreadUrlParse(url)
+  } else {
+    let res = forumUrlParse(url)
+    if (res.forumId === 0) {
+      res = ThreadUrlParse(url)
+    }
+    return res
+  }
+}
+
 let checkWebp = function () {
   return new Promise(function (resolve) {
     if (getCookie("webpSupport") == "true") {
@@ -449,5 +509,6 @@ export {
   debugMode,
   socks5Mode,
   defaultWebSite,
-  onlineWebSite
+  onlineWebSite,
+  discuzUrlParse
 };

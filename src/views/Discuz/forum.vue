@@ -59,7 +59,7 @@
 import { mapState, mapActions } from "vuex";
 import Pagination from "../../components/Pagination";
 import Menus from "../../components/Menus";
-import { selectors } from "../../util";
+import { selectors, discuzUrlParse } from "../../util";
 export default {
   props: ["url"],
   components: { Pagination, Menus },
@@ -78,10 +78,8 @@ export default {
     prevUrl() {
       let prevUrl = "";
       if (this.pageInfo && this.pageInfo.pageNum != 1 && this.url) {
-        prevUrl = this.url.replace(
-          /(^.*-)(\d.*)(.html$)/g,
-          `$1${this.pageInfo.pageNum - 1}$3`
-        );
+        let { forumId, forumIndex } = discuzUrlParse(this.url, "forum");
+        prevUrl = `forum-${forumId}-${forumIndex - 1}.html`;
       }
       return prevUrl;
     },
@@ -92,10 +90,8 @@ export default {
         this.pageInfo.pageNum < this.pageInfo.pageCount &&
         this.url
       ) {
-        nextUrl = this.url.replace(
-          /(^.*-)(\d.*)(.html$)/g,
-          `$1${this.pageInfo.pageNum + 1}$3`
-        );
+        let { forumId, forumIndex } = discuzUrlParse(this.url, "forum");
+        nextUrl = `forum-${forumId}-${forumIndex + 1}.html`;
       }
       return nextUrl;
     },
@@ -115,14 +111,17 @@ export default {
   methods: {
     ...mapActions(["getPageData"]),
     async getForumPageData(url) {
-      url = "/bbs/" + url;
       let pageData = {};
       if (sessionStorage.getItem(url)) {
         pageData = JSON.parse(sessionStorage.getItem(url));
       } else {
+        let href = url;
+        if (!href.startsWith("http")) {
+          href = "/bbs/" + href;
+        }
         let selector = selectors.forum;
         pageData = await this.getPageData({
-          url,
+          url: href,
           selector,
         });
         sessionStorage.setItem(url, JSON.stringify(pageData));

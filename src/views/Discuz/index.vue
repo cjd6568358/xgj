@@ -124,9 +124,7 @@ export default {
         userInfo: { username, password, QA },
       } = this;
       if (username && password) {
-        let QAarr = QA.split(",");
-        let questionid = (QAarr.length > 1 && QAarr[0]) || null;
-        let answer = (QAarr.length > 1 && QAarr[1]) || null;
+        let [questionid, answer] = QA.split(",");
         let formData = {
           formhash: "30b7da0e",
           cookietime: "315360000",
